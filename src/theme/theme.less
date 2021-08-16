@@ -1,0 +1,39 @@
+// less公共常量定义
+@testColor: #F00;
+
+// less公共常量定义
+@themeColor: #5063c2; //全局主色
+@fontColor: #3D404D; // 主文本色
+@textColor: #5C6280; // 标题文本色
+@fontPrimaryColor: #ffffff; // 纯白文本色
+@blackFontColor: #1F2127; //黑色字体
+@subTitleColor: #B3B6C7; //副标题颜色
+@SecondaryFontColor: #9298B3; //次要文字
+@borderColor: #DADCE6; // 边框色
+@successColor: #00C653; // 成功色
+@warningColor: #F9A214; // 警告色
+@errorColor: #F56C6C; // 错误色
+@errorBackgroundColor: #FFE8E6; // 错误色
+@textHoverBackgroundColor: rgba(48,80,240,0.12);
+@VideoMegaloscope:#C3C7D9;//放大镜颜色
+@VideoPlayAndClockIcon:#8D91A6;//视频播放图标色
+@HomePagesGoto:#7079B0;//首页页面进入图标色
+@collectionIcon:#FF5C5A;//收藏心形图标色
+
+@expandedRowBorderColor: #CCCCCC; // 手册列表展开列下边框颜色
+
+@siderWith: 200px; // 主界面侧边栏菜单宽度
+@disabledBackground: #F7F8FA;//控件被禁用的背景颜色
+@videoDefaultBackground: #111321; // 视频占位背景颜色
+@videoDefaultFontColor: #919299;// 视频占位字体颜色
+@videoCountDownBackground: rgba(0, 0 , 0, 0.8); // 倒计时栏的背景颜色
+
+// 需要导入到 js 中的变量
+:export {
+  testColor: @testColor;
+  themeColor: @themeColor;
+  successColor: @successColor;
+  warningColor: @warningColor;
+  errorColor: @errorColor;
+  siderWith: @siderWith;
+}

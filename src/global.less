@@ -1,0 +1,115 @@
+@import './theme/theme.less';
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+// .ant-switch-checked {
+//   background-color: @testColor !important;
+// }
+
+/*---------------------------theme-body-------------------------*/
+.color-theme(@theme) {
+	--theme-color: @theme;
+	--success-color: @theme;
+	--warning-color: @theme;
+	--error-color: @theme;
+	--border-color: #DADCE6;
+	--font-color: #3D404D;
+	--text-color: #5C6280;
+	--font-primary-color: #ffffff;
+	--black-font-color: #1F2127;
+}
+
+// .body-wrap-theme1 {
+// 	.color-theme(#5063C2);
+// }
+
+// .body-wrap-theme2 {
+// 	.color-theme(#3245a8);
+// }
+
+// .body-wrap-theme3 {
+// 	.color-theme(#6d7ed4);
+// }
+
+/*---------------------------theme-body-------------------------*/
+
+
+/*---------------------------reaset.css-------------------------*/
+html,body,div,span,applet,object,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video {
+	margin:0;
+	padding:0;
+	border:0;
+	font-size:100%;
+	font:inherit;
+	font-weight:normal;
+	vertical-align:baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section {
+	display:block;
+}
+ol,ul,li {
+	list-style:none;
+}
+blockquote,q {
+	quotes:none;
+}
+blockquote:before,blockquote:after,q:before,q:after {
+	content:'';
+	content:none;
+}
+table {
+	border-collapse:collapse;
+	border-spacing:0;
+}
+th,td {
+	vertical-align:middle;
+}
+/* custom */
+a {
+	outline:none;
+	color:#16418a;
+	text-decoration:none;
+	-webkit-backface-visibility:hidden;
+}
+a:focus {
+	outline:none;
+}
+input:focus,select:focus,textarea:focus {
+	outline:-webkit-focus-ring-color auto 0;
+}
+/*---------------------------reaset.css-------------------------*/
+
+/*---------------------------scrollbar begin-------------------------*/
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(163, 169, 204, 0.8);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:decrement {
+  border-width: 0 1px;
+  border-color: transparent #c2c7cb;
+}
+
+::-webkit-scrollbar-thumb:increment {
+  border-width: 1px 0;
+  border-color: #c2c7cb transparent;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(208, 212, 217, 0.8);
+}
+
+/*---------------------------scrollbar end--------------------------*/

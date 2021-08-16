@@ -1,0 +1,53 @@
+.keyframes(@fx, @fy, @name) {
+  @keyframes @name
+  {
+    from {
+       font-size: @fx;
+    }
+    to {
+      font-size: @fy;
+    }
+  }
+  @-moz-keyframes @name /* Firefox */
+  {
+    from {
+       font-size: @fx;
+    }
+    to {
+      font-size: @fy;
+    }
+  }
+
+  @-webkit-keyframes @name /* Safari 和 Chrome */
+  {
+    from {
+       font-size: @fx;
+    }
+    to {
+      font-size: @fy;
+    }
+  }
+
+  @-o-keyframes @name /* Opera */
+  {
+    from {
+       font-size: @fx;
+    }
+    to {
+      font-size: @fy;
+    }
+  }
+}
+//固定模式
+.animation(@animation-name, @animation-duration, @animation-timing-function, @animation-delay,
+@animation-iteration-count,
+@animation-direction)
+{
+  animation: @arguments;
+  /* Firefox: */
+  -moz-animation: @arguments;
+  /* Safari 和 Chrome: */
+  -webkit-animation: @arguments;
+  /* Opera: */
+  -o-animation: @arguments;
+}

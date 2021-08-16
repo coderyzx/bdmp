@@ -1,0 +1,75 @@
+.pageMain{
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 67px;
+  bottom: 0;
+  overflow-y: auto;
+  font-family: 'Open Sans', "PingFang SC", Helvetica, Arial, sans-serif;
+  .mainContent{
+    min-height: 'calc(100vh - 67px)';
+    overflow: hidden;
+    color: #949CB1;
+    .homeSection{
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      .homeDescriptionContainer{
+        margin: 0 auto;
+        height: 100%;
+        padding: 0 30px;
+        .homeInfo{
+          margin-top: 20vh;
+          .homeBrand{
+            font-size: 75px;
+            font-weight: 800;
+            color: #081642;
+            line-height: 1.2em;
+          }
+          .homeSubtitle{
+            font-size: 21px;
+            color: #1d2b5a;
+            margin-top: 15px;
+          }
+        }
+        .homeChart{
+          height: 60%;
+          top: 16%;
+          position: absolute;
+          right: 300px;
+          z-index: -100;
+          img{
+            max-height: 100%;
+            max-width: 100%;
+            vertical-align: middle;
+            border: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 1200px){
+  .homeDescriptionContainer {
+      width: 1170px;
+  }
+}
+@media (min-width: 992px)
+{.homeDescriptionContainer {
+    width: 970px;
+  }
+}
+@media (min-width: 768px)
+{.homeDescriptionContainer {
+    width: 750px;}
+}
+
+
+// .Wellcome{
+//   padding: 120px;
+//   text-align: center;
+//   font-size: 50px;
+//   background: #fff;
+// }
+
