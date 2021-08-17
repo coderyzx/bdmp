@@ -14,21 +14,23 @@ class LineChart extends React.Component {
     super(props);
     this.state = {}
   }
+
   componentDidMount () {
-    const { dispatch} = this.props;
+    const { dispatch } = this.props;
     dispatch({
       type: 'chartModel/getLineChart',
       payload: {},
     });
   }
+
   render() {
-    console.log(lineChart);
     // console.log('render', this.props.match.params.id);
     const { lineChart } = this.props;
+    console.log(lineChart);
     return (
       // <div>{this.props.match.params.id}</div>
       <div style={{ margin: '0 20px', minHeight: 'calc(100vh)' }}>
-         <h3 className={styles.chartTypeHead}>{lineChart.name}</h3>
+        <h3 className={styles.chartTypeHead}>{lineChart.name}</h3>
         {
             // chartType.list.map(item =>{
             //   console.log(item);
@@ -48,10 +50,10 @@ class LineChart extends React.Component {
                       />
                     </div>
                     <div className={styles.mask} >
-                        <Link to={`/editor/${item.option}`}>
-                          <div>编辑</div>
-                        </Link>
-                        <div>删除</div>
+                      <Link to={`/editor/${item.option}`}>
+                        <div>编辑</div>
+                      </Link>
+                      <div>删除</div>
                     </div>
                   </div>
                   <h4 className={styles.title}>{item.title}</h4>

@@ -37,3 +37,4 @@ export async function getRadarChart(payload) {
       payload,
   });
 }
+

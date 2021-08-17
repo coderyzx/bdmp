@@ -1,12 +1,13 @@
 import React from 'react';
-import { connect } from 'dva';
+// import { connect } from 'dva';
 import { Layout, Menu, Icon } from 'antd';
 import Link from 'umi/link'
+
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 class TempLib extends React.Component {
   render() {
-    const { children,chartMenu } = this.props;
+    const { children } = this.props;
     return (
       <>
         <Sider
@@ -15,13 +16,14 @@ class TempLib extends React.Component {
             height: '100vh',
             position: 'fixed',
             background: '#fff',
-            left: 0,
+            // background: 'black',
+            left: 0, 
           }}>
           <Menu
             // theme='dark'
             mode="inline"
             style={{ height: '100%' }}
-            defaultSelectedKeys={['sub1']}
+            defaultSelectedKeys={['1']}
             // defaultOpenKeys = {['1']}
           >
             <Menu.Item key="1">
@@ -40,19 +42,19 @@ class TempLib extends React.Component {
             }
             >
               <Menu.Item key="sub1" >
-                <Link to ={'/templateLib/lineChart'}><Icon type="line-chart" /><span>折线图</span>
+                <Link to ="/templateLib/lineChart"><Icon type="line-chart" /><span>折线图</span>
                 </Link>
               </Menu.Item>
               <Menu.Item key="sub2" >
-                <Link to ={'/templateLib/barChart'}><Icon type="bar-chart" /><span>柱状图</span>
+                <Link to ="/templateLib/barChart"><Icon type="bar-chart" /><span>柱状图</span>
                 </Link>
               </Menu.Item>
               <Menu.Item key="sub3" >
-                <Link to ={'/templateLib/pieChart'}><Icon type="pie-chart" /><span>饼图</span>
+                <Link to ="/templateLib/pieChart"><Icon type="pie-chart" /><span>饼图</span>
                 </Link>
               </Menu.Item>
               <Menu.Item key="sub4" >
-                <Link to ={'/templateLib/radarChart'}><Icon type="radar-chart" /><span>雷达图</span>
+                <Link to ="/templateLib/radarChart"><Icon type="radar-chart" /><span>雷达图</span>
                 </Link>
               </Menu.Item>
             </SubMenu>
@@ -61,7 +63,7 @@ class TempLib extends React.Component {
             </Menu.Item>
             <Menu.Item key="5">
               <Link to="/templateLib/form"><Icon type="tool"/><span>form表单管理</span></Link>
-            </Menu.Item>  
+            </Menu.Item>
             <Menu.Item key="6">
               <Link to="/templateLib/toolBar"><Icon type="tool"/><span>工具栏列表</span></Link>
             </Menu.Item>
@@ -70,7 +72,7 @@ class TempLib extends React.Component {
             </Menu.Item>
           </Menu>
         </Sider>
-        <Layout style={{ padding: 14, marginLeft: '200px', overflow: 'initial' }}>
+        <Layout style={{ padding: 14, marginLeft: '200px',background:'#fff'}}>
           {children}
         </Layout>
       </>

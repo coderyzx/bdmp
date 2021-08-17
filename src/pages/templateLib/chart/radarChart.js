@@ -14,13 +14,15 @@ class RadarChart extends React.Component {
     super(props);
     this.state = {}
   }
+
   componentDidMount () {
-    const { dispatch} = this.props;
+    const { dispatch } = this.props;
     dispatch({
       type: 'chartModel/getRadarChart',
       payload: {},
     });
   }
+
   render() {
     // console.log(chartList.lineChart);
     // console.log('render', this.props.match.params.id);
@@ -28,7 +30,7 @@ class RadarChart extends React.Component {
     return (
       // <div>{this.props.match.params.id}</div>
       <div style={{ margin: '0 20px', minHeight: 'calc(100vh)' }}>
-         <h3 className={styles.chartTypeHead}>{radarChart.name}</h3>
+        <h3 className={styles.chartTypeHead}>{radarChart.name}</h3>
         {
             // chartType.list.map(item =>{
             //   console.log(item);
@@ -48,10 +50,10 @@ class RadarChart extends React.Component {
                       />
                     </div>
                     <div className={styles.mask} >
-                        <Link to={`/editor/${item.option}`}>
-                          <div>编辑</div>
-                        </Link>
-                        <div>删除</div>
+                      <Link to={`/editor/${item.option}`}>
+                        <div>编辑</div>
+                      </Link>
+                      <div>删除</div>
                     </div>
                   </div>
                   <h4 className={styles.title}>{item.title}</h4>
