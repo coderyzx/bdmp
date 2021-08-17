@@ -70,7 +70,7 @@ class BasicLayout extends React.Component {
             </Link>
           </Menu>
         </Header>
-        <Layout style={{ marginTop: 67 }}>
+        <Layout >
           { this.props.children }
         </Layout>
       </Layout>

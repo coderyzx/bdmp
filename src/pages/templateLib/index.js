@@ -18,6 +18,8 @@ class TempLib extends React.Component {
             background: '#fff',
             // background: 'black',
             left: 0,
+            marginTop: 67
+            
           }}>
           <Menu
             // theme='dark'
@@ -72,7 +74,7 @@ class TempLib extends React.Component {
             </Menu.Item>
           </Menu>
         </Sider>
-        <Layout style={{ padding: 14, marginLeft: '200px', background: '#fff' }}>
+        <Layout style={{ padding: '67px 15px 0 15px', marginLeft: '200px',minHeight:'100vh'}}>
           {children}
         </Layout>
       </>

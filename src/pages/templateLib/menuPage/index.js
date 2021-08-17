@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import { Table, Button, Popconfirm, Form, Divider } from 'antd';
 import CreateForm from './createForm';
 import styles from './index.less';
-
+import { Spin, Alert } from 'antd';
 const EditableContext = React.createContext();
 const EditableRow = ({ form, index, ...props }) => (
   <EditableContext.Provider value={form}>
@@ -56,7 +56,7 @@ class MenuPage extends React.Component {
         title: 'Operation',
         key: 'Operation',
         fixed: 'right',
-        width: 150,
+        width: 200,
         render: (record) => (
           <span >
             <a>Edit</a>
@@ -151,7 +151,7 @@ class MenuPage extends React.Component {
     // 为columns的每一列都增加onCell属性。
     const { columns } = this;
     return (
-      <div style={{ margin: '0 50px' }}>
+      <div style={{ margin: '0 50px' }}>  
         <div className={styles.title} >菜单页面维护</div>
         <Button onClick={this.showModal} type="primary" style={{ marginBottom: 16 }}>
           新建一项
