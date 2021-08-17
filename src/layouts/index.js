@@ -37,7 +37,7 @@ class BasicLayout extends React.Component {
           // theme='dark'
           mode="horizontal"
           // defaultSelectedKeys={['1']}
-          style={{ lineHeight: '64px',fontSize:'18px' }}
+          style={{ lineHeight: '64px', fontSize: '18px' }}
           >
             <Menu.Item key="1"><Link to="/dashBoard">仪表盘</Link></Menu.Item>
             <Menu.Item key="2"><Link to="/templateLib">模板库</Link></Menu.Item>

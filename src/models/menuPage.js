@@ -4,7 +4,7 @@ import { getMenuPage } from '@/services/menuPage';
 const menuPageModel = {
   namespace: 'menuPageModel',
   state: {
-    data:[],
+    data: [],
   },
   effects: {
 
