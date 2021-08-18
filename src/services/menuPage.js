@@ -7,3 +7,10 @@ export async function getMenuPage(payload) {
       payload,
   });
 }
+// export async function postNewMenuPage(payload) {
+//   // console.log(payload);
+//   return request('/api/query/menuPage', {
+//       method: 'get',
+//       payload,
+//   });
+// }

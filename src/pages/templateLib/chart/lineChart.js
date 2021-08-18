@@ -26,7 +26,7 @@ class LineChart extends React.Component {
   render() {
     // console.log('render', this.props.match.params.id);
     const { lineChart } = this.props;
-    console.log(lineChart);
+    // console.log(lineChart);
     return (
       // <div>{this.props.match.params.id}</div>
       <div style={{ margin: '0 20px', minHeight: 'calc(100vh)' }}>

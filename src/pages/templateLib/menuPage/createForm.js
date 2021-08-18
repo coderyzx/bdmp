@@ -1,11 +1,10 @@
 import React from 'react';
 import { Modal, Form, Input } from 'antd';
-
 const CreateForm = Form.create({ name: 'form_in_modal' })(
   // eslint-disable-next-line
   class extends React.Component {
     render() {
-      const { visible, onCancel, onCreate, form } = this.props;
+      const { visible, onCancel, onCreate, form,confirmLoading } = this.props;
       const { getFieldDecorator } = form;
       return (
         <Modal
@@ -14,12 +13,14 @@ const CreateForm = Form.create({ name: 'form_in_modal' })(
           okText="保存"
           onCancel={onCancel}
           onOk={onCreate}
+          width={900}
+          confirmLoading={confirmLoading}
         >
-          <Form layout="inline">
+          <Form layout="inline" >
             <Form.Item label="id">
               {getFieldDecorator('id', {
                 rules: [{ required: true, message: 'Please input the id!' }],
-              })(<Input placeholder="Please input the id" />)}
+              })(<Input placeholder="id is required" />)}
             </Form.Item>
             <Form.Item label="parentCode">
               {getFieldDecorator('parentCode')(<Input type="textarea" />)}
@@ -31,7 +32,7 @@ const CreateForm = Form.create({ name: 'form_in_modal' })(
               {getFieldDecorator('level')(<Input type="textarea" />)}
             </Form.Item>
             <Form.Item label="code">
-              {getFieldDecorator('parentCode')(<Input type="textarea" />)}
+              {getFieldDecorator('code')(<Input type="textarea" />)}
             </Form.Item>
             <Form.Item label="sort">
               {getFieldDecorator('sort')(<Input type="textarea" />)}

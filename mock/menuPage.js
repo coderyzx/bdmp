@@ -3,7 +3,6 @@ export default {
     code: 'menu000',
     data: [
       {
-
         id: '1',
         parentCode: '1',
         parentLabel: '1',
@@ -221,28 +220,6 @@ export default {
         classIcon: '10',
         introCrid: '10',
         componentCode: '10',
-      },
-      {
-
-        id: '11',
-        parentCode: '11',
-        parentLabel: '11',
-        level: '11',
-        code: '11',
-        sort: '11',
-        classLabel: '11',
-        classTttle: '11',
-        classPath: '/api/classPath/',
-        jumpCode: '11',
-        jumpPath: '/api/classPath/',
-        layoutType: '11',
-        classInfo: '11',
-        classLabelEn: '11',
-        classTttleEn: '11',
-        classInfoEn: '11',
-        classIcon: '11',
-        introCrid: '11',
-        componentCode: '11',
       },
     ],
   },

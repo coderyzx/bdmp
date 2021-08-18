@@ -76,4 +76,10 @@ request.interceptors.response.use(async response => {
   return data;
 })
 
+// // 请求头需要加上，不然post请求，mock里接收不到参数
+// const headers = {
+//   'Accept': 'application/json',
+//   'Content-Type': 'application/json'
+// };
+
 export default request;

@@ -5,7 +5,7 @@ import Link from 'umi/link'
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
-class TempLib extends React.Component {
+class TemplateLib extends React.Component {
   render() {
     const { children } = this.props;
     return (
@@ -81,4 +81,4 @@ class TempLib extends React.Component {
     )
   }
 }
-export default TempLib;
+export default TemplateLib;
