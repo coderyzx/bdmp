@@ -48,10 +48,11 @@ const config = {
   routes,
   proxy: {
     '/api': {
-      target: 'http://your.domain.com',
+      target: 'http://10.5.65.37:8091/',
+       // secure: false,// 如果是https接口，需要配置这个参数
       changeOrigin: true,
       pathRewrite: {
-        '^/your': '',
+        '^/api': '',
       },
     },
   },

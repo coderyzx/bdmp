@@ -1,28 +1,28 @@
 import React from 'react';
 import { Input, InputNumber, Form } from 'antd';
 
-const EditableContext = React.createContext();
+const EditableContext = React.createContext();   // 创建一个Context 默认值为空
 
-class Editable extends React.Component {
+class EditableCell extends React.Component {
   getInput = () => {
     if (this.props.inputType === 'number') {
       return <InputNumber />;
     }
     return <Input />;
   };
-  // const { form } = this.props;
-  // const { getFieldDecorator } = form;
   renderCell = ({ getFieldDecorator }) => {
     const {
-      editing,
-      dataIndex,
-      title,
-      inputType,
-      record,
-      index,
-      children,
-      ...restProps
+        editing,
+        dataIndex,
+        title,
+        inputType,
+        record,
+        index,
+        children,
+        ...restProps
     } = this.props;
+    console.log('editing: ',editing);
+
     return (
       <td {...restProps}>
         {editing ? (
@@ -31,25 +31,24 @@ class Editable extends React.Component {
               rules: [
                 {
                   required: true,
-                  message: `Please Input ${title}!`,
-                },
+                  message: `请选择内容 ${title}!`
+                }
               ],
-              initialValue: record[dataIndex],
+              initialValue: record[dataIndex]
             })(this.getInput())}
           </Form.Item>
         ) : (
-          children
-        )}
+              children
+            )}
       </td>
     );
   };
 
   render() {
-    return <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>;
+      return (
+          <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
+      );
   }
 }
 
-const EditableCell = Form.create()(Editable);
-
 export default EditableCell;
-

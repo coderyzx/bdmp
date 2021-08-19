@@ -11,7 +11,6 @@ class MetaData extends React.Component {
     render () {
       return (
         <div >
-
           <div >元数据</div>
           <Footer style={{ textAlign: 'center' }}>UIH ©2021 Created by UIH-BDMP</Footer>
         </div>

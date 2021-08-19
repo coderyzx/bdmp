@@ -10,7 +10,7 @@ class DashBoard extends React.Component {
 
     render () {
       return (
-        <div style={{marginTop:67}}>
+        <div style={{ marginTop: 67 }}>
           <div >仪表板</div>
           <Footer style={{ textAlign: 'center' }}>UIH ©2021 Created by UIH-BDMP</Footer>
         </div>

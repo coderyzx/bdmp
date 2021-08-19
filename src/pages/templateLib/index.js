@@ -18,8 +18,7 @@ class TemplateLib extends React.Component {
             background: '#fff',
             // background: 'black',
             left: 0,
-            marginTop: 67
-            
+
           }}>
           <Menu
             // theme='dark'
@@ -74,7 +73,7 @@ class TemplateLib extends React.Component {
             </Menu.Item>
           </Menu>
         </Sider>
-        <Layout style={{ padding: '67px 15px 0 15px', marginLeft: '200px',minHeight:'100vh'}}>
+        <Layout style={{ padding: '0 15px', marginLeft: '200px', minHeight: 'calc(100vh - 67px)' }}>
           {children}
         </Layout>
       </>

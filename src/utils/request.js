@@ -72,7 +72,7 @@ request.interceptors.response.use(async response => {
   // if (data && data.NOT_LOGIN) {
   //   // location.href = '登录url';
   // }
-  data.yuanzhixin = 1;
+  // data.yuanzhixin = 1;
   return data;
 })
 

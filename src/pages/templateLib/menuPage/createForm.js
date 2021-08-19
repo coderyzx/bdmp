@@ -1,16 +1,17 @@
 import React from 'react';
 import { Modal, Form, Input } from 'antd';
+
 const CreateForm = Form.create({ name: 'form_in_modal' })(
   // eslint-disable-next-line
   class extends React.Component {
     render() {
-      const { visible, onCancel, onCreate, form,confirmLoading } = this.props;
+      const { visible, onCancel, onCreate, form, confirmLoading } = this.props;
       const { getFieldDecorator } = form;
       return (
         <Modal
           visible={visible}
           title="创建菜单页面维护"
-          okText="保存"
+          okText="添加"
           onCancel={onCancel}
           onOk={onCreate}
           width={900}
@@ -20,7 +21,7 @@ const CreateForm = Form.create({ name: 'form_in_modal' })(
             <Form.Item label="id">
               {getFieldDecorator('id', {
                 rules: [{ required: true, message: 'Please input the id!' }],
-              })(<Input placeholder="id is required" />)}
+              })(<Input placeholder="id is unique!" />)}
             </Form.Item>
             <Form.Item label="parentCode">
               {getFieldDecorator('parentCode')(<Input type="textarea" />)}
@@ -67,12 +68,43 @@ const CreateForm = Form.create({ name: 'form_in_modal' })(
             <Form.Item label="classInfoEn">
               {getFieldDecorator('classInfoEn')(<Input type="textarea" />)}
             </Form.Item>
+            <Form.Item label="classIcon">
+              {getFieldDecorator('classIcon')(<Input type="textarea" />)}
+            </Form.Item>
             <Form.Item label="introCrid">
               {getFieldDecorator('introCrid')(<Input type="textarea" />)}
             </Form.Item>
             <Form.Item label="componentCode">
               {getFieldDecorator('componentCode')(<Input type="textarea" />)}
             </Form.Item>
+            {/* 新增加9个字段 */}
+            {/* <Form.Item label="active">
+              {getFieldDecorator('active')(<Input type="textarea" />)}
+            </Form.Item>
+            <Form.Item label="backgroud">
+              {getFieldDecorator('backgroud')(<Input type="textarea" />)}
+            </Form.Item>
+            <Form.Item label="createDatatime">
+              {getFieldDecorator('createDatatime')(<Input type="textarea" />)}
+            </Form.Item>
+            <Form.Item label="createUserId">
+              {getFieldDecorator('createUserId')(<Input type="textarea" />)}
+            </Form.Item>
+            <Form.Item label="deleted">
+              {getFieldDecorator('deleted')(<Input type="textarea" />)}
+            </Form.Item>
+            <Form.Item label="mark">
+              {getFieldDecorator('mark')(<Input type="textarea" />)}
+            </Form.Item>
+            <Form.Item label="modifyDatatime">
+              {getFieldDecorator('modifyDatatime')(<Input type="textarea" />)}
+            </Form.Item>
+            <Form.Item label="modifyUserId">
+              {getFieldDecorator('modifyUserId')(<Input type="textarea" />)}
+            </Form.Item>
+            <Form.Item label="version">
+              {getFieldDecorator('version')(<Input type="textarea" />)}
+            </Form.Item> */}
           </Form>
         </Modal>
       );
