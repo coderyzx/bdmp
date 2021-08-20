@@ -73,7 +73,7 @@ class TemplateLib extends React.Component {
             </Menu.Item>
           </Menu>
         </Sider>
-        <Layout style={{ padding: '0 15px', marginLeft: '200px', minHeight: 'calc(100vh - 67px)' }}>
+        <Layout style={{ padding: '0 15px', marginLeft: '200px', minHeight: 'calc(100vh - 67px)',background:'#fff'}}>
           {children}
         </Layout>
       </>

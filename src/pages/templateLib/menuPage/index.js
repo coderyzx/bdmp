@@ -1,7 +1,7 @@
  /* eslint-disable */ 
 import React from 'react';
 import { connect } from 'dva';
-import { Table, Button, Popconfirm, Form, Divider, Input, InputNumber, } from 'antd';
+import { Table, Button, Popconfirm, Form, Divider, Input, InputNumber,Tooltip,Modal } from 'antd';
 import CreateForm from './createForm';
 // import Editable from './editable';
 // import EditableCell from './editableCell';
@@ -28,7 +28,7 @@ class EditableCell extends React.Component {
         children,
         ...restProps
     } = this.props;
-    // console.log('editing: ',editing);
+    // console.log('inputType: ',inputType);
     return (
       <td {...restProps}>
         {editing ? (
@@ -68,10 +68,14 @@ class MenuPage extends React.Component {
     super(props);
     
     this.state = {
-      visible: false,
-      confirmLoading: false,
-      loading:true,
-      editingKey:'',
+      visible: false,//添加显示对话框
+      visible2: false,//删除显示对话框
+      confirmLoading: false,//添加加载
+      loading:true,//表格加载
+      editingKey:'',//行是否可编辑
+      iconLoading: false,//编辑保存加载
+      selectedRowKeys: [], //选择一行
+      deleteLoading:false,//选择多行删除加载
     };
     this.columns = [
         {
@@ -84,7 +88,8 @@ class MenuPage extends React.Component {
           sortDirections: ['descend'],
           editable: true,
         }, // 主键
-        { title: 'parentCode', dataIndex: 'parentCode', key: 'parentCode', width: 120,editable: true, ellipsis: true,}, // 父节点
+        { title: 'parentCode', dataIndex: 'parentCode', key: 'parentCode', width: 120,editable: true, 
+        }, // 父节点
         { title: 'parentLabel', dataIndex: 'parentLabel', key: 'parentLabel', width: 120 ,editable: true,ellipsis: true,}, // 父标签
         { title: 'level', dataIndex: 'level', key: 'level', width: 120,editable: true,ellipsis: true, }, // 级别
         { title: 'code', dataIndex: 'code', key: 'code', width: 120,editable: true,ellipsis: true, }, // 编号
@@ -93,56 +98,95 @@ class MenuPage extends React.Component {
         { title: 'classTttle', dataIndex: 'classTttle', key: 'classTttle', width: 120,editable: true,ellipsis: true, },
         { title: 'classPath', dataIndex: 'classPath', key: 'classPath', width: 120,editable: true,ellipsis: true, },
         { title: 'jumpCode', dataIndex: 'jumpCode', key: 'jumpCode', width: 120,editable: true, ellipsis: true,},
-        { title: 'jumpPath', dataIndex: 'jumpPath', key: 'jumpPath', width: 200 ,editable: true,ellipsis: true,}, // 跳转路径
+        { title: 'jumpPath', dataIndex: 'jumpPath', key: 'jumpPath', width: 120 ,editable: true,ellipsis: true,
+          onCell: () => {
+            return {
+              style: {
+                maxWidth: 120,
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+                textOverflow:'ellipsis',
+              }
+            }
+          },
+          render: (text) => <Tooltip placement="topLeft" title={text}>{text}</Tooltip>
+        }, // 跳转路径
         { title: 'layoutType', dataIndex: 'layoutType', key: 'layoutType', width: 120 ,editable: true,ellipsis: true,},
-        { title: 'classInfo', dataIndex: 'classInfo', key: 'classInfo', width: 120,editable: true,ellipsis: true, },
+        { title: 'classInfo', dataIndex: 'classInfo', key: 'classInfo', width: 120,editable: true,ellipsis: true, 
+          onCell: () => {
+            return {
+              style: {
+                maxWidth: 120,
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+                textOverflow:'ellipsis',
+              }
+            }
+          },
+          render: (text) => <Tooltip placement="topLeft" title={text}>{text}</Tooltip>
+        },
         { title: 'classLabelEn', dataIndex: 'classLabelEn', key: 'classLabelEn', width: 120,editable: true,ellipsis: true, },
         { title: 'classTttleEn', dataIndex: 'classTttleEn', key: 'classTttleEn', width: 120,editable: true, ellipsis: true,},
         { title: 'classInfoEn', dataIndex: 'classInfoEn', key: 'classInfoEn', width: 120 ,editable: true,ellipsis: true,},
         { title: 'classIcon', dataIndex: 'classIcon', key: 'classIcon', width: 120 ,editable: true,ellipsis: true,},
         { title: 'introCrid', dataIndex: 'introCrid', key: 'introCrid', width: 120 ,editable: true,ellipsis: true,},
-        { title: 'componentCode', dataIndex: 'componentCode', key: 'componentCode', width: 150,editable: true,ellipsis: true, }, // 组件编号
+        { title: 'componentCode', dataIndex: 'componentCode', key: 'componentCode', width: 150,editable: true,ellipsis: true,
+          onCell: () => {
+            return {
+              style: {
+                maxWidth: 150,
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+                textOverflow:'ellipsis',
+              }
+            }
+          },
+          render: (text) => <Tooltip placement="topLeft" title={text}>{text}</Tooltip>
+        }, // 组件编号
         {
           title: 'Operation',
           key: 'Operation',
           fixed: 'right',
-          width: 200,
+          width: 210,
           render: (text,record) => {
             const { editingKey } = this.state;
             const editable = this.isEditing(record);
             // console.log(editable);
             return(
-              <span style={{width:"100%",}}  >
+              <span style={{width:"100%",display:'block'}}  >
                 {editable ? (
                   <span>
                     <EditableContext.Consumer>
                       {form => (
-                        <a
+                        <Button type="primary" size="small" 
                           onClick={() => this.save(form,  record.key)}
-                          style={{ marginRight: 8 }}
+                          style={{ marginLeft: 3, marginRight: 8 }}
+                          icon="save"
+                          loading={this.state.iconLoading}
                         >
-                          Save
-                        </a>
+                          保存
+                        </Button>
                       )}
                     </EditableContext.Consumer>
                     <Popconfirm title="Sure to cancel?" onConfirm={() => this.cancel(record.key)}>
-                      <a>Cancel</a>
+                      <Button type="default" size="small"  >取&nbsp;&nbsp;&nbsp;消</Button>
                     </Popconfirm>
                   </span>
                   ):(
                     <Button type="primary" size="small" 
                       disabled={editingKey !== ''} 
                       onClick={() => this.edit(record.key)}
-                      style={{ marginLeft:30}}
+                      style={{ marginLeft:35}}
+                      icon="edit"
                     >
-                      Edit
+                      编辑
                     </Button>
                   )
                 }
                 <Divider type="vertical" />
                 {this.props.dataSource.length >= 1 ? (
-                  <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.id)}>
-                    <Button type="danger" size="small">Delete</Button>
+                  <Popconfirm title="确认删除吗?" onConfirm={() => this.handleDelete(record.id)}>
+                    <Button type="danger" size="small" icon="delete"  ></Button>
                   </Popconfirm>
                   ) : null}
               </span>
@@ -152,6 +196,7 @@ class MenuPage extends React.Component {
     ];
   }
 
+  //初始化获得表格
   componentDidMount () {
     const { dispatch } = this.props;
     dispatch({
@@ -162,71 +207,6 @@ class MenuPage extends React.Component {
       this.setState({ loading: false });
     }, 600);
   }
-  
-  //编辑行
-  isEditing = record => record.key === this.state.editingKey;
-
-  cancel = () => {
-    this.setState({ editingKey: '' });
-  };
-
-  save(form, key) {
-    // console.log(record);
-    form.validateFields((error, row) => {
-      if (error) {
-        return;
-      }
-      const {dataSource,dispatch} = this.props;
-      const newData = [...dataSource];
-      // console.log(newData);
-      const index = newData.findIndex(item => key === item.key);
-      // console.log(index);
-      if (index > -1) {
-        const item = newData[index];
-        console.log(item);
-        // newData.splice(index, 1, {
-        //   ...item,
-        //   ...row,
-        // });
-        // console.log(row);
-        dispatch({
-          type: 'menuPageModel/postEditMenu',
-          payload: row,
-        });
-        this.setState({
-          editingKey: '' 
-        });
-      } else {
-        // newData.push(row);
-        dispatch({
-          type: 'menuPageModel/postEditMenu',
-          payload: row,
-        });
-        this.setState({
-          // data:newData,
-          editingKey: '' 
-        });
-      }
-    });
-  }
-
-  edit(key) {
-    this.setState({ editingKey: key });
-  }
-
-  // 删除某一行
-  handleDelete = id => {
-    // console.log(key);
-    // const dataSource = [...this.props.dataSource];
-    // const data = [...this.state.data];
-    // this.setState({ data: data.filter(item => item.key !== key) });
-    const {dispatch} = this.props;
-    dispatch({
-      type: 'menuPageModel/getDeleteMenu',
-      payload: id,
-    });
-  };
-
 
   // 新建一项,添加到表格中去
   showModal = () => {
@@ -254,12 +234,14 @@ class MenuPage extends React.Component {
       });
       // this.setState({ data:[...data,values]});
       this.setState({
-         confirmLoading: true,
+          confirmLoading: true,
+          loading: true
       });
       this.timer2 = setTimeout(() => {
         this.setState({ 
           confirmLoading: false,
-          visible: false 
+          visible: false,
+          loading: false 
         });
       }, 800);
       form.resetFields();
@@ -269,13 +251,112 @@ class MenuPage extends React.Component {
   saveFormRef = formRef => {
     this.formRef = formRef;
   };
+  
+  // 删除某一行
+  handleDelete = id => {
+    const {dispatch} = this.props;
+    dispatch({
+      type: 'menuPageModel/getDeleteMenu',
+      payload: id,
+    });
+  };
+
+  //删除选择项
+  showDelete = () => {
+    this.setState({ visible2: true });
+  };
+  deleteSelection = selectedRowKeys =>{
+    // console.log(selectedRowKeys);
+    const {dispatch} = this.props;
+      dispatch({
+        type: 'menuPageModel/postDeleteMenu',
+        payload: selectedRowKeys,
+      });
+      this.setState({ 
+        selectedRowKeys: [],
+        visible2: true,
+        deleteLoading:true, 
+        loading: true
+      });
+      this.timer3 = setTimeout(() => {
+        this.setState({
+          deleteLoading:false, 
+          visible2: false,
+          loading: false
+        });
+      }, 800);
+  };
+
+  onSelectChange = selectedRowKeys => {
+    // console.log('selectedRowKeys changed: ', selectedRowKeys);
+    this.setState({ selectedRowKeys });
+  };
+
+  //编辑表格行
+  isEditing = record => record.key === this.state.editingKey;
+
+  cancel = () => {
+    this.setState({ editingKey: '' });
+  };
+
+  save(form, key) {
+    // console.log(record);
+    form.validateFields((error, row) => {
+      if (error) {
+        return;
+      }
+      const {dataSource,dispatch} = this.props;
+      const newData = [...dataSource];
+      // console.log(newData);
+      const index = newData.findIndex(item => key === item.key);
+      // console.log(index);
+      if (index > -1) {
+        // const item = newData[index];
+        // console.log(item);
+        dispatch({
+          type: 'menuPageModel/postEditMenu',
+          payload: row,
+        });
+        this.setState({
+          iconLoading: true 
+        });
+        this.timer4 = setTimeout(() => {
+          this.setState({ 
+            editingKey: '',
+            iconLoading: false
+          });
+        }, 600);
+      } else {
+        // newData.push(row);
+        dispatch({
+          type: 'menuPageModel/postEditMenu',
+          payload: row,
+        });
+        this.setState({
+          iconLoading: true 
+        });
+        this.timer4 = setTimeout(() => {
+          this.setState({ 
+            editingKey: '',
+            iconLoading: false
+          });
+        }, 600);
+      }
+    });
+  }
+
+  edit(key) {
+    this.setState({ editingKey: key });
+  }
+
 
   componentWillUnMount = () => {
 
-    // //清除定时器
+    //清除定时器
     clearTimeout( this.timer1);
     clearTimeout( this.timer2);
     clearTimeout( this.timer3);
+    clearTimeout( this.timer4);
   }
 
 
@@ -304,13 +385,39 @@ class MenuPage extends React.Component {
       };
     });
     // const {confirmLoading,visible,data,loading} = this.state;
-    const {confirmLoading,visible,loading} = this.state;
+    const {confirmLoading,visible,loading,deleteLoading,selectedRowKeys} = this.state;
+    const rowSelection = {
+      selectedRowKeys,
+      onChange: this.onSelectChange,
+    };
+    const hasSelected = selectedRowKeys.length > 0;
+
     return (
       <div style={{ margin: '0 50px' }}>  
         <div className={styles.title} >菜单页面维护</div>
-        <Button onClick={this.showModal} type="primary" size='large' style={{ marginBottom: 16 }}>
-          Add New
-        </Button>
+        <div className={styles.bar}>
+          <Button type="danger" size='large' 
+          onClick={this.showDelete}
+          disabled={!hasSelected}
+          icon="delete"
+          >
+            删除
+          </Button>
+          <Button onClick={this.showModal} type="primary" size='large' style={{ marginLeft: 30}}>
+            添加一项
+          </Button>
+        </div>
+        <Modal
+          okType= 'danger'
+          visible={this.state.visible2}
+          onOk={()=>this.deleteSelection(rowSelection.selectedRowKeys)}
+          onCancel={this.handleCancel}
+          confirmLoading={deleteLoading}
+        >
+          <p className={styles.selectItem}>
+            确认删除所选择的<b>{hasSelected ? `${selectedRowKeys.length}项` : ''}吗？</b>
+          </p>
+        </Modal>
         <CreateForm
           wrappedComponentRef={this.saveFormRef}
           visible={visible}
@@ -323,15 +430,15 @@ class MenuPage extends React.Component {
             components={components}
             columns={columns}
             dataSource={dataSource}
-            // dataSource={data}
             bordered
             loading={loading}
             // rowKey="id"
-            scroll={{ x: 1500, y: 500 }}
+            scroll={{ x: 1500, y: 470 }}
             pagination={{
               onChange: this.cancel,
             }}
-            rowClassName={styles.editableRow}
+            rowSelection={rowSelection}
+            // rowClassName={styles.editableRow}
           />
         </EditableContext.Provider>
       </div>
@@ -341,7 +448,3 @@ class MenuPage extends React.Component {
 const EditableFormTable = Form.create()(MenuPage);
 
 export default EditableFormTable;
-
-// MenuPage.propTypes = {
-//   form: PropTypes.object,
-// };

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Input, InputNumber, Form } from 'antd';
 
-const EditableContext = React.createContext();   // 创建一个Context 默认值为空
+const EditableContext = React.createContext(); // 创建一个Context 默认值为空
 
 class EditableCell extends React.Component {
   getInput = () => {
@@ -10,6 +10,7 @@ class EditableCell extends React.Component {
     }
     return <Input />;
   };
+
   renderCell = ({ getFieldDecorator }) => {
     const {
         editing,
@@ -21,7 +22,7 @@ class EditableCell extends React.Component {
         children,
         ...restProps
     } = this.props;
-    console.log('editing: ',editing);
+    console.log('editing: ', editing);
 
     return (
       <td {...restProps}>
@@ -31,10 +32,10 @@ class EditableCell extends React.Component {
               rules: [
                 {
                   required: true,
-                  message: `请选择内容 ${title}!`
-                }
+                  message: `请选择内容 ${title}!`,
+                },
               ],
-              initialValue: record[dataIndex]
+              initialValue: record[dataIndex],
             })(this.getInput())}
           </Form.Item>
         ) : (
@@ -46,7 +47,7 @@ class EditableCell extends React.Component {
 
   render() {
       return (
-          <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
+        <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
       );
   }
 }

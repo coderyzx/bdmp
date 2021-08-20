@@ -1,5 +1,5 @@
 
-import { getMenuPageData,postNewMenu,postUpdateMenu,getDeleteMenu } from '@/services/menuPage';
+import { getMenuPageData,getMenuById, postNewMenu, postUpdateMenu, getDeleteMenu ,postDeleteMenuArray} from '@/services/menuPage';
 import { getMenuPageKey } from '@/utils/menuPage';
 
 const menuPageModel = {
@@ -9,11 +9,11 @@ const menuPageModel = {
   },
 
   effects: {
-    //查询
+    // 查询所有
     *getMenuPage ({ payload, callback }, { call, put }) {
       const response = yield call(getMenuPageData, payload);
       // console.log(response);
-      if(response){
+      if (response) {
         yield put({
           type: 'menuPage',
           payload: response,
@@ -23,12 +23,12 @@ const menuPageModel = {
         }
       }
     },
-    //增加
-    *postNewMenu({payload}, {call,put}){
+    // 增加
+    *postNewMenu({ payload }, { call, put }) {
       // console.log(payload);
-      const response =  yield call(postNewMenu,payload);
+      const response = yield call(postNewMenu, payload);
       // console.log(response);
-      if(response){
+      if (response) {
         const res = yield call(getMenuPageData);
         yield put({
           type: 'menuPage',
@@ -36,12 +36,26 @@ const menuPageModel = {
         });
       }
     },
-    //修改  
-    *postEditMenu({payload}, {call,put}){
+    // 修改
+    *postEditMenu({ payload }, { call, put }) {
+      // console.log(payload.id);
+      const id = payload.id;
+      const response = yield call(postUpdateMenu, payload);
+      console.log(response);
+      if (response === "200") {
+        const res = yield call( getMenuById,id);
+        yield put({
+          type: 'menuPage',
+          payload: res,
+        });
+      }
+    },
+    // 删除
+    *getDeleteMenu({ payload }, { call, put }) {
       // console.log(payload);
-      const response =  yield call(postUpdateMenu,payload);
+      const response = yield call(getDeleteMenu, payload);
       // console.log(response);
-      if(response){
+      if (response) {
         const res = yield call(getMenuPageData);
         yield put({
           type: 'menuPage',
@@ -49,12 +63,12 @@ const menuPageModel = {
         });
       }
     },
-    //删除
-    *getDeleteMenu({payload}, {call,put}){
+    // 批量删除
+    *postDeleteMenu({ payload }, { call, put }) {
       // console.log(payload);
-      const response =  yield call(getDeleteMenu,payload);
+      const response = yield call(postDeleteMenuArray, payload);
       // console.log(response);
-      if(response){
+      if (response) {
         const res = yield call(getMenuPageData);
         yield put({
           type: 'menuPage',
@@ -63,6 +77,7 @@ const menuPageModel = {
       }
     },
 
+    
   },
   reducers: {
     menuPage(state, { payload }) {

@@ -3,7 +3,7 @@ import { connect } from 'dva'
 import Link from 'umi/link';
 import ReactECharts from 'echarts-for-react';
 import styles from './index.less';
-
+import { Icon,Button } from 'antd';
 @connect(({ chartModel }) => (
   {
     lineChart: chartModel.lineChart,
@@ -50,10 +50,14 @@ class LineChart extends React.Component {
                       />
                     </div>
                     <div className={styles.mask} >
-                      <Link to={`/editor/${item.option}`}>
-                        <div>编辑</div>
+                      <Link to={`/editor/${item.id}`}>
+                        <Button type="primary"  size="large" style={{fontSize:40,height:60,margin:"100px 30px 0 90px"}}  >
+                        <Icon type="edit" />
+                        </Button>
                       </Link>
-                      <div>删除</div>
+                      <Button type="danger"  size="large" style={{fontSize:40,height:60,margin:"100px 0 0 0"}}  >
+                        <Icon type="delete" />
+                      </Button>
                     </div>
                   </div>
                   <h4 className={styles.title}>{item.title}</h4>
