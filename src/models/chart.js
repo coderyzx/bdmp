@@ -1,57 +1,95 @@
-import { getLineChart, getBarChart, getPieChart, getRadarChart } from '@/services/global';
+import { getChartByTypeName,postChartData, getDelete, postUpdate, getChartById,getTypeList,getTypeName } from '@/services/chart';
 
 const chartModel = {
   namespace: 'chartModel',
   state: {
-    chartMenu: [],
-    lineChart: {},
-    barChart: {},
-    pieChart: {},
-    radarChart: {},
+    chartList: [],
+    chartType:[],
+    chartTypeName:[],
+    chartEdit:{},
   },
 
   effects: {
-    *getLineChart({ payload }, { call, put }) {
+    //获取所有chart
+    *getChartList({ payload}, { call, put }) {
       // console.log(payload);
-      const response = yield call(getLineChart, payload);
+      const response = yield call(getChartByTypeName, payload);
       // console.log(response);
-      if (response.code === '001') {
+      if (response) {
         yield put({
-          type: 'lineChart',
-          payload: response.lineChart,
+          type: 'chartList',
+          payload: response,
         });
       }
     },
-    *getBarChart({ payload }, { call, put }) {
+    //新增chart
+    *postNewChart({ payload ,callback}, { call, put }) {
       // console.log(payload);
-      const response = yield call(getBarChart, payload);
-      // console.log(response);
-      if (response.code === '002') {
+      const response = yield call(postChartData, payload);
+      console.log(response);
+      if (response === 200) {
+        callback();
+      }
+    },
+    //删除chart
+    *getDeleteChart({ payload ,callback}, { call, put }) {
+      // console.log(payload);
+      const response = yield call(getDelete, payload);
+      console.log(response);
+      if (response === 200) {
+        callback();
+      }
+    },
+    //修改chart
+    *postUpdateChart({ payload ,callback}, { call, put }) {
+      // console.log(payload);
+      const response = yield call(postUpdate, payload);
+      console.log(response);
+      if (response === 200) {
+        const res = yield call(getChartByTypeName);
         yield put({
-          type: 'barChart',
-          payload: response.barChart,
+          type: 'chartList',
+          payload: res,
+        });
+        if (callback) {
+          callback(response);
+        }
+      }
+    },
+    //查一个chart
+    *getChart({ payload }, { call, put }) {
+      // console.log(payload);
+      const response = yield call(getChartById, payload);
+      console.log(response);
+      if (response) {
+        yield put({
+          type: 'chartEdit',
+          payload: response,
         });
       }
     },
-    *getPieChart({ payload }, { call, put }) {
+
+    //获取图表类型的所有信息
+    *getChartType({ payload}, { call, put }) {
       // console.log(payload);
-      const response = yield call(getPieChart, payload);
+      const response = yield call(getTypeList, payload);
       // console.log(response);
-      if (response.code === '003') {
+      if (response) {
         yield put({
-          type: 'pieChart',
-          payload: response.pieChart,
+          type: 'chartType',
+          payload: response,
         });
       }
     },
-    *getRadarChart({ payload }, { call, put }) {
+    //获取图表类型的名称
+    *getChartTypeName({ payload}, { call, put }) {
       // console.log(payload);
-      const response = yield call(getRadarChart, payload);
+      const response = yield call(getTypeName, payload);
       // console.log(response);
-      if (response.code === '004') {
+      if (response) {
         yield put({
-          type: 'radarChart',
-          payload: response.radarChart,
+          type: 'chartTypeName',
+          payload: response,
         });
       }
     },
@@ -59,34 +97,35 @@ const chartModel = {
 
   },
   reducers: {
-    lineChart(state, { payload }) {
+    chartList(state, { payload }) {
       // console.log(payload);
       return {
         ...state,
-        lineChart: payload,
+        chartList: payload,
       }
     },
-    barChart(state, { payload }) {
+    chartEdit(state, { payload }) {
       // console.log(payload);
       return {
         ...state,
-        barChart: payload,
+        chartEdit: payload,
       }
     },
-    pieChart(state, { payload }) {
+    chartType(state, { payload }) {
       // console.log(payload);
       return {
         ...state,
-        pieChart: payload,
+        chartType: payload,
       }
     },
-    radarChart(state, { payload }) {
+    chartTypeName(state, { payload }) {
       // console.log(payload);
       return {
         ...state,
-        radarChart: payload,
+        chartTypeName: payload,
       }
     },
+    
   },
 };
 

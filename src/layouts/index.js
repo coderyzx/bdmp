@@ -66,7 +66,7 @@ class BasicLayout extends React.Component {
             </Tooltip>
           </span>
         </Header>
-        <Layout style={{ marginTop: 67 }}>
+        <Layout style={{ paddingTop: 67}}>
           { this.props.children }
         </Layout>
       </Layout>

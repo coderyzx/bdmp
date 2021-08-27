@@ -1,62 +1,14 @@
  /* eslint-disable */ 
 import React from 'react';
 import { connect } from 'dva';
-import { Table, Button, Popconfirm, Form, Divider, Input, InputNumber,Tooltip,Modal } from 'antd';
+import { Table, Button, Popconfirm, Form, Divider, Input, InputNumber,Tooltip,Modal,Icon } from 'antd';
 import CreateForm from './createForm';
-// import Editable from './editable';
-// import EditableCell from './editableCell';
+import EditableForm from './editable';
 import styles from './index.less';
+import dele from '@/assets/delete.svg';
 
 const EditableContext = React.createContext();
 // 表格行内编辑
-class EditableCell extends React.Component {
-  getInput = () => {
-    // console.log(this.props.inputType);
-    if (this.props.inputType === 'number') {
-      return <InputNumber />;
-    }
-    return <Input />;
-  };
-  renderCell = ({ getFieldDecorator }) => {
-    const {
-        editing,
-        dataIndex,
-        title,
-        inputType,
-        record,
-        index,
-        children,
-        ...restProps
-    } = this.props;
-    // console.log('inputType: ',inputType);
-    return (
-      <td {...restProps}>
-        {editing ? (
-          <Form.Item style={{ margin: 0 }}>
-            {getFieldDecorator(dataIndex, {
-              // rules: [
-              //   {
-              //     required: true,
-              //     message: `请选择内容 ${title}!`,
-              //   }
-              // ],
-              initialValue: record[dataIndex],
-            })(this.getInput())}
-          </Form.Item>
-        ) : (
-          children
-        )}
-      </td>
-    );
-  };
-
-  render() {
-      return (
-          <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
-      );
-  }
-}
-
 
 @connect(({ menuPageModel }) => (
   {
@@ -68,27 +20,22 @@ class MenuPage extends React.Component {
     super(props);
     
     this.state = {
+      loading:true,//表格是否加载
       visible: false,//添加显示对话框
       visible2: false,//删除显示对话框
-      confirmLoading: false,//添加加载
-      loading:true,//表格加载
+      visible3: false,//编辑显示对话框
+      confirmLoading: false,//添加是否加载
+      iconLoading: false,//编辑保存是否加载
       editingKey:'',//行是否可编辑
-      iconLoading: false,//编辑保存加载
       selectedRowKeys: [], //选择一行
-      deleteLoading:false,//选择多行删除加载
+      deleteLoading:false,//选择多行删除是否加载
+      editData:{}//某一行编辑时的默认数据
     };
     this.columns = [
-        {
-          title: ' id',
-          dataIndex: 'id',
-          key: 'id',
-          fixed: 'left',
-          width: 100,
-          sorter: (a, b) => a.id - b.id,
-          sortDirections: ['descend'],
-          editable: true,
-        }, // 主键
-        { title: 'parentCode', dataIndex: 'parentCode', key: 'parentCode', width: 120,editable: true, 
+        { 
+          title: 'parentCode', dataIndex: 'parentCode', key: 'parentCode',
+          fixed: 'left', width: 120, sorter: (a, b) => a.parentCode - b.parentCode,
+          sortDirections: ['descend'], editable: true, 
         }, // 父节点
         { title: 'parentLabel', dataIndex: 'parentLabel', key: 'parentLabel', width: 120 ,editable: true,ellipsis: true,}, // 父标签
         { title: 'level', dataIndex: 'level', key: 'level', width: 120,editable: true,ellipsis: true, }, // 级别
@@ -149,43 +96,22 @@ class MenuPage extends React.Component {
           fixed: 'right',
           width: 210,
           render: (text,record) => {
-            const { editingKey } = this.state;
-            const editable = this.isEditing(record);
-            // console.log(editable);
             return(
               <span style={{width:"100%",display:'block'}}  >
-                {editable ? (
-                  <span>
-                    <EditableContext.Consumer>
-                      {form => (
-                        <Button type="primary" size="small" 
-                          onClick={() => this.save(form,  record.key)}
-                          style={{ marginLeft: 3, marginRight: 8 }}
-                          icon="save"
-                          loading={this.state.iconLoading}
-                        >
-                          保存
-                        </Button>
-                      )}
-                    </EditableContext.Consumer>
-                    <Popconfirm title="Sure to cancel?" onConfirm={() => this.cancel(record.key)}>
-                      <Button type="default" size="small"  >取&nbsp;&nbsp;&nbsp;消</Button>
-                    </Popconfirm>
-                  </span>
-                  ):(
-                    <Button type="primary" size="small" 
-                      disabled={editingKey !== ''} 
-                      onClick={() => this.edit(record.key)}
-                      style={{ marginLeft:35}}
-                      icon="edit"
-                    >
-                      编辑
-                    </Button>
-                  )
-                }
+                <Button type="primary" size="small" 
+                  onClick={() =>this.showEdit(record)}
+                  style={{ marginLeft:35}}
+                  icon="edit"
+                >
+                  编辑
+                </Button>
                 <Divider type="vertical" />
                 {this.props.dataSource.length >= 1 ? (
-                  <Popconfirm title="确认删除吗?" onConfirm={() => this.handleDelete(record.id)}>
+                  <Popconfirm 
+                  title="确认删除吗?" 
+                  onConfirm={() => this.handleDelete(record.id)} 
+                  icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
+                  okType="danger" >
                     <Button type="danger" size="small" icon="delete"  ></Button>
                   </Popconfirm>
                   ) : null}
@@ -202,15 +128,20 @@ class MenuPage extends React.Component {
     dispatch({
       type: 'menuPageModel/getMenuPage',
       payload: {},
+      callback:()=>{
+        // this.setState({ loading: false });
+        this.timer1 = setTimeout(() => {
+          this.setState({ loading: false });
+        }, 400);      
+      }
     });
-    this.timer1 = setTimeout(() => {
-      this.setState({ loading: false });
-    }, 600);
   }
 
   // 新建一项,添加到表格中去
   showModal = () => {
-    this.setState({ visible: true });
+    this.setState({ 
+      visible: true 
+    });
   };
 
   handleCancel = () => {
@@ -223,27 +154,30 @@ class MenuPage extends React.Component {
     const { dispatch } = this.props;
     // const regexp = new RegExp(/^1(3|4|5|6|7|8)\d{9}$/);
     form.validateFields((err, values) => {
-      console.log('Received values of form: ', values);
+      // console.log('Received values of form: ', values);
       if (err) {//如果有一个校验不通过，代码将不再往下执行
         return;
       }
+      this.setState({
+        confirmLoading: true,
+        loading: true
+      });
       //校验通过，调接口传参
       dispatch({
         type: 'menuPageModel/postNewMenu',
         payload: values,
+        callback:(res)=>{
+          if(res ===200){
+            this.timer2 = setTimeout(() => {
+              this.setState({ 
+                confirmLoading: false,
+                visible: false,
+                loading: false 
+              });
+            }, 500);    
+          }
+        }
       });
-      // this.setState({ data:[...data,values]});
-      this.setState({
-          confirmLoading: true,
-          loading: true
-      });
-      this.timer2 = setTimeout(() => {
-        this.setState({ 
-          confirmLoading: false,
-          visible: false,
-          loading: false 
-        });
-      }, 800);
       form.resetFields();
     });
   };
@@ -268,23 +202,28 @@ class MenuPage extends React.Component {
   deleteSelection = selectedRowKeys =>{
     // console.log(selectedRowKeys);
     const {dispatch} = this.props;
-      dispatch({
-        type: 'menuPageModel/postDeleteMenu',
-        payload: selectedRowKeys,
-      });
-      this.setState({ 
-        selectedRowKeys: [],
-        visible2: true,
-        deleteLoading:true, 
-        loading: true
-      });
-      this.timer3 = setTimeout(() => {
-        this.setState({
-          deleteLoading:false, 
-          visible2: false,
-          loading: false
-        });
-      }, 800);
+    this.setState({ 
+      selectedRowKeys: [],
+      visible2: true,
+      deleteLoading:true, 
+      loading: true
+    });
+    dispatch({
+      type: 'menuPageModel/postDeleteMenu',
+      payload: selectedRowKeys,
+      callback:()=>{
+        this.timer3 = setTimeout(() => {
+          this.setState({
+            deleteLoading:false, 
+            visible2: false,
+            loading: false
+          });
+        }, 500);
+      }
+    });
+  };
+  deleteSelectionCancel = () => {
+    this.setState({ visible2: false });
   };
 
   onSelectChange = selectedRowKeys => {
@@ -292,67 +231,64 @@ class MenuPage extends React.Component {
     this.setState({ selectedRowKeys });
   };
 
-  //编辑表格行
-  isEditing = record => record.key === this.state.editingKey;
-
-  cancel = () => {
-    this.setState({ editingKey: '' });
+//编辑弹框
+  showEdit = record => {
+    // console.log(record);
+    this.setState({ 
+      visible3: true,
+      editData:record
+    });
+    
+    // const { dispatch } = this.props;
+    // dispatch({
+    //   type: 'menuPageModel/getMenuById',
+    //   payload: id,
+    // });
   };
 
-  save(form, key) {
-    // console.log(record);
-    form.validateFields((error, row) => {
-      if (error) {
+  cancelEdit = () => {
+    this.setState({ visible3: false });
+  };
+
+  saveEdit = () => {
+    const { form } = this.formRefEdit.props;
+    const { dispatch } = this.props;
+    this.setState({
+      iconLoading: true,
+      loading: true
+    });
+    form.validateFields((err, values) => {
+      // console.log('Received values of form: ', values);
+      if (err) {//如果有一个校验不通过，代码将不再往下执行
         return;
       }
-      const {dataSource,dispatch} = this.props;
-      const newData = [...dataSource];
-      // console.log(newData);
-      const index = newData.findIndex(item => key === item.key);
-      // console.log(index);
-      if (index > -1) {
-        // const item = newData[index];
-        // console.log(item);
-        dispatch({
-          type: 'menuPageModel/postEditMenu',
-          payload: row,
-        });
-        this.setState({
-          iconLoading: true 
-        });
-        this.timer4 = setTimeout(() => {
-          this.setState({ 
-            editingKey: '',
-            iconLoading: false
-          });
-        }, 600);
-      } else {
-        // newData.push(row);
-        dispatch({
-          type: 'menuPageModel/postEditMenu',
-          payload: row,
-        });
-        this.setState({
-          iconLoading: true 
-        });
-        this.timer4 = setTimeout(() => {
-          this.setState({ 
-            editingKey: '',
-            iconLoading: false
-          });
-        }, 600);
-      }
+      //校验通过，调接口传参
+      dispatch({
+        type: 'menuPageModel/postEditMenu',
+        payload: values,
+        callback:(res)=>{
+          if(res ===200 ){
+            this.timer4 = setTimeout(() => {
+              this.setState({ 
+                iconLoading: false,
+                visible3: false,
+                loading: false 
+              });
+            }, 500);
+          }
+        }
+      });
+      form.resetFields();
     });
-  }
+  };
 
-  edit(key) {
-    this.setState({ editingKey: key });
-  }
+  saveRef = formRefEdit => {
+    this.formRefEdit = formRefEdit;
+  };
 
-
+  //清除定时器
   componentWillUnMount = () => {
 
-    //清除定时器
     clearTimeout( this.timer1);
     clearTimeout( this.timer2);
     clearTimeout( this.timer3);
@@ -362,36 +298,13 @@ class MenuPage extends React.Component {
 
   render() {
     const { dataSource } = this.props;
-    // 定义可编辑的row和cell
-    const components = {
-      body: {
-        cell: EditableCell,
-      },
-    };
-    // 为columns的每一列都增加onCell属性。
-    const columns = this.columns.map((col, index) => {
-      if (!col.editable) {
-        return col;
-      }
-      return {
-        ...col,
-        onCell: record => ({
-          record,
-          inputType: col.dataIndex === 'age' ? 'number' : 'text',
-          dataIndex: col.dataIndex,
-          title: col.title,
-          editing: this.isEditing(record),
-        }),
-      };
-    });
-    // const {confirmLoading,visible,data,loading} = this.state;
-    const {confirmLoading,visible,loading,deleteLoading,selectedRowKeys} = this.state;
+    const {confirmLoading,visible,loading,visible2,deleteLoading,selectedRowKeys,visible3,iconLoading,editData} = this.state;
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
     };
     const hasSelected = selectedRowKeys.length > 0;
-
+    const titleDelete = <p style={{ fontSize: 30,marginBottom:5,textAlign:'center'}}>删除</p>
     return (
       <div style={{ margin: '0 50px' }}>  
         <div className={styles.title} >菜单页面维护</div>
@@ -403,21 +316,35 @@ class MenuPage extends React.Component {
           >
             删除
           </Button>
-          <Button onClick={this.showModal} type="primary" size='large' style={{ marginLeft: 30}}>
+          <Button onClick={this.showModal} type="primary" size='large' 
+          style={{ marginLeft: 30}}>
             添加一项
           </Button>
         </div>
         <Modal
           okType= 'danger'
-          visible={this.state.visible2}
+          title={titleDelete}
+          visible={visible2}
           onOk={()=>this.deleteSelection(rowSelection.selectedRowKeys)}
-          onCancel={this.handleCancel}
+          onCancel={this.deleteSelectionCancel}
           confirmLoading={deleteLoading}
         >
+          <p style={{textAlign:'center',marginBottom:15}}>
+            {/* <Icon type="delete" style={{ color:'red',fontSize: 50}}/> */}
+            <img src={dele} />
+          </p>
           <p className={styles.selectItem}>
-            确认删除所选择的<b>{hasSelected ? `${selectedRowKeys.length}项` : ''}吗？</b>
+            确认删除所选择的&nbsp;<b>{hasSelected ? `${selectedRowKeys.length}` : ''}</b>&nbsp;项吗？
           </p>
         </Modal>
+        <EditableForm
+          wrappedComponentRef={this.saveRef}
+          visible={visible3}
+          onCancel={this.cancelEdit}
+          onCreate={this.saveEdit}
+          confirmLoading={iconLoading}
+          editData={editData}
+        />
         <CreateForm
           wrappedComponentRef={this.saveFormRef}
           visible={visible}
@@ -425,22 +352,20 @@ class MenuPage extends React.Component {
           onCreate={this.handleCreate}
           confirmLoading={confirmLoading}
         />
-        <EditableContext.Provider value={this.props.form}>
-          <Table
-            components={components}
-            columns={columns}
-            dataSource={dataSource}
-            bordered
-            loading={loading}
-            // rowKey="id"
-            scroll={{ x: 1500, y: 470 }}
-            pagination={{
-              onChange: this.cancel,
-            }}
-            rowSelection={rowSelection}
-            // rowClassName={styles.editableRow}
-          />
-        </EditableContext.Provider>
+        <Table
+          // components={components}
+          columns={this.columns}
+          dataSource={dataSource}
+          bordered
+          loading={loading}
+          // rowKey="id"
+          scroll={{ x: 1500, y: 470 }}
+          // pagination={{
+          //   onChange: this.cancel,
+          // }}
+          rowSelection={rowSelection}
+          // rowClassName={styles.editableRow}
+        />
       </div>
     );
   }

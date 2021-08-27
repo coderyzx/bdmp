@@ -55,6 +55,13 @@ const config = {
         '^/api': '',
       },
     },
+    '/chartType': {
+      target: 'http://10.5.65.30:8091/',
+      changeOrigin: true,
+      pathRewrite: {
+        '^/chartType': '',
+      },
+    },
   },
   chainWebpack: webpackPlugin,
 }

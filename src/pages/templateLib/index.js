@@ -1,13 +1,27 @@
 import React from 'react';
-// import { connect } from 'dva';
+import { connect } from 'dva';
 import { Layout, Menu, Icon } from 'antd';
 import Link from 'umi/link'
-
+import router from 'umi/router';
 const { Sider } = Layout;
 const { SubMenu } = Menu;
+
+@connect(({ chartModel }) => (
+  {
+    chartType: chartModel.chartType,
+  }),
+)
 class TemplateLib extends React.Component {
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'chartModel/getChartType',
+      payload: {},
+    });
+  }
   render() {
-    const { children } = this.props;
+    const { children,chartType } = this.props;
+    // console.log(chartType);
     return (
       <>
         <Sider
@@ -17,6 +31,7 @@ class TemplateLib extends React.Component {
             position: 'fixed',
             background: '#fff',
             // background: 'black',
+            zIndex:10,
             left: 0,
 
           }}>
@@ -34,30 +49,25 @@ class TemplateLib extends React.Component {
               <Link to="/templateLib/chartType"><Icon type="form"/><span>图表类型管理</span></Link>
             </Menu.Item>
             <SubMenu
-            key="3"
-            title={
-              <span>
-                <Icon type="area-chart"/>
-                <span>图表组件管理</span>
-              </span>
-            }
+              key="3"
+              title={
+                <span>
+                  <Icon type="area-chart"/>
+                  <span>图表组件管理</span>
+                </span>
+              }
             >
-              <Menu.Item key="sub1" >
-                <Link to ="/templateLib/lineChart"><Icon type="line-chart" /><span>折线图</span>
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="sub2" >
-                <Link to ="/templateLib/barChart"><Icon type="bar-chart" /><span>柱状图</span>
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="sub3" >
-                <Link to ="/templateLib/pieChart"><Icon type="pie-chart" /><span>饼图</span>
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="sub4" >
-                <Link to ="/templateLib/radarChart"><Icon type="radar-chart" /><span>雷达图</span>
-                </Link>
-              </Menu.Item>
+              {
+                // <div>heleo</div>
+                chartType.map(item => (
+                  <Menu.Item key={item.typeId} 
+                  onClick={() => router.push(`/templateLib/chart?typeName=${item.typeName}`)}
+                  >
+                    <Icon type={item.typeIcon} />
+                    <span>{item.typeName}</span>
+                  </Menu.Item>
+                ))
+              }
             </SubMenu>
             <Menu.Item key="4">
               <Link to="/templateLib/dictionary"><Icon type="tool"/><span>字典</span></Link>
@@ -73,7 +83,9 @@ class TemplateLib extends React.Component {
             </Menu.Item>
           </Menu>
         </Sider>
-        <Layout style={{ padding: '0 15px', marginLeft: '200px', minHeight: 'calc(100vh - 67px)',background:'#fff'}}>
+        <Layout style={{ 
+          padding: '0 15px', marginLeft: '200px',
+           minHeight: 'calc(100vh - 67px)', background: '#fff',}}>
           {children}
         </Layout>
       </>

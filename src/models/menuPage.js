@@ -1,11 +1,12 @@
 
-import { getMenuPageData,getMenuById, postNewMenu, postUpdateMenu, getDeleteMenu ,postDeleteMenuArray} from '@/services/menuPage';
-import { getMenuPageKey } from '@/utils/menuPage';
+import { getMenuPageData, getMenuDataById, postNewMenu, postUpdateMenu, getDeleteMenu, postDeleteMenuArray } from '@/services/menuPage';
+import { getMenuPageKey } from '@/utils/templateLib';
 
 const menuPageModel = {
   namespace: 'menuPageModel',
   state: {
     data: [],
+    editData:[],
   },
 
   effects: {
@@ -24,30 +25,49 @@ const menuPageModel = {
       }
     },
     // 增加
-    *postNewMenu({ payload }, { call, put }) {
+    *postNewMenu({ payload,callback }, { call, put }) {
       // console.log(payload);
       const response = yield call(postNewMenu, payload);
       // console.log(response);
-      if (response) {
+      if (response === 200) {
         const res = yield call(getMenuPageData);
         yield put({
           type: 'menuPage',
           payload: res,
         });
+        if (callback) {
+          callback(response);
+        }
+      }
+    },
+    // 查询单一行ID
+    *getMenuById({ payload }, { call, put }) {
+      // console.log(payload);
+      const response = yield call(getMenuDataById, payload);
+      // console.log(response);
+      if (response) {
+        yield put({
+          type: 'editData',
+          payload: response,
+        });
       }
     },
     // 修改
-    *postEditMenu({ payload }, { call, put }) {
-      // console.log(payload.id);
-      const id = payload.id;
+    *postEditMenu({ payload,callback }, { call, put }) {
+      console.log(payload);
       const response = yield call(postUpdateMenu, payload);
-      console.log(response);
-      if (response === "200") {
-        const res = yield call( getMenuById,id);
+      // console.log(response);
+      if (response === 200) {
+        const res = yield call(getMenuPageData, payload);
         yield put({
           type: 'menuPage',
           payload: res,
         });
+        if (callback) {
+          callback(response);
+        }
+      }else{
+        console.log('error');
       }
     },
     // 删除
@@ -55,7 +75,7 @@ const menuPageModel = {
       // console.log(payload);
       const response = yield call(getDeleteMenu, payload);
       // console.log(response);
-      if (response) {
+      if (response === 200) {
         const res = yield call(getMenuPageData);
         yield put({
           type: 'menuPage',
@@ -64,7 +84,7 @@ const menuPageModel = {
       }
     },
     // 批量删除
-    *postDeleteMenu({ payload }, { call, put }) {
+    *postDeleteMenu({ payload ,callback}, { call, put }) {
       // console.log(payload);
       const response = yield call(postDeleteMenuArray, payload);
       // console.log(response);
@@ -74,10 +94,13 @@ const menuPageModel = {
           type: 'menuPage',
           payload: res,
         });
+        if(callback){
+          callback();
+        }
       }
     },
 
-    
+
   },
   reducers: {
     menuPage(state, { payload }) {
@@ -85,6 +108,13 @@ const menuPageModel = {
       return {
         ...state,
         data: getMenuPageKey(payload),
+      }
+    },
+    editData(state, { payload }) {
+      // console.log(payload);
+      return {
+        ...state,
+        editData: getMenuPageKey(payload),
       }
     },
 

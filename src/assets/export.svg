@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 62 (91390) - https://sketch.com -->
+    <title>icon/48px/导出</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="-25.6515384%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#76B0F0" offset="0%"></stop>
+            <stop stop-color="#4366C8" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="140.503396%" id="linearGradient-2">
+            <stop stop-color="#84BEFF" offset="0%"></stop>
+            <stop stop-color="#4366C8" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="icon/48px/导出" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M0,8 C-1.3527075e-16,6.8954305 0.8954305,6 2,6 L16.1715729,6 C16.7020059,6 17.2107137,6.21071368 17.5857864,6.58578644 L21,10 L46,10 C47.1045695,10 48,10.8954305 48,12 L48,40 C48,41.1045695 47.1045695,42 46,42 L2,42 C0.8954305,42 1.3527075e-16,41.1045695 0,40 L0,8 Z" id="形状结合" fill="url(#linearGradient-1)"></path>
+        <rect id="矩形" fill="url(#linearGradient-2)" x="0" y="14" width="48" height="28" rx="2"></rect>
+        <rect id="矩形" fill="#FFFFFF" x="21" y="25" width="6" height="8" rx="1"></rect>
+        <path d="M24.7474093,19.8408355 L30.5205655,26.3356362 C30.8874835,26.7484189 30.8503028,27.3804913 30.43752,27.7474093 C30.2544689,27.9101214 30.0180703,28 29.7731562,28 L18.2268438,28 C17.6745591,28 17.2268438,27.5522847 17.2268438,27 C17.2268438,26.7550858 17.3167224,26.5186873 17.4794345,26.3356362 L23.2525907,19.8408355 C23.6195087,19.4280527 24.2515811,19.390872 24.6643638,19.75779 C24.6936487,19.783821 24.7213783,19.8115506 24.7474093,19.8408355 Z" id="矩形备份-2" fill="#FFFFFF"></path>
+    </g>
+</svg>
