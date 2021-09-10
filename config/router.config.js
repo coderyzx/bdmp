@@ -12,82 +12,82 @@ const routes = [
     routes: [
       {
         path: '/',
-        component: './wellcome',
+        component: './Wellcome',
       },
       {
         path: '/templateLib',
-        component: './templateLib',
+        component: './TemplateLib',
         routes: [
           {
             path: '/templateLib',
-            component: './templateLib/menuPage',
+            component: './TemplateLib/MenuPage',
           },
            // 默认打开模板库展示菜单页面维护
           {
             path: '/templateLib/menuPage',
-            component: './templateLib/menuPage',
+            component: './TemplateLib/MenuPage',
           },
           // 图表类型
           {
             path: '/templateLib/chartType',
-            component: './templateLib/chartType',
+            component: './TemplateLib/ChartType',
           },
           // 图表组件
           {
             path: '/templateLib/lineChart',
-            component: './templateLib/chart/lineChart.js',
+            component: './TemplateLib/Chart/lineChart.js',
           },
           {
             path: '/templateLib/barChart',
-            component: './templateLib/chart/barChart.js',
+            component: './TemplateLib/Chart/barChart.js',
           },
           {
             path: '/templateLib/pieChart',
-            component: './templateLib/chart/pieChart.js',
+            component: './TemplateLib/Chart/pieChart.js',
           },
           {
             path: '/templateLib/radarChart',
-            component: './templateLib/chart/radarChart.js',
+            component: './TemplateLib/Chart/radarChart.js',
           },
            // 字典
           {
             path: '/templateLib/dictionary',
-            component: './templateLib/dictionary',
+            component: './TemplateLib/Dictionary',
           },
           {
             path: '/templateLib/form',
-            component: './templateLib/form',
+            component: './TemplateLib/Form',
           },
           {
             path: '/templateLib/toolBar',
-            component: './templateLib/toolBar',
+            component: './TemplateLib/ToolBar',
           },
           {
             path: '/templateLib/largeScreen',
-            component: './templateLib/largeScreen',
+            component: './TemplateLib/LargeScreen',
           },
         ],
       },
       {
         path: '/dashBoard',
-        component: './dashBoard',
+        component: './DashBoard',
       },
       {
         path: '/editor/:id',
-        component: './editor',
+        component: './Editor',
       },
       {
         path: '/metaData',
-        component: './metaData',
+        component: './MetaData',
       },
       {
         path: '/evaluReport',
-        component: './evaluReport',
+        component: './EvaluReport',
       },
       {
         path: '/dataProcessing',
-        component: './dataProcessing',
-      },   
+        component: './DataProcessing',
+      },
     ],
 
   },
@@ -98,4 +98,3 @@ const routes = [
 ]
 
 export default routes;
-

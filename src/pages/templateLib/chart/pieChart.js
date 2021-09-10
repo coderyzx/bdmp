@@ -14,13 +14,15 @@ class PieChart extends React.Component {
     super(props);
     this.state = {}
   }
+
   componentDidMount () {
-    const { dispatch} = this.props;
+    const { dispatch } = this.props;
     dispatch({
       type: 'chartModel/getPieChart',
       payload: {},
     });
   }
+
   render() {
     // console.log(chartList.lineChart);
     // console.log('render', this.props.match.params.id);
@@ -34,7 +36,7 @@ class PieChart extends React.Component {
             //   console.log(item);
             //   return (<div>{item}</div>)
             // })
-         ( pieChart.list || []).map(item => (
+         (pieChart.list || []).map(item => (
             <div key={item.id} style={{ marginRight: '-15px', marginLeft: '-15px' }}>
               <div className={styles.colItem} >
                 <div className={styles.listLtem}>

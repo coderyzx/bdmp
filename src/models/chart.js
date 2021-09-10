@@ -1,4 +1,4 @@
-import { getLineChart, getBarChart,getPieChart,getRadarChart } from '@/services/global';
+import { getLineChart, getBarChart, getPieChart, getRadarChart } from '@/services/global';
 
 const chartModel = {
   namespace: 'chartModel',
@@ -55,7 +55,6 @@ const chartModel = {
         });
       }
     },
-
 
 
   },

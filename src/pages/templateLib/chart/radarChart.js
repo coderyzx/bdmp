@@ -14,13 +14,15 @@ class RadarChart extends React.Component {
     super(props);
     this.state = {}
   }
+
   componentDidMount () {
-    const { dispatch} = this.props;
+    const { dispatch } = this.props;
     dispatch({
       type: 'chartModel/getRadarChart',
       payload: {},
     });
   }
+
   render() {
     // console.log(chartList.lineChart);
     // console.log('render', this.props.match.params.id);

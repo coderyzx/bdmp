@@ -14,15 +14,16 @@ class LineChart extends React.Component {
     super(props);
     this.state = {}
   }
+
   componentDidMount () {
-    const { dispatch} = this.props;
+    const { dispatch } = this.props;
     dispatch({
       type: 'chartModel/getLineChart',
       payload: {},
     });
   }
+
   render() {
-    console.log(lineChart);
     // console.log('render', this.props.match.params.id);
     const { lineChart } = this.props;
     return (

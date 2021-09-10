@@ -28,7 +28,7 @@ const plugins = [
         /components\//,
       ],
     },
-  }]
+  }],
 ]
 
 
@@ -47,11 +47,18 @@ const config = {
   },
   routes,
   proxy: {
-    '/api': {
-      target: 'http://your.domain.com',
+    '/chartType': {
+      target: 'http://10.5.65.30:8091/',
       changeOrigin: true,
       pathRewrite: {
-        '^/your': '',
+        '^/chartType': '',
+      },
+    },
+    '/dict': {
+      target: 'http://10.5.67.45:8091/',
+      changeOrigin: true,
+      pathRewrite: {
+        '^/dict': '',
       },
     },
   },

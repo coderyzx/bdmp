@@ -1,5 +1,5 @@
 
-import { getMenusList } from '@/services/global';
+// import { getMenusList } from '@/services/global';
 
 const globalModel = {
   namespace: 'globalModel',
