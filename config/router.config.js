@@ -12,7 +12,7 @@ const routes = [
     routes: [
       {
         path: '/',
-        component: './wellcome',
+        component: './Wellcome',
       },
       {
         path: '/templateLib',
@@ -75,7 +75,7 @@ const routes = [
       {
         path: '/dataProcessing',
         component: './DataProcessing',
-      },   
+      },
     ],
 
   },
@@ -86,4 +86,3 @@ const routes = [
 ]
 
 export default routes;
-
