@@ -1,13 +1,13 @@
 import React from 'react';
 // import { connect } from 'dva';
-import { Modal, Form, Input,InputNumber } from 'antd';
+import { Modal, Form, Input, InputNumber } from 'antd';
 
 
 const EditableForm = Form.create({ name: 'form_in_edit' })(
   // eslint-disable-next-line
   class extends React.Component {
     render() {
-      const { visible, onCancel, onCreate, form, confirmLoading,editData } = this.props;
+      const { visible, onCancel, onCreate, form, confirmLoading, editData } = this.props;
       const { getFieldDecorator } = form;
       // console.log(editData);
       return (
@@ -19,97 +19,97 @@ const EditableForm = Form.create({ name: 'form_in_edit' })(
           onOk={onCreate}
           width={900}
           confirmLoading={confirmLoading}
-          destroyOnClose= 'true'
+          destroyOnClose= "true"
         >
           <Form layout="inline" >
             <Form.Item label="parentCode">
-              {getFieldDecorator('parentCode',{
+              {getFieldDecorator('parentCode', {
                 rules: [{ required: true, message: 'Please input the parentCode!' }],
                 initialValue: editData.parentCode,
-              })(<InputNumber min={0} max={1000}  placeholder="number" allowClear />)}
+              })(<InputNumber min={0} max={1000} placeholder="number" allowClear />)}
             </Form.Item>
             <Form.Item label="parentLabel">
-              {getFieldDecorator('parentLabel',{
+              {getFieldDecorator('parentLabel', {
                  initialValue: editData.parentLabel,
               })(<Input type="textarea" allowClear />)}
             </Form.Item>
             <Form.Item label="level">
-              {getFieldDecorator('level',{
+              {getFieldDecorator('level', {
                 initialValue: editData.level,
               })(<Input type="textarea" allowClear />)}
             </Form.Item>
             <Form.Item label="code">
-              {getFieldDecorator('code',{
+              {getFieldDecorator('code', {
                 initialValue: editData.code,
               })(<Input type="textarea" allowClear />)}
             </Form.Item>
             <Form.Item label="sort">
-              {getFieldDecorator('sort',{
+              {getFieldDecorator('sort', {
                 initialValue: editData.sort,
               })(<Input type="textarea" allowClear />)}
             </Form.Item>
             <Form.Item label="classLabel">
-              {getFieldDecorator('classLabel',{
+              {getFieldDecorator('classLabel', {
                 initialValue: editData.classLabel,
-              })(<Input type="textarea"  allowClear/>)}
+              })(<Input type="textarea" allowClear/>)}
             </Form.Item>
             <Form.Item label="classTttle">
-              {getFieldDecorator('classTttle',{
+              {getFieldDecorator('classTttle', {
                 initialValue: editData.classTttle,
-              })(<Input type="textarea"  allowClear/>)}
+              })(<Input type="textarea" allowClear/>)}
             </Form.Item>
             <Form.Item label="classPath">
-              {getFieldDecorator('classPath',{
+              {getFieldDecorator('classPath', {
                 initialValue: editData.classPath,
-              })(<Input type="textarea"  allowClear/>)}
+              })(<Input type="textarea" allowClear/>)}
             </Form.Item>
             <Form.Item label="jumpCode">
-              {getFieldDecorator('jumpCode',{
+              {getFieldDecorator('jumpCode', {
                  initialValue: editData.jumpCode,
               })(<Input type="textarea" allowClear />)}
             </Form.Item>
             <Form.Item label="jumpPath">
-              {getFieldDecorator('jumpPath',{
+              {getFieldDecorator('jumpPath', {
                  initialValue: editData.jumpPath,
-              })(<Input type="textarea"  allowClear/>)}
+              })(<Input type="textarea" allowClear/>)}
             </Form.Item>
             <Form.Item label="layoutType">
-              {getFieldDecorator('layoutType',{
+              {getFieldDecorator('layoutType', {
                  initialValue: editData.layoutType,
-              })(<Input type="textarea"  allowClear/>)}
+              })(<Input type="textarea" allowClear/>)}
             </Form.Item>
             <Form.Item label="classInfo">
-              {getFieldDecorator('classInfo',{
+              {getFieldDecorator('classInfo', {
                  initialValue: editData.classInfo,
               })(<Input type="textarea" allowClear />)}
             </Form.Item>
             <Form.Item label="classLabelEn">
-              {getFieldDecorator('classLabelEn',{
+              {getFieldDecorator('classLabelEn', {
                  initialValue: editData.classLabelEn,
-              })(<Input type="textarea"  allowClear/>)}
+              })(<Input type="textarea" allowClear/>)}
             </Form.Item>
             <Form.Item label="classTttleEn">
-              {getFieldDecorator('classTttleEn',{
+              {getFieldDecorator('classTttleEn', {
                  initialValue: editData.classTttleEn,
               })(<Input type="textarea" allowClear />)}
             </Form.Item>
             <Form.Item label="classInfoEn">
-              {getFieldDecorator('classInfoEn',{
+              {getFieldDecorator('classInfoEn', {
                  initialValue: editData.classInfoEn,
-              })(<Input type="textarea"  allowClear/>)}
+              })(<Input type="textarea" allowClear/>)}
             </Form.Item>
             <Form.Item label="classIcon">
-              {getFieldDecorator('classIcon',{
+              {getFieldDecorator('classIcon', {
                  initialValue: editData.classIcon,
               })(<Input type="textarea" allowClear />)}
             </Form.Item>
             <Form.Item label="introCrid">
-              {getFieldDecorator('introCrid',{
+              {getFieldDecorator('introCrid', {
                  initialValue: editData.introCrid,
-              })(<Input type="textarea"  allowClear/>)}
+              })(<Input type="textarea" allowClear/>)}
             </Form.Item>
             <Form.Item label="componentCode">
-              {getFieldDecorator('componentCode',{
+              {getFieldDecorator('componentCode', {
                  initialValue: editData.componentCode,
               })(<Input type="textarea" allowClear />)}
             </Form.Item>

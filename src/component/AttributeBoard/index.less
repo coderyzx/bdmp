@@ -1,0 +1,39 @@
+.attributeBoardWrap {
+  width: 100%;
+  height: 100%;
+  padding: 15px;
+  border-left: 1px solid #ccc;
+  position: relative;
+  .menuWrap {
+    position: absolute;
+    width: 40px;
+    left: -40px;
+    text-align: center;
+    .item {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      margin-bottom: 15px;
+    }
+    .active {
+      background-color: pink;
+      color: #fff;
+    }
+    .item:hover {
+      background-color: pink;
+      color: #fff;
+    }
+  }
+  .contentWrap {
+    .item {
+      line-height: 32px;
+      margin-bottom: 15px;
+      .label {
+        text-align: right;
+      }
+      .curInput {}
+    }
+  }
+}

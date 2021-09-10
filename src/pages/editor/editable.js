@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva'
-import {Modal, Form, Input,Select } from 'antd';
+import { Modal, Form, Input, Select } from 'antd';
 // const { TextArea } = Input;
 const { Option } = Select;
 
@@ -19,14 +19,14 @@ class Editable extends React.Component {
   }
 
   render() {
-    const { visible, onCancel, onCreate, form,editData } = this.props;
+    const { visible, onCancel, onCreate, form, editData } = this.props;
     const { getFieldDecorator } = form;
-    const {chartTypeName} = this.props;
+    const { chartTypeName } = this.props;
     // console.log(editData);
     return (
       <Modal
         visible={visible}
-        title="新增图表"
+        title="编辑图表类型和名称"
         okText="确定"
         onCancel={onCancel}
         onOk={onCreate}
@@ -35,7 +35,7 @@ class Editable extends React.Component {
           <Form.Item label="图表类型">
             {getFieldDecorator('typeName', {
               rules: [{ required: true, message: '请输入图表类型!' }],
-              initialValue:editData.typeName
+              initialValue: editData.typename,
             })(
               <Select
               showSearch
@@ -50,20 +50,20 @@ class Editable extends React.Component {
                 option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
             >
-              {
+                {
                 chartTypeName.length ?
-                (chartTypeName || []).map(item=>(
+                (chartTypeName || []).map(item => (
                   <Option key={item} value={item}>{item}</Option>
                 ))
-                :null
+                : null
               }
-            </Select>
+              </Select>,
             )}
           </Form.Item>
           <Form.Item label="图表名称">
-            {getFieldDecorator('title',{
+            {getFieldDecorator('title', {
               rules: [{ required: true, message: '请输入图表名称!' }],
-              initialValue:editData.title
+              initialValue: editData.title,
             })(<Input type="textarea" />)}
           </Form.Item>
         </Form>

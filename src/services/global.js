@@ -8,4 +8,3 @@ export async function getLogin(username, password) {
       password,
   });
 }
-

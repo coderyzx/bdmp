@@ -7,12 +7,13 @@ import 'codemirror/addon/fold/foldcode.js';
 import 'codemirror/addon/fold/foldgutter.js';
 import 'codemirror/addon/fold/brace-fold.js';
 import 'codemirror/addon/fold/comment-fold.js';
+import 'codemirror/addon/fold/foldgutter.css';
+import 'codemirror/addon/lint/lint.css';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/css/css';
 import 'codemirror/lib/codemirror.css'
-import 'codemirror/addon/fold/foldgutter.css';
-import 'codemirror/addon/lint/lint.css';
 import 'codemirror/theme/idea.css';
+import 'codemirror/theme/monokai.css';
 
 class Mirror extends React.Component {
   editConfig = {
@@ -23,7 +24,7 @@ class Mirror extends React.Component {
     smartIndent: true,
     lineWrapping: true,
     foldGutter: true,
-    lineWiseCopyCut: true,//将复制或剪切的行带有光标
+    lineWiseCopyCut: true, // 将复制或剪切的行带有光标
     gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter', 'CodeMirror-lint-markers'],
     lint: true,
     matchBrackets: true,
@@ -32,29 +33,12 @@ class Mirror extends React.Component {
         editor.undo();
       },
     },
-   
   }
 
   constructor(props) {
     super(props);
     this.state = {
-      option1: {
-        id: '1',
-        title: '基础折线图',
-        option: {
-          xAxis: {
-              type: 'category',
-              data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          },
-          yAxis: {
-              type: 'value',
-          },
-          series: [{
-              data: [150, 230, 224, 218, 135, 147, 260],
-              type: 'line',
-          }],
-        },
-      },
+      value: this.props.value,
     }
   }
 
@@ -63,32 +47,42 @@ class Mirror extends React.Component {
   }
 
   createEdit = () => {
-    const { mode, } = this.props;
-    // const {option } = this.props;
-  // option = {JSON.parse(item.optionjson.replace(/\n/g,""))}
-// option = {eval("("+item.optionjson+")")}
+    const { mode } = this.props;
+    const { value } = this.state;
+    // const option = eval("("+optionjson+")");
+    // console.log(optionjson,option);
+    // option = JSON.stringify(option.replace(/\r\n/g,"<br>"))
+    // option = JSON.stringify(option.replace(/\n/g,"<br>"))
+    // option = JSON.stringify(option.replace(/\s\n/g,"&nbsp;"))
+
 // dangerouslySetInnerHTML = {{__html:item}}
     if (mode) {
       this.editConfig.mode = mode;
-      this.editConfig.value=this.state.option1.option;
     }
+    // this.editConfig.value = value;
     this.CodeMirrorEditor = codemirror.fromTextArea(this.edit, this.editConfig);
-    this.CodeMirrorEditor.setSize('100%', 'calc(100vh - 153px)');
-    // this.CodeMirrorEditor.setValue( this.state.option1.option);//设置初始值
+    this.CodeMirrorEditor.setSize('100%', 'calc(100vh - 163px)');
+    // if (value) {
+    //   this.CodeMirrorEditor.setValue(value);
+    //   setTimeout(() => {
+    //     this.CodeMirrorEditor.refresh();
+    //  }, 1);
+    // }
     this.CodeMirrorEditor.on('change', editor => {
-      const value = editor.getValue();
-      const { handleSaveValue } = this.props;
-      handleSaveValue(value);
-      try {
-        console.log(JSON.parse(value));
-        
-      } catch (e) {
-        console.log(e);
-      }
+      const val = editor.getValue();
+      // try {
+      //   onChange(JSON.parse(val));
+      // } catch (e) {
+      //   onChange({});
+      // }
+      // const { handleStart } = this.props;
+      // handleStart(value);
     })
   }
 
   render () {
+    const { value } = this.props;
+    // console.log(value);
     return (
       // <div className={styles.editWrap} style={{ height: `${document.body.clientHeight}px` }}>
       //   <textarea
@@ -99,6 +93,8 @@ class Mirror extends React.Component {
       <div >
         <textarea
           ref={ el => { this.edit = el }}
+          value = {value}
+          // value = {JSON.parse(value)}
         />
       </div>
     )

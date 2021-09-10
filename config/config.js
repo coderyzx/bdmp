@@ -47,6 +47,7 @@ const config = {
   },
   routes,
   proxy: {
+    // bingbing接口
     '/api': {
       target: 'http://10.5.65.37:8091/',
        // secure: false,// 如果是https接口，需要配置这个参数
@@ -55,11 +56,12 @@ const config = {
         '^/api': '',
       },
     },
-    '/chartType': {
+    // huiqi接口
+    '/huiqi': {
       target: 'http://10.5.65.30:8091/',
       changeOrigin: true,
       pathRewrite: {
-        '^/chartType': '',
+        '^/huiqi': '',
       },
     },
   },

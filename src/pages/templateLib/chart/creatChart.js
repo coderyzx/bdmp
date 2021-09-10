@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'dva'
-import {Modal, Form, Input,Select } from 'antd';
+import { Modal, Form, Input, Select } from 'antd';
+
 const { TextArea } = Input;
 const { Option } = Select;
 
@@ -33,7 +34,7 @@ class Create extends React.Component {
   render() {
     const { visible, onCancel, onCreate, form } = this.props;
     const { getFieldDecorator } = form;
-    const {chartTypeName} = this.props;
+    const { chartTypeName } = this.props;
     // console.log(chartTypeName);
     return (
       <Modal
@@ -42,7 +43,7 @@ class Create extends React.Component {
         okText="确定"
         onCancel={onCancel}
         onOk={onCreate}
-        destroyOnClose= 'true'
+        destroyOnClose= "true"
       >
         <Form layout="vertical">
           <Form.Item label="图表类型">
@@ -64,23 +65,23 @@ class Create extends React.Component {
               >
                 {
                   chartTypeName.length ?
-                  (chartTypeName || []).map(item=>(
+                  (chartTypeName || []).map(item => (
                     <Option key={item} value={item}>{item}</Option>
                   ))
-                  :null
+                  : null
                 }
-              </Select>
+              </Select>,
             )}
           </Form.Item>
           <Form.Item label="图表名称">
-            {getFieldDecorator('title',{
+            {getFieldDecorator('title', {
               rules: [{ required: true, message: '请输入图表名称!' }],
             })(<Input type="textarea" />)}
           </Form.Item>
           <Form.Item label="图表option">
-            {getFieldDecorator('optionjson',{
+            {getFieldDecorator('optionjson', {
               rules: [{ required: true, message: '请输入图表option!' }],
-            })(<TextArea  rows={4} />)}
+            })(<TextArea rows={4} placeholder="输入图表的option" />)}
           </Form.Item>
         </Form>
       </Modal>

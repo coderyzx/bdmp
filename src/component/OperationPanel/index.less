@@ -1,0 +1,93 @@
+.operationPanelWrap {
+  margin: 16px 24px 0px 16px;
+  .defaultBoard {
+    width: 100%;
+    height: 42px;
+    line-height: 40px;
+    border-bottom: 1px solid #ddd;
+    div {
+      display: inline-block;
+      margin-right: 10px;
+      padding: 0 15px;
+      border-radius: 4px 4px 0px 0px;
+      cursor: pointer;
+    }
+    .currentTitle {
+      position: relative;
+      width: 175px;
+      background: #fff;
+      border-bottom: none;
+      cursor: pointer;
+      .txt {}
+      .more {
+        position:absolute;
+        width: 2px;
+        right: 0px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 20px;
+        font-weight:700;
+        writing-mode: vertical-rl;
+      }
+    }
+    .addButton {
+      width: 85px;
+      background-color: #eee;
+      border: 1px solid #ddd;
+      border-bottom: none;
+    }
+  }
+  .pageTitle {
+    width: 185px;
+    margin-top: 10px;
+    height: 40px;
+    line-height: 40px;
+    font-size:16px;
+  }
+  .pageTitle:hover {
+    color: #266466;
+  }
+  .formPanel {
+    margin-top:10px;
+    position:relative;
+    height:40px;
+    width:100%;
+    .timeWrap {
+      float: left;
+      .icon {
+        float:left;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        background-color: #fff;
+        text-align: center;
+      }
+      .timeSelect {
+        float:left;
+        margin-right: 15px;
+        svg {
+          color: #000;
+        }
+      }
+    }
+    .actionWrap {
+      float: right;
+      .actionItem {
+        display:inline-block;
+        margin-left: 25px;
+        cursor: pointer;
+        .icon, .title {
+          margin-right: 5px;
+          display:inline-block;
+        }
+        .icon {
+          font-size:16px;
+        }
+      }
+    }
+  }
+}
+
+.menuItem {
+  margin-bottom: 15px;
+}

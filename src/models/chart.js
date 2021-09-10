@@ -1,48 +1,48 @@
-import { getChartByTypeName,postChartData, getDelete, postUpdate, getChartById,getTypeList,getTypeName } from '@/services/chart';
+import { getChartByTypeName, postChartData, getDelete, postUpdate, getChartById, getTypeList, getTypeName } from '@/services/chart';
 
 const chartModel = {
   namespace: 'chartModel',
   state: {
     chartList: [],
-    chartType:[],
-    chartTypeName:[],
-    chartEdit:{},
+    chartType: [],
+    chartTypeName: [],
+    chartEdit: {},
   },
 
   effects: {
-    //获取所有chart
-    *getChartList({ payload}, { call, put }) {
-      // console.log(payload);
+    // 获取所有chart
+    *getChartList({ payload, callback }, { call, put }) {
       const response = yield call(getChartByTypeName, payload);
-      // console.log(response);
       if (response) {
         yield put({
           type: 'chartList',
           payload: response,
         });
+        callback(response);
+      } else {
+        callback(response);
       }
     },
-    //新增chart
-    *postNewChart({ payload ,callback}, { call, put }) {
-      // console.log(payload);
+    // 新增chart
+    *postNewChart({ payload, callback }, { call }) {
       const response = yield call(postChartData, payload);
-      console.log(response);
       if (response === 200) {
-        callback();
+        callback(response);
+      } else {
+        callback(response);
       }
     },
-    //删除chart
-    *getDeleteChart({ payload ,callback}, { call, put }) {
-      // console.log(payload);
+    // 删除chart
+    *getDeleteChart({ payload, callback }, { call }) {
       const response = yield call(getDelete, payload);
-      console.log(response);
       if (response === 200) {
-        callback();
+        callback(response);
+      } else {
+        callback(response);
       }
     },
-    //修改chart
-    *postUpdateChart({ payload ,callback}, { call, put }) {
-      // console.log(payload);
+    // 修改chart
+    *postUpdateChart({ payload, callback }, { call, put }) {
       const response = yield call(postUpdate, payload);
       console.log(response);
       if (response === 200) {
@@ -53,43 +53,46 @@ const chartModel = {
         });
         if (callback) {
           callback(response);
+        } else {
+          callback(response);
         }
       }
     },
-    //查一个chart
-    *getChart({ payload }, { call, put }) {
+    // 查一个chart，用于编辑的时候查询一个chart
+    *getChart({ payload, callback }, { call, put }) {
       // console.log(payload);
       const response = yield call(getChartById, payload);
-      console.log(response);
+      // console.log(response);
       if (response) {
         yield put({
           type: 'chartEdit',
           payload: response,
         });
+        callback();
       }
     },
 
-    //获取图表类型的所有信息
-    *getChartType({ payload}, { call, put }) {
-      // console.log(payload);
+    // 获取图表类型的所有信息
+    *getChartType({ payload, callback }, { call, put }) {
       const response = yield call(getTypeList, payload);
-      // console.log(response);
-      if (response) {
+      if (response.code === 'U000000') {
         yield put({
           type: 'chartType',
-          payload: response,
+          payload: response.data,
         });
+        callback(response.code)
+      } else {
+        callback(response)
       }
     },
-    //获取图表类型的名称
-    *getChartTypeName({ payload}, { call, put }) {
-      // console.log(payload);
+    // 获取图表类型的名称
+    *getChartTypeName({ payload }, { call, put }) {
       const response = yield call(getTypeName, payload);
       // console.log(response);
       if (response) {
         yield put({
           type: 'chartTypeName',
-          payload: response,
+          payload: response.data,
         });
       }
     },
@@ -125,7 +128,7 @@ const chartModel = {
         chartTypeName: payload,
       }
     },
-    
+
   },
 };
 

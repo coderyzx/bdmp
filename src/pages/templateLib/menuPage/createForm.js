@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Form, Input,InputNumber } from 'antd';
+import { Modal, Form, Input, InputNumber } from 'antd';
 
 const CreateForm = Form.create({
   name: 'form_in_modal',
@@ -19,13 +19,13 @@ const CreateForm = Form.create({
           onOk={onCreate}
           width={900}
           confirmLoading={confirmLoading}
-          destroyOnClose= 'true'
+          destroyOnClose= "true"
         >
           <Form layout="inline" >
             <Form.Item label="parentCode">
-              {getFieldDecorator('parentCode',{
+              {getFieldDecorator('parentCode', {
                 rules: [{ required: true, message: 'Please input the parentCode!' }],
-              })(<InputNumber  min={0} max={1000} placeholder="number" />)}
+              })(<InputNumber min={0} max={1000} placeholder="number" />)}
             </Form.Item>
             <Form.Item label="parentLabel">
               {getFieldDecorator('parentLabel')(<Input type="textarea" />)}
