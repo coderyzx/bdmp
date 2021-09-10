@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 62 (91390) - https://sketch.com -->
+    <title>icon/48px/删除</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#F76F63" offset="0%"></stop>
+            <stop stop-color="#F26B49" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="icon/48px/删除" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M40,10 L40,44 C40,46.209139 38.209139,48 36,48 L12,48 C9.790861,48 8,46.209139 8,44 L8,10 L40,10 Z M29.1715729,0 C29.7020059,-9.74389576e-17 30.2107137,0.210713681 30.5857864,0.585786438 L34,4 L42,4 C42.5522847,4 43,4.44771525 43,5 L43,7 C43,7.55228475 42.5522847,8 42,8 L6,8 C5.44771525,8 5,7.55228475 5,7 L5,5 C5,4.44771525 5.44771525,4 6,4 L14,4 L17.4142136,0.585786438 C17.7892863,0.210713681 18.2979941,9.74389576e-17 18.8284271,0 L29.1715729,0 Z" id="形状结合" fill="url(#linearGradient-1)"></path>
+        <path d="M25,18 C25.5522847,18 26,18.4477153 26,19 L26,25 L32,25 C32.5522847,25 33,25.4477153 33,26 L33,28 C33,28.5522847 32.5522847,29 32,29 L26,29 L26,35 C26,35.5522847 25.5522847,36 25,36 L23,36 C22.4477153,36 22,35.5522847 22,35 L22,28.999 L16,29 C15.4477153,29 15,28.5522847 15,28 L15,26 C15,25.4477153 15.4477153,25 16,25 L22,24.999 L22,19 C22,18.4477153 22.4477153,18 23,18 L25,18 Z" id="形状结合" fill="#FFFFFF" transform="translate(24.000000, 27.000000) rotate(-315.000000) translate(-24.000000, -27.000000) "></path>
+    </g>
+</svg>

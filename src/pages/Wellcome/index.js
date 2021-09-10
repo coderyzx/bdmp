@@ -20,7 +20,7 @@ class Wellcome extends React.Component {
                   <div className={styles.homeBrand}>BDMP</div>
                   <div className={styles.homeSubtitle}>大数据可视化管理平台</div>
                 </div>
-                <div className={styles.homeChart}><img alt="" src={bigData} /></div>
+                <div className={styles.homeChart}><img src={bigData} alt=""/></div>
               </div>
             </section>
           </div>

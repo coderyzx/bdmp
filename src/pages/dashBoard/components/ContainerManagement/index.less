@@ -1,0 +1,62 @@
+.dashboardMamagementWrap {
+  // .choiceChartsWrap {
+  // }
+  .containerItem {
+    cursor: move;
+    .containerTitle {
+      cursor: pointer;
+    }
+  }
+}
+
+.tabChartWrap {
+  padding-top: 15px;
+  height: 520px;
+  overflow-y: auto;
+  .tabChartItem {
+    margin-bottom: 15px;
+    cursor: pointer;
+    position: relative;
+    i {
+      position: absolute;
+      font-size: 22px;
+      top: 0px;
+      right: 15px;
+    }
+    .img {
+      width: 100%;
+      height: 120px;
+      img {
+        width: 100%;
+      }
+    }
+    .name {
+      text-align: center;
+      height: 36px;
+      line-height:36px;
+    }
+  }
+}
+
+.item {
+  width: 200px;
+  height: 200px;
+  cursor: pointer;
+}
+.drawerBody {
+  height:100%;
+  .chartView {
+    float:left;
+    width: 1360px;
+    height: 100%;
+  }
+  .attributeView {
+    width: 400px;
+    height: 100%;
+    float:right;
+  }
+}
+
+:global .ant-drawer-body {
+  height: 100%
+}

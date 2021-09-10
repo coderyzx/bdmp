@@ -2,7 +2,7 @@ import React from 'react';
 import { Layout } from 'antd';
 
 const { Footer } = Layout;
-class DataProcessing extends React.Component {
+class DashBoard extends React.Component {
     constructor (props) {
         super(props);
         this.state = { };
@@ -10,13 +10,12 @@ class DataProcessing extends React.Component {
 
     render () {
       return (
-        <div >
-
-          <div >数据加工厂</div>
+        <div style={{ marginTop: 67 }}>
+          <div >仪表板</div>
           <Footer style={{ textAlign: 'center' }}>UIH ©2021 Created by UIH-BDMP</Footer>
         </div>
       )
     }
 }
 
-export default DataProcessing;
+export default DashBoard;

@@ -34,20 +34,8 @@ const routes = [
           },
           // 图表组件
           {
-            path: '/templateLib/lineChart',
-            component: './TemplateLib/Chart/lineChart.js',
-          },
-          {
-            path: '/templateLib/barChart',
-            component: './TemplateLib/Chart/barChart.js',
-          },
-          {
-            path: '/templateLib/pieChart',
-            component: './TemplateLib/Chart/pieChart.js',
-          },
-          {
-            path: '/templateLib/radarChart',
-            component: './TemplateLib/Chart/radarChart.js',
+            path: '/templateLib/chart',
+            component: './TemplateLib/Chart',
           },
            // 字典
           {
@@ -73,7 +61,7 @@ const routes = [
         component: './DashBoard',
       },
       {
-        path: '/editor/:id',
+        path: '/editor',
         component: './Editor',
       },
       {

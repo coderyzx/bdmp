@@ -1,13 +1,85 @@
 import React from 'react';
-import { Layout, Menu, Icon } from 'antd';
+import { connect } from 'dva';
+import { Layout, Menu, Icon, notification } from 'antd';
 import router from 'umi/router';
+import { openNotificationLocal } from '@/utils/notification';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
-// eslint-disable-next-line react/prefer-stateless-function
-class TempLib extends React.Component {
+
+@connect(({ chartModel }) => (
+  {
+    chartType: chartModel.chartType,
+  }),
+)
+class TemplateLib extends React.Component {
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'chartModel/getChartType',
+      payload: {},
+      callback: res => {
+        if (res === 401 || res === 403 || res === 404) {
+          openNotificationLocal(res);
+        } else if (res.status === 500 || res.status === 404) {
+          notification.open({
+            message: '读取图表失败',
+            description:
+              `报错${res.status}, 暂时没有图表类型，服务未找到，请稍后再来`,
+            icon: <Icon type="smile" rotate={180} theme="twoTone" twoToneColor="#108ee9" />,
+            duration: 5,
+          })
+        }
+      },
+    });
+  }
+
   render() {
-    const { children } = this.props;
+    const { children, chartType } = this.props;
+    const menu = [
+      {
+        key: '1',
+        type: 'form',
+        title: '菜单页面维护',
+        path: '/templateLib/menuPage',
+      },
+      {
+        key: '2',
+        type: 'form',
+        title: '图表类型管理',
+        path: '/templateLib/chartType',
+      },
+      {
+        key: '3',
+        type: 'form',
+        title: '字典',
+        path: '/templateLib/dictionary',
+      },
+      {
+        key: '4',
+        type: 'form',
+        title: 'form表单管理',
+        path: '/templateLib/form',
+      },
+      {
+        key: '5',
+        type: 'tool',
+        title: '工具栏列表',
+        path: '/templateLib/toolBar',
+      },
+      {
+        key: '6',
+        type: 'desktop',
+        title: '大屏配置',
+        path: '/templateLib/largeScreen',
+      },
+      // {
+      //   key: '7',
+      //   type: 'area-chart',
+      //   title: '大屏配置',
+      //   path: '/templateLib/largeScreen',
+      // },
+    ];
     return (
       <>
         <Sider
@@ -16,7 +88,10 @@ class TempLib extends React.Component {
             height: '100vh',
             position: 'fixed',
             background: '#fff',
+            // background: 'black',
+            zIndex: 10,
             left: 0,
+
           }}>
           <Menu
             // theme='dark'
@@ -25,53 +100,52 @@ class TempLib extends React.Component {
             defaultSelectedKeys={['1']}
             // defaultOpenKeys = {['1']}
           >
-            <Menu.Item key="1" onClick={() => { router.push('/templateLib/menuPage') }}>
-              <Icon type="form"/><span>菜单页面维护</span>
-            </Menu.Item>
-            <Menu.Item key="2" onClick={() => { router.push('/templateLib/chartType') }}>
-              <Icon type="form"/><span>图表类型管理</span>
-            </Menu.Item>
-            <SubMenu
-            key="3"
-            title={
-              <span>
-                <Icon type="area-chart"/>
-                <span>图表组件管理</span>
-              </span>
+            {
+              menu.map(item => (
+                <Menu.Item key={item.key} onClick={() => router.push(item.path)}>
+                  <Icon type= { item.type } /><span>{item.title} </span>
+                </Menu.Item>
+              ))
             }
+            <SubMenu
+              key="7"
+              title={
+                <span>
+                  <Icon type="area-chart"/>
+                  <span>图表组件管理</span>
+                </span>
+              }
             >
-              <Menu.Item key="sub1" onClick={() => { router.push('/templateLib/lineChart') }}>
-                <Icon type="line-chart" /><span>折线图</span>
-              </Menu.Item>
-              <Menu.Item key="sub2" onClick={() => { router.push('/templateLib/barChart') }}>
-                <Icon type="bar-chart" /><span>柱状图</span>
-              </Menu.Item>
-              <Menu.Item key="sub3" onClick={() => { router.push('/templateLib/pieChart') }}>
-                <Icon type="pie-chart" /><span>饼图</span>
-              </Menu.Item>
-              <Menu.Item key="sub4" onClick={() => { router.push('/templateLib/radarChart') }}>
-                <Icon type="radar-chart" /><span>雷达图</span>
-              </Menu.Item>
+              {
+                chartType.status === 404 ?
+                  <Menu.Item key="sub1"
+                  onClick={() => router.push('/templateLib/chart')}
+                  >
+                    <span>暂无图表类型</span>
+                  </Menu.Item>
+                :
+                chartType.map(item => (
+                  <Menu.Item key={item.id + item.typeId + item.typeIcon}
+                  onClick={() => router.push(`/templateLib/chart?typeName=${item.typeName}`)}
+                  >
+                    <Icon type={item.typeIcon} />
+                    <span>{item.typeName}</span>
+                  </Menu.Item>
+                ))
+              }
             </SubMenu>
-            <Menu.Item key="4" onClick={() => { router.push('/templateLib/dictionary') }}>
-              <Icon type="tool"/><span>字典</span>
-            </Menu.Item>
-            <Menu.Item key="5" onClick={() => { router.push('/templateLib/form') }}>
-              <Icon type="tool"/><span>form表单管理</span>
-            </Menu.Item>
-            <Menu.Item key="6" onClick={() => { router.push('/templateLib/toolBar') }}>
-              <Icon type="tool"/><span>工具栏列表</span>
-            </Menu.Item>
-            <Menu.Item key="7" onClick={() => { router.push('/templateLib/largeScreen') }}>
-              <Icon type="desktop"/><span>大屏配置</span>
-            </Menu.Item>
           </Menu>
         </Sider>
-        <Layout style={{ padding: '0 15px', marginLeft: '200px', minHeight: 'calc(100vh - 67px)', backgroundColor: '#fff' }}>
+        <Layout style={{
+          padding: '0 15px',
+          marginLeft: '200px',
+          minHeight: 'calc(100vh - 67px)',
+          background: '#fff' }}
+        >
           {children}
         </Layout>
       </>
     )
   }
 }
-export default TempLib;
+export default TemplateLib;
