@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from 'antd';
-import CardTools from '@/components/CardTools';
 import WordCloud from 'WordCloud';
+import CardTools from '@/components/CardTools';
 
 // import styles from './index.less'
 

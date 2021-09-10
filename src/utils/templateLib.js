@@ -8,7 +8,7 @@ export function getMenuPageKey (datas = []) {
       classInfoEn, classIcon, introCrid, componentCode,
     } = ele;
     result.push({
-      key: id+Math.random()*100,
+      key: id + Math.random() * 100,
       id,
       parentCode,
       parentLabel,

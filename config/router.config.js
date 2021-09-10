@@ -12,7 +12,7 @@ const routes = [
     routes: [
       {
         path: '/',
-        component: './wellcome',
+        component: './Wellcome',
       },
       {
         path: '/templateLib',
