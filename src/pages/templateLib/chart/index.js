@@ -7,8 +7,7 @@ import styles from './index.less';
 import CreateChart from './creatChart'
 import dele from '@/assets/delete.svg';
 import { handleOption } from '@/utils/templateLib'
-import { openNotificationLocal, openNotificationServer } from '@/utils/notification';
-
+import noData from '@/assets/noData.svg';
 
 @connect(({ chartModel }) => (
   {
@@ -36,13 +35,6 @@ class Chart extends React.Component {
     dispatch({
       type: 'chartModel/getChartList',
       payload: typeName,
-      callback: res => {
-        if (res === 400 || res === 401 || res === 403 || res === 404) {
-          openNotificationLocal(res);
-        } else if (res.status === 500) {
-          openNotificationServer(res);
-        }
-      },
     });
   }
 
@@ -54,13 +46,6 @@ class Chart extends React.Component {
       dispatch({
         type: 'chartModel/getChartList',
         payload: type,
-        callback: res => {
-          if (res === 400 || res === 401 || res === 403 || res === 404) {
-            openNotificationLocal(res);
-          } else if (res.status === 500) {
-            openNotificationServer(res.status);
-          }
-        },
       });
     }
    }
@@ -85,6 +70,7 @@ class Chart extends React.Component {
         confirmLoading: true,
       });
       // 校验通过，调接口传参
+      console.log(values);
       dispatch({
         type: 'chartModel/postNewChart',
         payload: values,
@@ -137,24 +123,10 @@ class Chart extends React.Component {
             visibleDeleteChart: false,
           });
         }
-        if (res === 400 || res === 401 || res === 403 || res === 404) {
-          this.setState({
-            deleteLoading: false,
-            visibleDeleteChart: false,
-          });
-          openNotificationLocal(res);
-        } else if (res.status === 500) {
-          this.setState({
-            deleteLoading: false,
-            visibleDeleteChart: false,
-          });
-          openNotificationServer(res.status);
-        } else {
-          this.setState({
-            deleteLoading: false,
-            visibleDeleteChart: false,
-          });
-        }
+        this.setState({
+          deleteLoading: false,
+          visibleDeleteChart: false,
+        });
       },
     });
   };
@@ -247,7 +219,16 @@ class Chart extends React.Component {
             </div>
           ))
           :
-          null
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'column',
+            marginTop: 200,
+            }}>
+            <img src={noData} />
+            <span style={{ fontSize: 20, marginTop: 10 }}>暂无图表，点击新增创建一个吧~</span>
+          </div>
         }
       </div>
     )

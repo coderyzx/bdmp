@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva'
-import { Modal, Form, Input, Select } from 'antd';
+import { Modal, Form, Input, Select, notification } from 'antd';
 // const { TextArea } = Input;
 const { Option } = Select;
 
@@ -15,6 +15,13 @@ class Editable extends React.Component {
     dispatch({
       type: 'chartModel/getChartTypeName',
       payload: {},
+      callback: () => {
+        const args = {
+          message: '提示',
+          description: '保存图表失败',
+        };
+        notification.open(args);
+      },
     });
   }
 

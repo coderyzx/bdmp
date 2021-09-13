@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-expressions */
 import React from 'react';
 import { Icon, Modal, Upload } from 'antd';
+import classNames from 'classnames';
 import { getBase64, imageSizeValid } from '@/utils/imageUtil';
 // import { getFilePath } from '@/services/charts';
-import classNames from 'classnames';
 import styles from './index.less';
 
 export default class UploadImg extends React.Component {

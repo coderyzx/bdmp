@@ -62,6 +62,7 @@ const config = {
       pathRewrite: {
         '^/dict': '',
       },
+    },
       // bingbing接口
     '/api': {
       target: 'http://10.5.65.37:8091/',
@@ -70,7 +71,6 @@ const config = {
       pathRewrite: {
         '^/api': '',
       },
-    },
     },
   },
   chainWebpack: webpackPlugin,

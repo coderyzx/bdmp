@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Form, Input, InputNumber } from 'antd';
+import { Modal, Form, Input, Col, Row } from 'antd';
 
 const CreateForm = Form.create({
   name: 'form_in_modal',
@@ -17,29 +17,70 @@ const CreateForm = Form.create({
           okText="添加"
           onCancel={onCancel}
           onOk={onCreate}
-          width={900}
+          width={1000}
           confirmLoading={confirmLoading}
           destroyOnClose= "true"
         >
           <Form layout="inline" >
-            <Form.Item label="parentCode">
-              {getFieldDecorator('parentCode', {
-                rules: [{ required: true, message: 'Please input the parentCode!' }],
-              })(<InputNumber min={0} max={1000} placeholder="number" />)}
-            </Form.Item>
-            <Form.Item label="parentLabel">
-              {getFieldDecorator('parentLabel')(<Input type="textarea" />)}
-            </Form.Item>
-            <Form.Item label="level">
-              {getFieldDecorator('level')(<Input type="textarea" />)}
-            </Form.Item>
-            <Form.Item label="code">
-              {getFieldDecorator('code')(<Input type="textarea" />)}
-            </Form.Item>
-            <Form.Item label="sort">
-              {getFieldDecorator('sort')(<Input type="textarea" />)}
-            </Form.Item>
-            <Form.Item label="classLabel">
+            <Row gutter={8}>
+              <Col span={8}>
+                <Form.Item label="父节点编号">
+                  {getFieldDecorator('parentCode', {
+                    rules: [{ required: true, message: '请输入父节点编号!' }],
+                  })(<Input min={0} max={1000} placeholder="number" />)}
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item label="父标签">
+                  {getFieldDecorator('parentLabel', {
+                    rules: [{ required: true, message: '请输入父标签' }],
+                  })(<Input type="textarea" />)}
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item label="级别">
+                {getFieldDecorator('level', {
+                    rules: [{ required: true, message: '请输入级别' }],
+                  })(<Input type="textarea" />)}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={8}>
+                <Form.Item label="编号">
+                  {getFieldDecorator('code')(<Input type="textarea" />)}
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item label="排序编号">
+                {getFieldDecorator('sort')(<Input type="textarea" />)}
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item label="跳转编号">
+                {getFieldDecorator('jumpCode')(<Input type="textarea" />)}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={8}>
+                <Form.Item label="跳转路径">
+                  {getFieldDecorator('jumpPath')(<Input type="textarea" />)}
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item label="布局编号">
+                  {getFieldDecorator('layoutType')(<Input type="textarea" />)}
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item label="组件编号">
+                  {getFieldDecorator('componentCode')(<Input type="textarea" />)}
+                </Form.Item>
+              </Col>
+            </Row>
+            <div style={{ fontSize: '14px', margin: '20px 0' }} >以下为选填</div>
+            <Form.Item label="类标签">
               {getFieldDecorator('classLabel')(<Input type="textarea" />)}
             </Form.Item>
             <Form.Item label="classTttle">
@@ -47,15 +88,6 @@ const CreateForm = Form.create({
             </Form.Item>
             <Form.Item label="classPath">
               {getFieldDecorator('classPath')(<Input type="textarea" />)}
-            </Form.Item>
-            <Form.Item label="jumpCode">
-              {getFieldDecorator('jumpCode')(<Input type="textarea" />)}
-            </Form.Item>
-            <Form.Item label="jumpPath">
-              {getFieldDecorator('jumpPath')(<Input type="textarea" />)}
-            </Form.Item>
-            <Form.Item label="layoutType">
-              {getFieldDecorator('layoutType')(<Input type="textarea" />)}
             </Form.Item>
             <Form.Item label="classInfo">
               {getFieldDecorator('classInfo')(<Input type="textarea" />)}
@@ -74,9 +106,6 @@ const CreateForm = Form.create({
             </Form.Item>
             <Form.Item label="introCrid">
               {getFieldDecorator('introCrid')(<Input type="textarea" />)}
-            </Form.Item>
-            <Form.Item label="componentCode">
-              {getFieldDecorator('componentCode')(<Input type="textarea" />)}
             </Form.Item>
             {/* 新增加9个字段 */}
             {/* <Form.Item label="active">

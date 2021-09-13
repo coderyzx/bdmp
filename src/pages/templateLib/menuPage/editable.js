@@ -1,6 +1,6 @@
 import React from 'react';
 // import { connect } from 'dva';
-import { Modal, Form, Input, InputNumber } from 'antd';
+import { Modal, Form, Input, Row, Col } from 'antd';
 
 
 const EditableForm = Form.create({ name: 'form_in_edit' })(
@@ -17,38 +17,85 @@ const EditableForm = Form.create({ name: 'form_in_edit' })(
           okText="确定"
           onCancel={onCancel}
           onOk={onCreate}
-          width={900}
+          width={1000}
           confirmLoading={confirmLoading}
           destroyOnClose= "true"
         >
           <Form layout="inline" >
-            <Form.Item label="parentCode">
-              {getFieldDecorator('parentCode', {
-                rules: [{ required: true, message: 'Please input the parentCode!' }],
-                initialValue: editData.parentCode,
-              })(<InputNumber min={0} max={1000} placeholder="number" allowClear />)}
-            </Form.Item>
-            <Form.Item label="parentLabel">
-              {getFieldDecorator('parentLabel', {
-                 initialValue: editData.parentLabel,
-              })(<Input type="textarea" allowClear />)}
-            </Form.Item>
-            <Form.Item label="level">
-              {getFieldDecorator('level', {
-                initialValue: editData.level,
-              })(<Input type="textarea" allowClear />)}
-            </Form.Item>
-            <Form.Item label="code">
-              {getFieldDecorator('code', {
+          <Row gutter={8}>
+              <Col span={8}>
+                <Form.Item label="父节点编号">
+                  {getFieldDecorator('parentCode', {
+                    rules: [{ required: true, message: '请输入父节点编号!' }],
+                    initialValue: editData.parentCode,
+                  })(<Input placeholder="number" allowClear/>)}
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item label="父标签">
+                  {getFieldDecorator('parentLabel', {
+                    rules: [{ required: true, message: '请输入父标签' }],
+                    initialValue: editData.parentLabel,
+                  })(<Input type="textarea" allowClear/>)}
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item label="级别">
+                {getFieldDecorator('level', {
+                    rules: [{ required: true, message: '请输入级别' }],
+                    initialValue: editData.level,
+                  })(<Input type="textarea" allowClear/>)}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={8}>
+                <Form.Item label="编号">
+                  {getFieldDecorator('code', {
                 initialValue: editData.code,
-              })(<Input type="textarea" allowClear />)}
-            </Form.Item>
-            <Form.Item label="sort">
-              {getFieldDecorator('sort', {
+              })(<Input type="textarea" allowClear/>)}
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item label="排序编号">
+                {getFieldDecorator('sort', {
                 initialValue: editData.sort,
+              })(<Input type="textarea" allowClear/>)}
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item label="跳转编号">
+                {getFieldDecorator('jumpCode', {
+                 initialValue: editData.jumpCode,
               })(<Input type="textarea" allowClear />)}
-            </Form.Item>
-            <Form.Item label="classLabel">
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={8}>
+                <Form.Item label="跳转路径">
+                  {getFieldDecorator('jumpPath', {
+                 initialValue: editData.jumpPath,
+              })(<Input type="textarea" allowClear/>)}
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item label="布局编号">
+                  {getFieldDecorator('layoutType', {
+                 initialValue: editData.layoutType,
+              })(<Input type="textarea" allowClear />)}
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item label="组件编号">
+                  {getFieldDecorator('componentCode', {
+                 initialValue: editData.componentCode,
+              })(<Input type="textarea" allowClear/>)}
+                </Form.Item>
+              </Col>
+            </Row>
+            <div style={{ fontSize: '14px', margin: '20px 0' }} >以下为选填</div>
+            <Form.Item label="类标签">
               {getFieldDecorator('classLabel', {
                 initialValue: editData.classLabel,
               })(<Input type="textarea" allowClear/>)}
@@ -61,21 +108,6 @@ const EditableForm = Form.create({ name: 'form_in_edit' })(
             <Form.Item label="classPath">
               {getFieldDecorator('classPath', {
                 initialValue: editData.classPath,
-              })(<Input type="textarea" allowClear/>)}
-            </Form.Item>
-            <Form.Item label="jumpCode">
-              {getFieldDecorator('jumpCode', {
-                 initialValue: editData.jumpCode,
-              })(<Input type="textarea" allowClear />)}
-            </Form.Item>
-            <Form.Item label="jumpPath">
-              {getFieldDecorator('jumpPath', {
-                 initialValue: editData.jumpPath,
-              })(<Input type="textarea" allowClear/>)}
-            </Form.Item>
-            <Form.Item label="layoutType">
-              {getFieldDecorator('layoutType', {
-                 initialValue: editData.layoutType,
               })(<Input type="textarea" allowClear/>)}
             </Form.Item>
             <Form.Item label="classInfo">
@@ -107,11 +139,6 @@ const EditableForm = Form.create({ name: 'form_in_edit' })(
               {getFieldDecorator('introCrid', {
                  initialValue: editData.introCrid,
               })(<Input type="textarea" allowClear/>)}
-            </Form.Item>
-            <Form.Item label="componentCode">
-              {getFieldDecorator('componentCode', {
-                 initialValue: editData.componentCode,
-              })(<Input type="textarea" allowClear />)}
             </Form.Item>
             {/* 新增加9个字段 */}
             {/* <Form.Item label="active">

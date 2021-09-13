@@ -58,7 +58,7 @@ export default {
         const resp = yield call(service.getInitial, pageSize);
         const typeIdList = yield call(service.getTypeIdList);
         const typeNameList = yield call(service.getTypeNameList);
-        console.log(resp)
+        // console.log(resp)
         if (resp.msgCode === 'SUCCESS') {
           yield put({
             type: 'showData',

@@ -1,15 +1,13 @@
-/* eslint-disable */
 
 import React from 'react';
 import { connect } from 'dva';
-import {Table,Button,Popconfirm,Form,Divider,Tooltip,
-  Modal,Icon} from 'antd';
+import { Table, Button, Popconfirm, Form, Divider, Tooltip,
+  Modal, Icon, notification } from 'antd';
 import CreateForm from './createForm';
 import EditableForm from './editable';
 import styles from './index.less';
 import dele from '@/assets/delete.svg';
-import {openNotificationLocal,openNotificationServer} from '@/utils/notification'
-const EditableContext = React.createContext();
+// const EditableContext = React.createContext();
 // 表格行内编辑
 
 @connect(({ menuPageModel }) => ({
@@ -20,20 +18,20 @@ class MenuPage extends React.Component {
     super(props);
 
     this.state = {
-      loading: true, //表格是否加载
-      visibleAdd: false, //添加显示对话框
-      visibleDelete: false, //删除显示对话框
-      visibleEdit: false, //编辑显示对话框
-      confirmLoading: false, //添加是否加载
-      editLoading: false, //编辑保存是否加载
-      editingKey: '', //行是否可编辑
-      selectedRowKeys: [], //选择一行
-      deleteLoading: false, //选择多行删除是否加载
-      editData: {}, //某一行编辑时的默认数据
+      loading: true, // 表格是否加载
+      visibleAdd: false, // 添加显示对话框
+      visibleDelete: false, // 删除显示对话框
+      visibleEdit: false, // 编辑显示对话框
+      confirmLoading: false, // 添加是否加载
+      editLoading: false, // 编辑保存是否加载
+      // editingKey: '', // 行是否可编辑
+      selectedRowKeys: [], // 选择一行
+      deleteLoading: false, // 选择多行删除是否加载
+      editData: {}, // 某一行编辑时的默认数据
     };
     this.columns = [
       {
-        title: 'parentCode',
+        title: '父节点编号',
         dataIndex: 'parentCode',
         key: 'parentCode',
         fixed: 'left',
@@ -41,27 +39,81 @@ class MenuPage extends React.Component {
         sorter: (a, b) => a.parentCode - b.parentCode,
         sortDirections: ['descend'],
         editable: true,
-      }, // 父节点
+      },
       {
-        title: 'parentLabel',
+        title: '父标签',
         dataIndex: 'parentLabel',
         key: 'parentLabel',
-        width: 120,
+        width: 140,
         editable: true,
         ellipsis: true,
-      }, // 父标签
+      },
       {
-        title: 'level',
+        title: '级别',
         dataIndex: 'level',
         key: 'level',
         width: 120,
         editable: true,
         ellipsis: true,
-      }, // 级别
-      { title: 'code', dataIndex: 'code', key: 'code', width: 120, editable: true, ellipsis: true }, // 编号
-      { title: 'sort', dataIndex: 'sort', key: 'sort', width: 120, editable: true, ellipsis: true }, // 排序编号
+      },
+      { title: '编号', dataIndex: 'code', key: 'code', width: 120, editable: true, ellipsis: true },
+      { title: '排序编号', dataIndex: 'sort', key: 'sort', width: 120, editable: true, ellipsis: true },
       {
-        title: 'classLabel',
+        title: '跳转编号',
+        dataIndex: 'jumpCode',
+        key: 'jumpCode',
+        width: 120,
+        editable: true,
+        ellipsis: true,
+      },
+      {
+        title: '跳转路径',
+        dataIndex: 'jumpPath',
+        key: 'jumpPath',
+        width: 120,
+        editable: true,
+        ellipsis: true,
+        onCell: () => ({
+          style: {
+            maxWidth: 120,
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+          },
+        }),
+        render: text => (
+          <Tooltip placement="topLeft" title={text}>
+            {text}
+          </Tooltip>
+        ),
+      },
+      {
+        title: '布局编号',
+        dataIndex: 'layoutType',
+        key: 'layoutType',
+        width: 120,
+        editable: true,
+        ellipsis: true,
+      },
+      {
+        title: '组件编号',
+        dataIndex: 'componentCode',
+        key: 'componentCode',
+        width: 120,
+        editable: true,
+        ellipsis: true,
+        onCell: () => ({
+            style: {
+              maxWidth: 150,
+              overflow: 'hidden',
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis',
+            },
+          }),
+        render: text => (<Tooltip placement="topLeft" title={text}>{text}</Tooltip>),
+      },
+      {
+        title: '类标签',
         dataIndex: 'classLabel',
         key: 'classLabel',
         width: 120,
@@ -85,66 +137,21 @@ class MenuPage extends React.Component {
         ellipsis: true,
       },
       {
-        title: 'jumpCode',
-        dataIndex: 'jumpCode',
-        key: 'jumpCode',
-        width: 120,
-        editable: true,
-        ellipsis: true,
-      },
-      {
-        title: 'jumpPath',
-        dataIndex: 'jumpPath',
-        key: 'jumpPath',
-        width: 120,
-        editable: true,
-        ellipsis: true,
-        onCell: () => {
-          return {
-            style: {
-              maxWidth: 120,
-              overflow: 'hidden',
-              whiteSpace: 'nowrap',
-              textOverflow: 'ellipsis',
-            },
-          };
-        },
-        render: text => (
-          <Tooltip placement="topLeft" title={text}>
-            {text}
-          </Tooltip>
-        ),
-      }, // 跳转路径
-      {
-        title: 'layoutType',
-        dataIndex: 'layoutType',
-        key: 'layoutType',
-        width: 120,
-        editable: true,
-        ellipsis: true,
-      },
-      {
         title: 'classInfo',
         dataIndex: 'classInfo',
         key: 'classInfo',
         width: 120,
         editable: true,
         ellipsis: true,
-        onCell: () => {
-          return {
+        onCell: () => ({
             style: {
               maxWidth: 120,
               overflow: 'hidden',
               whiteSpace: 'nowrap',
               textOverflow: 'ellipsis',
             },
-          };
-        },
-        render: text => (
-          <Tooltip placement="topLeft" title={text}>
-            {text}
-          </Tooltip>
-        ),
+          }),
+        render: text => (<Tooltip placement="topLeft" title={text}>{text}</Tooltip>),
       },
       {
         title: 'classLabelEn',
@@ -187,41 +194,17 @@ class MenuPage extends React.Component {
         ellipsis: true,
       },
       {
-        title: 'componentCode',
-        dataIndex: 'componentCode',
-        key: 'componentCode',
-        width: 150,
-        editable: true,
-        ellipsis: true,
-        onCell: () => {
-          return {
-            style: {
-              maxWidth: 150,
-              overflow: 'hidden',
-              whiteSpace: 'nowrap',
-              textOverflow: 'ellipsis',
-            },
-          };
-        },
-        render: text => (
-          <Tooltip placement="topLeft" title={text}>
-            {text}
-          </Tooltip>
-        ),
-      }, // 组件编号
-      {
-        title: 'Operation',
+        title: '操作',
         key: 'Operation',
         fixed: 'right',
-        width: 210,
-        render: (text, record) => {
-          return (
+        width: 200,
+        align: 'center',
+        render: (text, record) => (
             <span style={{ width: '100%', display: 'block' }}>
               <Button
                 type="primary"
                 size="small"
                 onClick={() => this.showEdit(record)}
-                style={{ marginLeft: 35 }}
                 icon="edit"
               >
                 编辑
@@ -238,30 +221,27 @@ class MenuPage extends React.Component {
                 </Popconfirm>
               ) : null}
             </span>
-          );
-        },
+        ),
       },
     ];
   }
 
-  //初始化获得表格
+  // 初始化获得表格
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
       type: 'menuPageModel/getMenuPage',
       payload: {},
-      callback: (res) => {
-        if(res === 401 ||res === 403||res === 404){
-          this.setState({ loading: false });
-          openNotificationLocal(res);
-        }
-        else if(res.status === 500 ){
-          this.setState({ loading: false });
-          openNotificationServer(res.status);
-        }else if(res === undefined ){
-          this.setState({ loading: false }); 
-        }
+      callback: res => {
         this.setState({ loading: false });
+        if (res.code !== 'U000000') {
+          this.setState({ loading: false });
+          const args = {
+            message: '提示',
+            description: '菜单页面管理获取数据失败',
+          };
+          notification.info(args);
+        }
       },
     });
   }
@@ -279,52 +259,44 @@ class MenuPage extends React.Component {
 
   handleCreate = () => {
     const { form } = this.formRef.props;
-    // const {data} = this.state;
     const { dispatch } = this.props;
-    // const regexp = new RegExp(/^1(3|4|5|6|7|8)\d{9}$/);
     form.validateFields((err, values) => {
-      // console.log('Received values of form: ', values);
       if (err) {
-        //如果有一个校验不通过，代码将不再往下执行
         return;
       }
       this.setState({
         confirmLoading: true,
         loading: true,
       });
-      //校验通过，调接口传参
       dispatch({
         type: 'menuPageModel/postNewMenu',
         payload: values,
         callback: res => {
-          if (res === 200) {
+          if (res.code === 'U000000') {
             this.setState({
               confirmLoading: false,
               visibleAdd: false,
               loading: false,
             });
-          }
-          if(res === 401 ||res === 403||res === 404){
+            // dispatch({
+            //   type: 'menuPageModel/getMenuPage',
+            // })
+            const args = {
+              message: '提示',
+              description: '新建数据成功',
+            };
+            notification.info(args);
+          } else {
             this.setState({
               confirmLoading: false,
               visibleAdd: false,
               loading: false,
             });
-            openNotificationLocal(res);
-          }
-          else if(res.status === 500 ){
-            this.setState({
-              confirmLoading: false,
-              visibleAdd: false,
-              loading: false,
-            });
-            openNotificationServer(res.status);
-          }else{
-            this.setState({
-              confirmLoading: false,
-              visibleAdd: false,
-              loading: false,
-            }); 
+            const args = {
+              message: '提示',
+              description: '新建数据失败',
+            };
+            notification.info(args);
           }
         },
       });
@@ -338,26 +310,43 @@ class MenuPage extends React.Component {
 
   // 删除某一行
   handleDelete = id => {
+    console.log(id);
     const { dispatch } = this.props;
     dispatch({
       type: 'menuPageModel/getDeleteMenu',
       payload: id,
-      callback: (res) => {
-        if(res === 401 ||res === 403||res === 404){
-          openNotificationLocal(res);
-        }else if(res.status === 500 ){
-          openNotificationServer(res.status);
+      callback: res => {
+        if (res.code === 'U000000') {
+          const args = {
+            message: '提示',
+            description: '删除成功',
+          };
+          notification.info(args);
+        } else {
+          const args = {
+            message: '提示',
+            description: '删除失败',
+          };
+          notification.info(args);
         }
-      }
+      },
     });
   };
 
-  //删除选择项
+  // 删除选择项
   showDelete = () => {
     this.setState({ visibleDelete: true });
   };
+
+  // selectRow = record => {
+  //   // console.log(record);
+  // }
+
+  onSelectChange = selectedRowKeys => {
+    this.setState({ selectedRowKeys });
+  };
+
   deleteSelection = selectedRowKeys => {
-    // console.log(selectedRowKeys);
     const { dispatch } = this.props;
     this.setState({
       selectedRowKeys: [],
@@ -368,41 +357,39 @@ class MenuPage extends React.Component {
     dispatch({
       type: 'menuPageModel/postDeleteMenu',
       payload: selectedRowKeys,
-      callback: () => {
-        if(res === 401 ||res === 403||res === 404){
+      callback: res => {
+        if (res.code === 'U000000') {
           this.setState({
             deleteLoading: false,
             visibleDelete: false,
             loading: false,
           });
-          openNotificationLocal(res);
-        }else if(res.status === 500 ){
+          const args = {
+            message: '提示',
+            description: '批量删除成功',
+          };
+          notification.info(args);
+        } else {
           this.setState({
             deleteLoading: false,
             visibleDelete: false,
             loading: false,
           });
-          openNotificationServer(res.status);
-        }else{
-          this.setState({
-            deleteLoading: false,
-            visibleDelete: false,
-            loading: false,
-          }); 
+          const args = {
+            message: '提示',
+            description: '批量删除失败',
+          };
+          notification.info(args);
         }
       },
     });
   };
+
   deleteSelectionCancel = () => {
     this.setState({ visibleDelete: false });
   };
 
-  onSelectChange = selectedRowKeys => {
-    // console.log('selectedRowKeys changed: ', selectedRowKeys);
-    this.setState({ selectedRowKeys });
-  };
-
-  //编辑弹框
+  // 编辑弹框
   showEdit = record => {
     this.setState({
       visibleEdit: true,
@@ -417,6 +404,8 @@ class MenuPage extends React.Component {
   saveEdit = () => {
     const { form } = this.formRefEdit.props;
     const { dispatch } = this.props;
+    const { editData } = this.state;
+    console.log(editData);
     this.setState({
       editLoading: true,
       loading: true,
@@ -426,38 +415,33 @@ class MenuPage extends React.Component {
       if (err) {
         return;
       }
-      //校验通过，调接口传参
       dispatch({
         type: 'menuPageModel/postEditMenu',
-        payload: values,
+        payload: { ...values, id: editData.id },
         callback: res => {
-          if (res === 200) {
+          if (res.code === 'U000000') {
+          this.setState({
+            editLoading: false,
+            visibleEdit: false,
+            loading: false,
+          });
+          const args = {
+            message: '提示',
+            description: '跟新数据成功',
+          };
+          notification.info(args);
+          } else {
             this.setState({
-              editLoading: false,
-              visibleEdit: false,
+              confirmLoading: false,
+              visibleAdd: false,
               loading: false,
             });
+            const args = {
+              message: '提示',
+              description: '跟新数据失败',
+            };
+            notification.info(args);
           }
-          if(res === 400 || res === 401 ||res === 403||res === 404){
-            this.setState({
-              editLoading: false,
-              visibleEdit: false,
-              loading: false,
-            });
-            openNotificationLocal(res);
-          }else if(res.status === 500 ){
-            this.setState({
-              editLoading: false,
-              visibleEdit: false,
-              loading: false,
-            });
-            openNotificationServer(res.status);
-          }
-          // this.setState({
-          //   editLoading: false,
-          //   visibleEdit: false,
-          //   loading: false,
-          // });
         },
       });
       form.resetFields();
@@ -486,10 +470,11 @@ class MenuPage extends React.Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     };
+    // console.log(rowSelection);
     const hasSelected = selectedRowKeys.length > 0;
     const titleDelete = <p style={{ fontSize: 30, marginBottom: 5, textAlign: 'center' }}>删除</p>;
     return (
-      <div style={{ margin: '0 50px' }}>
+      <div style={{ margin: '0 15px' }}>
         <div className={styles.title}>菜单页面维护</div>
         <div className={styles.bar}>
           <Button
@@ -499,7 +484,7 @@ class MenuPage extends React.Component {
             disabled={!hasSelected}
             icon="delete"
           >
-            删除
+            批量删除
           </Button>
           <Button onClick={this.showModal} type="primary" size="large" style={{ marginLeft: 30 }}>
             添加一项
@@ -509,12 +494,11 @@ class MenuPage extends React.Component {
           okType="danger"
           title={titleDelete}
           visible={visibleDelete}
-          onOk={() => this.deleteSelection(rowSelection.selectedRowKeys)}
+          onOk={() => this.deleteSelection(selectedRowKeys)}
           onCancel={this.deleteSelectionCancel}
           confirmLoading={deleteLoading}
         >
           <p style={{ textAlign: 'center', marginBottom: 15 }}>
-            {/* <Icon type="delete" style={{ color:'red',fontSize: 50}}/> */}
             <img src={dele} />
           </p>
           <p className={styles.selectItem}>
@@ -549,7 +533,11 @@ class MenuPage extends React.Component {
           //   onChange: this.cancel,
           // }}
           rowSelection={rowSelection}
-          // rowClassName={styles.editableRow}
+          // onRow={record => ({
+          //   onClick: () => {
+          //     this.selectRow(record);
+          //   },
+          // })}
         />
       </div>
     );

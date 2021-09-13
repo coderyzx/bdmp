@@ -1,4 +1,5 @@
 import { getChartByTypeName, postChartData, getDelete, postUpdate, getChartById, getTypeList, getTypeName } from '@/services/chart';
+import { openNotificationServer } from '@/utils/notification';
 
 const chartModel = {
   namespace: 'chartModel',
@@ -11,22 +12,21 @@ const chartModel = {
 
   effects: {
     // 获取所有chart
-    *getChartList({ payload, callback }, { call, put }) {
+    *getChartList({ payload }, { call, put }) {
       const response = yield call(getChartByTypeName, payload);
       if (response) {
         yield put({
           type: 'chartList',
           payload: response,
         });
-        callback(response);
-      } else {
-        callback(response);
+      } else if (response.status === 500) {
+        openNotificationServer();
       }
     },
     // 新增chart
     *postNewChart({ payload, callback }, { call }) {
       const response = yield call(postChartData, payload);
-      if (response === 200) {
+      if (response) {
         callback(response);
       } else {
         callback(response);
@@ -37,25 +37,18 @@ const chartModel = {
       const response = yield call(getDelete, payload);
       if (response === 200) {
         callback(response);
-      } else {
-        callback(response);
+      } else if (response.status === 500) {
+        openNotificationServer();
       }
     },
     // 修改chart
-    *postUpdateChart({ payload, callback }, { call, put }) {
+    *postUpdateChart({ payload, callback }, { call }) {
       const response = yield call(postUpdate, payload);
       console.log(response);
-      if (response === 200) {
-        const res = yield call(getChartByTypeName);
-        yield put({
-          type: 'chartList',
-          payload: res,
-        });
-        if (callback) {
-          callback(response);
-        } else {
-          callback(response);
-        }
+      if (response.code === 'U000000') {
+        callback(response);
+      } else {
+        callback(response);
       }
     },
     // 查一个chart，用于编辑的时候查询一个chart
@@ -68,7 +61,9 @@ const chartModel = {
           type: 'chartEdit',
           payload: response,
         });
-        callback();
+        if (callback) {
+          callback();
+        }
       }
     },
 
@@ -80,20 +75,20 @@ const chartModel = {
           type: 'chartType',
           payload: response.data,
         });
-        callback(response.code)
       } else {
-        callback(response)
+        callback()
       }
     },
     // 获取图表类型的名称
-    *getChartTypeName({ payload }, { call, put }) {
+    *getChartTypeName({ payload, callback }, { call, put }) {
       const response = yield call(getTypeName, payload);
-      // console.log(response);
-      if (response) {
+      if (response.code === 'U000000') {
         yield put({
           type: 'chartTypeName',
           payload: response.data,
         });
+      } else {
+        callback()
       }
     },
 
