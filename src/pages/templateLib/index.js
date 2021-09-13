@@ -32,13 +32,13 @@ class TemplateLib extends React.Component {
     const menu = [
       {
         key: '1',
-        type: 'form',
+        type: 'menu',
         title: '菜单页面管理',
         path: '/templateLib/menuPage',
       },
       {
         key: '2',
-        type: 'form',
+        type: 'table',
         title: '图表类型管理',
         path: '/templateLib/chartType',
       },
@@ -50,7 +50,7 @@ class TemplateLib extends React.Component {
       },
       {
         key: '4',
-        type: 'form',
+        type: 'folder',
         title: '字典',
         path: '/templateLib/dictionary',
       },

@@ -5,8 +5,6 @@ import { Button, Empty, Table, Divider, Drawer, Icon, Modal, Input, Select } fro
 import { getDashboardList, addDashboard, deleteDashboard, getProject, getGroup,
   createContainer2Dashboard,
   getContainerForDashboard } from '@/services/dashBoard';
-// import BusinessThemeManagementModal from './components/BusinessThemeManagement';
-// import FolderManagementModal from './components/FolderManagement';
 // import ContainerManagement from './components/ContainerManagement';
 import { addNewContainer2Dashboard } from '@/utils/formatDashBoard';
 
@@ -77,8 +75,6 @@ class DashboardManagement extends React.Component {
       dashboardName: '',
       selectedProjectId: '',
       selectedGroupId: '',
-      themeVisible: false,
-      folderVisible: false,
       dashboardVisible: false,
       saveVisible: false,
       containerList: [],
@@ -99,14 +95,6 @@ class DashboardManagement extends React.Component {
     return res.data;
   }
 
-  businessThemeManagement = () => {
-    this.setState({ themeVisible: true });
-  }
-
-  folderManagement = () => {
-    this.setState({ folderVisible: true });
-  }
-
   // 先弹窗
   createDashboard = async () => {
     const res = await getProject();
@@ -124,14 +112,6 @@ class DashboardManagement extends React.Component {
         dashboardName: name,
       })
     }
-  }
-
-  closeTheme = () => {
-    this.setState({ themeVisible: false });
-  }
-
-  closeFolder = () => {
-    this.setState({ folderVisible: false });
   }
 
   closeDashboard = async () => {
@@ -275,11 +255,11 @@ class DashboardManagement extends React.Component {
         height="100%"
       >
         <div className={styles.drawerBody}>
-          {/* <div className={styles.addItem}>
+          <div className={styles.addItem}>
             <Button className={styles.showChartBtn} onClick={this.showChart}>
               + 图表组件
             </Button>
-          </div> */}
+          </div>
           {/* <ContainerManagement
             containerList={containerList}
             onContainerCreate={this.onContainerCreate}
@@ -292,8 +272,6 @@ class DashboardManagement extends React.Component {
   render() {
     const {
       dashboardList,
-      themeVisible,
-      folderVisible,
       dashboardVisible,
       saveVisible,
       dashboardName,
@@ -304,12 +282,6 @@ class DashboardManagement extends React.Component {
     return (
       <div className={styles.wrapper}>
         <div className={styles.wrapHeader}>
-          <Button className={styles.createBtn} onClick={this.businessThemeManagement}>
-            + 业务主题场景管理
-          </Button>
-          <Button className={styles.createBtn} onClick={this.folderManagement}>
-            + 文件夹管理
-          </Button>
           <Button className={styles.createBtn} onClick={this.createDashboard}>
             + 创建仪表板
           </Button>
@@ -318,8 +290,6 @@ class DashboardManagement extends React.Component {
           <div className={styles.Listdesc}>{`仪表板列表 | 共${dashboardList && dashboardList.length}条记录`}</div>
           <div className={styles.dashboardListStyle}>
             {listNode}
-            {/* {themeVisible && <BusinessThemeManagementModal closeTheme={this.closeTheme} />} */}
-            {/* {folderVisible && <FolderManagementModal closeFolder={this.closeFolder}/>} */}
           </div>
         </div>
         {dashboardVisible && this.renderDashboard()}
