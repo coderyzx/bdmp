@@ -1,0 +1,34 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 2733835 */
+  src: url('./iconfont.eot?t=1629770180599'); /* IE9 */
+  src: url('./iconfont.eot?t=1629770180599#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAAS8AAsAAAAACegAAARuAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHFQGYACDKgqGfIYGATYCJAMUCwwABCAFhGcHSxujCBHVm6HJfibEm7+M0AiSuBDUY/5/5Mc1oZirtB+NNcHz/dzbuQ/SzEuKABbBEqsKTbzjV1gi36mwS6xXf5/ev/wTUL4bQCX0tgpRubO7TP+5tKZlWyEb2dGTfDtAhXCQu3ugfEakawdOzE7pBcD/f69yJv+AzWtfIIpj3v+y9saPsYRWgQLUPa3UasV6KkxdxLMYqIz8P4MAjjrYgnHIdWe/w7uVwGVHEswYqwJxp2xlWNFh552YGpHgWzzovQZyARZQh4wPAOf+78s/GDKwA4XVMD40lrqqO/v/+qthIv9JNNMDyHAz+HwFWEADVQtzy0Z9cAlMYbEKTLiyPDNtAD3ZR8FP/Cq/mv//iVDrNlX0cTj8D0+hMSAeDBJicx8tGfipbRoCP5GGgp8lDQ0/G92TIZZc7IB4QBqA7CNB0TM1Fo2XnCwtz8nJw6OSzCEUIxoasar2qQuTep++pGaz19THzJXjvt1lPtLMrJR5rz/mjJOBRrXPAc4Rk3muAOIOOoNw+WlUVXl1l9O1b/PDzGSHK7pjj8Hy9Ym0R1xBxxA+bZ3ccIbtwwyWJ7mjdjCVMJfAKg8ZIdwYVScmur2qg2MbA3JiUQu54M9bkSH84rCR1DT644ndg7+pHhxO+zmeJ8LJwU+HjRVm6ixt3HswZXE4PEZVlGsIMT37B4EG/qBDbDxnKPfCNcpcTBI3QDi31SfPZHKQEidYWv6UnzhU+cstf3LHsxVppoRGQQYGQYahJ1TpKaP1oYYntN9l8LiDuzBDiZtsN2QYcqdOgOliz+ma3JYcZTtdTytPMy2S25K9kv2VUzbl665cWEJYKBJz3d9P8m5mvmIOYZH/60GFDdGXPIbpikxQ8TkPJunZPkwCOsLG0B6GpA0SaL09t1G6Ibf9kEimQDLsT9hzKz3wT2rY7abKxxw1cg3BWtqKZ+crNjoK2rou+VPVVllF2VZVdQd+GC8mbr12ls97nRFq9tAoybsZCH1mPE5njRfIk8/5Rd1plshKl92Wo9jqvzKHjL3XGhW15D4l7nktbsN0o0STUrqiWWboNjXuySgHgMi9XmVq8WWfdAdTXrCc8VdZOJ7J5C95HgnHCx+u+Kz/s3O9io0PW4zONBG5N+iu/UtpwZo/oAlAVqOmwJqyeduBqCEW8e8KK/irWSM4moCnYcyJ4DwIfkrLgSKKTND4FHCMoAIsAQ3g4dMNjkq4PByQiHwwIYYDUIIGBEIc5kERw0vQxOGQYwTXYEnBN3jE4S84Zhh4nhdQwiCrZULBqEE+QKKq0lgW9g/dRXuTCyrKHSK1Cc5A6AXZyjqWSH3c0N7aiNmAoaqANfZjmOcV1FSlqNhzzHXs+6bsWzxVFZ1lQsGoQT5AoqrSuOyc/nu7aG9yQUDOoZ9aqiaHQ+gFAM46KUELF3Jye2sjZkMvMlQVsKb6MTeLFdTlZ6Wo2HMd8nXsEzYDJd705uIGHwFcx/hC21WixYgVDye0XlIJqRxHonUyKQeoEx6YJMdOBwAA') format('woff2'),
+       url('./iconfont.woff?t=1629770180599') format('woff'),
+       url('./iconfont.ttf?t=1629770180599') format('truetype'),
+       url('./iconfont.svg?t=1629770180599#iconfont') format('svg');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-add-circle:before {
+  content: "\e664";
+}
+
+.icon-ashbin:before {
+  content: "\e665";
+}
+
+.icon-edit:before {
+  content: "\e66e";
+}
+
+.icon-file:before {
+  content: "\e671";
+}
+

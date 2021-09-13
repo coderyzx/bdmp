@@ -4,7 +4,7 @@ import Redirect from 'umi/redirect';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import styles from './login.less';
 
-/* eslint-disable */ 
+/* eslint-disable */
 @connect(({ loginModel }) => (
   {
     loginStatus: loginModel.loginStatus,

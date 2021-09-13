@@ -1,9 +1,8 @@
 import request from '@/utils/request';
 // 查询所有数据
-export async function getMenuPageData(payload) {
+export async function getMenuPageData() {
   return request('/api/consumer/findAllMenu', {
-      method: 'GET',
-      payload,
+    method: 'GET',
   });
 }
 // 添加

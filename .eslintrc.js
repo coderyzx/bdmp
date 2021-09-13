@@ -13,9 +13,15 @@ module.exports = {
     'jsx-a11y/label-has-associated-control': 'off',
     'jsx-a11y/label-has-for': 'off',
     'jsx-a11y/alt-text': 'off',
+    'jsx-a11y/anchor-is-valid':'off',
+    'jsx-a11y/anchor-has-content': 0,
     'import/no-extraneous-dependencies': 0,
     'import/no-unresolved': 'off',
     'no-use-before-define': 0,
     '@typescript-eslint/camelcase': 0,
+    'react/no-access-state-in-setstate': 0,
+    'no-unneeded-ternary': 0,
+    'react/jsx-indent': 0,
+    'no-console':0,
   }
 };

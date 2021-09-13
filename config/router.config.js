@@ -42,6 +42,11 @@ const routes = [
             path: '/templateLib/dictionary',
             component: './TemplateLib/Dictionary',
           },
+          //仪表盘管理
+          {
+            path: '/templateLib/dashBoard',
+            component: './DashBoardManagement',
+          },
           {
             path: '/templateLib/form',
             component: './TemplateLib/Form',
@@ -56,6 +61,7 @@ const routes = [
           },
         ],
       },
+       //仪表盘展示
       {
         path: '/dashBoard',
         component: './DashBoard',
@@ -75,7 +81,7 @@ const routes = [
       {
         path: '/dataProcessing',
         component: './DataProcessing',
-      },   
+      },
     ],
 
   },
@@ -86,4 +92,3 @@ const routes = [
 ]
 
 export default routes;
-

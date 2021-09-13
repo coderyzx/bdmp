@@ -8,7 +8,7 @@ export function getMenuPageKey (datas = []) {
       classInfoEn, classIcon, introCrid, componentCode,
     } = ele;
     result.push({
-      key: id + Math.random() * 100,
+      key: id,
       id,
       parentCode,
       parentLabel,
@@ -36,7 +36,16 @@ export function getMenuPageKey (datas = []) {
 
 export function handleOption (option) {
   const { ...result } = option
-  for (const i in result) {
+  for (let i in result) {
+    // switch (i) {
+    //   case 'title': result[i] = null;
+    //   case 'tooltip': result[i] = null;
+    //   case 'legend': result[i] = null;
+    //   case 'toolbox': result[i] = null;
+    //   case 'xAxis': result[i] = null;
+    //   case 'yAxis': result[i] = null;
+    //   case 'series': result[i] = null;
+    // }
     if (i === 'title') {
       result[i] = null;
     }
@@ -45,13 +54,6 @@ export function handleOption (option) {
     }
     if (i === 'legend') {
       result[i] = null;
-    }
-    if (i === 'grid') {
-      // delete result[i].top ;
-      // delete result[i].left  ;
-      // delete result[i].right ;
-      // delete result[i].bottom ;
-      // delete result[i].containLabel;
     }
     if (i === 'toolbox') {
       result[i] = null;

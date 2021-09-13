@@ -47,13 +47,13 @@ export async function getChartById(id) {
 }
 // 查询图表类型信息
 export async function getTypeList() {
-  return request('/huiqi/consumer/selectTypeAll', {
+  return request('/chartType/consumer/selectTypeAll', {
       method: 'get',
   });
 }
 // 查询图表类型名称
 export async function getTypeName() {
-  return request('/huiqi/consumer/selectTypeName', {
+  return request('/chartType/consumer/selectTypeName', {
       method: 'get',
   });
 }

@@ -20,7 +20,7 @@ class Editor extends React.Component {
     this.state = {
       visible: false,
       loading: false,
-      optionValue: this.props.chartEdit.option,
+      optionValue: {},
       isShow: false,
     };
   }
@@ -73,29 +73,32 @@ class Editor extends React.Component {
   saveEdit = () => {
     const { form } = this.formRefEdit.props;
     const { dispatch } = this.props;
-    this.setState({
-      loading: true,
-    });
     form.validateFields((err, values) => {
-      if (err) { // 如果有一个校验不通过，代码将不再往下执行
+      if (err) {
         return;
       }
       const { id } = this.props.location.query;
       const parameter = values;
       parameter.id = id;
-      // 校验通过，调接口传参
+      // console.log(parameter);
       dispatch({
         type: 'chartModel/postUpdateChart',
         payload: parameter,
-        callback: () => {
-          dispatch({
-            type: 'chartModel/getChart',
-            payload: id,
-          })
-          this.setState({
-            visible: false,
-            loading: false,
-          });
+        callback: res => {
+          if (res.code === 'U000000') {
+            dispatch({
+              type: 'chartModel/getChart',
+              payload: id,
+            })
+            this.setState({ visible: false });
+          } else {
+            this.setState({ visible: false });
+            const args = {
+              message: '提示',
+              description: '保存图表类型和名称失败',
+            };
+            notification.info(args);
+          }
         },
       });
       form.resetFields();
@@ -107,52 +110,74 @@ class Editor extends React.Component {
   };
 
   // 运行代码块
-  handleStart=option => {
-    console.log(option);
-    const { dispatch, chartEdit } = this.props;
-    dispatch({
-      type: 'chartModel/postUpdateChart',
-      payload: chartEdit.option,
+  // handleStart=option => {
+  //   console.log(option);
+  //   const { dispatch, chartEdit } = this.props;
+  //   dispatch({
+  //     type: 'chartModel/postUpdateChart',
+  //     payload: chartEdit.option,
 
-    })
-  }
+  //   })
+  // }
 
   // 保存
-
-  handleSave = option => {
-    console.log(option)
+  handleSave = () => {
     const { dispatch } = this.props;
+    const { optionValue } = this.state;
+    const { id } = this.props.location.query;
+    const newData = {};
+    newData.optionjson = JSON.stringify(optionValue, null, '\t');
+    newData.id = id;
+    console.log(newData);
     dispatch({
       type: 'chartModel/postUpdateChart',
-      payload: option,
-      callback: () => {
-        const { id } = this.props.location.query;
-        console.log(id);
-        dispatch({
-          type: 'chartModel/getChart',
-          payload: id,
-        })
-        const args = {
-          message: '提示',
-          description: '保存图表成功',
-        };
-        notification.open(args);
+      payload: newData,
+      callback: res => {
+        if (res.code === 'U000000') {
+          dispatch({
+            type: 'chartModel/getChart',
+            payload: id,
+          })
+          const args = {
+            message: '提示',
+            description: '保存图表option成功',
+          };
+          notification.info(args);
+        } else {
+          const args = {
+            message: '提示',
+            description: '保存图表option失败',
+          };
+          notification.info(args);
+        }
       },
     })
   }
 
   goBack = () => {
     this.setState({
-      // optionValue: '',
       isShow: false,
     })
+    const { dispatch, chartEdit } = this.props;
+    dispatch({
+      type: 'chartModel/getChartList',
+      payload: chartEdit.typename,
+      // callback: () => {
+      //   router.goBack()
+      // },
+    });
     router.goBack()
   }
 
+  onChange = valueonChange => {
+    this.setState({
+      optionValue: valueonChange,
+    })
+  }
 
   render() {
     const { chartEdit } = this.props;
-    // console.log(JSON.parse(chartEdit.optionjson));
+    // console.log(chartEdit);
     const { visible, loading, optionValue, isShow } = this.state;
     return (
       <Content
@@ -182,7 +207,7 @@ class Editor extends React.Component {
               <Icon type="edit" />
             </Button>
             <Button type="primary" size="large"
-               onClick={this.handleSave}
+              onClick={this.handleSave}
               className={styles.save}
             >
               保存
@@ -194,19 +219,18 @@ class Editor extends React.Component {
           <div className={styles.mirror}>
             <div className={styles.mirrorTitle} >
               图表代码
-              <Button type="primary"
+              {/* <Button type="primary"
               onClick={() => this.handleStart()}
               className={styles.start}
               >
                 运行
-              </Button>
+              </Button> */}
             </div>
             <Mirror
-            // value={chartEdit.optionjson}
-            // value={optionValue}
-            // value={JSON.stringify(optionValue, null, '\t')}
             value={JSON.stringify(chartEdit.option, null, '\t')}
-            handleStart={this.handleStart} />
+            handleStart={this.handleStart}
+            onChange={valueonChange => { this.onChange(valueonChange) }}
+            />
           </div>
           <div className={styles.chart} >
             <div className={styles.chartTitle} >图表示例预览</div>

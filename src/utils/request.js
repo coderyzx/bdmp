@@ -55,8 +55,8 @@ const request = extend({
 
 // request拦截器, 改变url 或 options.
 // request.interceptors.request.use((url, options) => {
-//   console.log(url);
-//   console.log(options);
+//   console.log('url:', url);
+//   console.log('option:', options);
 //   return (
 //     {
 //       url,
@@ -68,18 +68,13 @@ const request = extend({
 // response拦截器, 处理response
 request.interceptors.response.use(async response => {
   const data = await response.clone().json();
+  // console.log('response:', response)
   // console.log('wangyucaho ', data);
   // if (data && data.NOT_LOGIN) {
   //   // location.href = '登录url';
   // }
-  // data.yuanzhixin = 1;
+  data.bdmp = 'win';
   return data;
 })
-
-// // 请求头需要加上，不然post请求，mock里接收不到参数
-// const headers = {
-//   'Accept': 'application/json',
-//   'Content-Type': 'application/json'
-// };
 
 export default request;
