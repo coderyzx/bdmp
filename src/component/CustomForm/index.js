@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Form, Input, Select, TreeSelect, Row, Col, Radio, DatePicker, Button } from 'antd';
 import moment from 'moment';
+import _ from 'lodash'
 import { createOptions, formatTreeData, createRadioButtons, createRadio } from '@/utils/customForm';
 import IconNode from '@/components/IconNode';
-import _ from 'lodash'
 import fieldsGroupType from '@/constants/fieldsGroupType'
 import styles from './index.less';
 

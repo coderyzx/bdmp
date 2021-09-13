@@ -1,15 +1,15 @@
 import { notification, Icon } from 'antd';
 
 export function openNotificationLocal (res) {
-  if(res === 400){
+  if (res === 400) {
     notification.open({
       message: '添加失败',
       description:
         `报错${res}, 你发送了一个很坏的请求~，服务器不接受`,
       icon: <Icon type="smile" theme="twoTone" twoToneColor="#eb2f96" />,
       // duration: 5,
-    })  
-  }else{
+    })
+  } else {
     notification.open({
       message: '添加失败',
       description:
@@ -29,4 +29,3 @@ export function openNotificationServer (res) {
     duration: 5,
   })
 }
-

@@ -1,7 +1,7 @@
 import React from 'react';
-import categoryConfig from '@/constants/categoryConfig';
 import ReactECharts from 'echarts-for-react';
 import cloneDeep from 'lodash/cloneDeep';
+import categoryConfig from '@/constants/categoryConfig';
 
 // import styles from './index.less'
 

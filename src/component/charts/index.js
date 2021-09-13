@@ -1,7 +1,7 @@
 import React from 'react';
-import categoryConfig from '@/constants/categoryConfig';
 import ReactECharts from 'echarts-for-react';
 import cloneDeep from 'lodash/cloneDeep';
+import categoryConfig from '@/constants/categoryConfig';
 import lineDefualtConfing from '@/constants/line/config';
 import pieDefualtConfing from '@/constants/pie/config';
 
