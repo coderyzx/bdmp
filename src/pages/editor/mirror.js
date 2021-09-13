@@ -38,7 +38,7 @@ class Mirror extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: this.props.value,
+      // value: this.props.value,
     }
   }
 
@@ -47,15 +47,8 @@ class Mirror extends React.Component {
   }
 
   createEdit = () => {
-    const { mode } = this.props;
-    const { value } = this.state;
-    // const option = eval("("+optionjson+")");
-    // console.log(optionjson,option);
-    // option = JSON.stringify(option.replace(/\r\n/g,"<br>"))
-    // option = JSON.stringify(option.replace(/\n/g,"<br>"))
-    // option = JSON.stringify(option.replace(/\s\n/g,"&nbsp;"))
-
-// dangerouslySetInnerHTML = {{__html:item}}
+    const { mode, onChange } = this.props;
+    // const { value } = this.state;
     if (mode) {
       this.editConfig.mode = mode;
     }
@@ -70,26 +63,17 @@ class Mirror extends React.Component {
     // }
     this.CodeMirrorEditor.on('change', editor => {
       const val = editor.getValue();
-      // try {
-      //   onChange(JSON.parse(val));
-      // } catch (e) {
-      //   onChange({});
-      // }
-      // const { handleStart } = this.props;
-      // handleStart(value);
+      try {
+        onChange(JSON.parse(val));
+      } catch (e) {
+        onChange({});
+      }
     })
   }
 
   render () {
     const { value } = this.props;
-    // console.log(value);
     return (
-      // <div className={styles.editWrap} style={{ height: `${document.body.clientHeight}px` }}>
-      //   <textarea
-      //     className={styles.edit}
-      //     ref={ el => { this.edit = el }}
-      //   />
-      // </div>
       <div >
         <textarea
           ref={ el => { this.edit = el }}
