@@ -106,16 +106,18 @@ class DictItem extends Component {
             </Tooltip>
           </div>
         </div>
-        <Tree
-          onExpand={this.onExpand}
-          expandedKeys={this.state.expandedKeys}
-          autoExpandParent={this.state.autoExpandParent}
-          onSelect={this.onSelect}
-          selectedKeys={this.state.selectedKeys}
-          blockNode
-        >
-        {this.renderTreeNodes(this.props.treeData)}
-        </Tree>
+        <div className={styles.tree}>
+          <Tree
+            onExpand={this.onExpand}
+            expandedKeys={this.state.expandedKeys}
+            autoExpandParent={this.state.autoExpandParent}
+            onSelect={this.onSelect}
+            selectedKeys={this.state.selectedKeys}
+            blockNode
+          >
+          {this.renderTreeNodes(this.props.treeData)}
+          </Tree>
+        </div>
         <DictAddModal onRef={this.onRefAdd} />
         <DictEditModal onRef={this.onRefEdit} selectedDictItem={this.state.selectedDictItem}
                        editItemkey={this.state.selectedKeys[0]}/>
