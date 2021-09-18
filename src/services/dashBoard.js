@@ -17,10 +17,20 @@ export async function getContainerForDashboard (displayId) {
   });
 }
 
+
+// 请求仪表盘的所有数据
 export async function getDashboardList(data) {
-  return request(`${doMain}api/display/list`, {
-    method: 'post',
+  return request('/api/consumer/findAllDashBoard', {
+    method: 'GET',
     data,
+  });
+}
+
+// 查询所有子菜单
+export async function getMenuPage(params) {
+  return request('api/consumer/findAllSubmenu', {
+    method: 'get',
+    params,
   });
 }
 
@@ -33,13 +43,6 @@ export async function addDashboard(params) {
 
 export async function deleteDashboard(data) {
   return request.delete(`${doMain}api/display/delete/${data}`)
-}
-
-export async function getProject(params) {
-  return request(`${doMain}api/project/list`, {
-    method: 'post',
-    params,
-  });
 }
 
 export async function addProject(params) {

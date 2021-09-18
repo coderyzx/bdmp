@@ -1,11 +1,12 @@
 import React from 'react';
 import moment from 'moment';
-import { Button, Empty, Table, Divider, Drawer, Icon, Modal, Input, Select } from 'antd';
+import { Button, Empty, Table, Divider, Drawer, Icon, Modal, Input, Select, Popconfirm } from 'antd';
 
-import { getDashboardList, addDashboard, deleteDashboard, getProject, getGroup,
+import { getDashboardList, addDashboard, deleteDashboard, getMenuPage,
+//  getGroup,
   createContainer2Dashboard,
   getContainerForDashboard } from '@/services/dashBoard';
-// import ContainerManagement from './components/ContainerManagement';
+import ContainerManagement from './components/ContainerManagement';
 import { addNewContainer2Dashboard } from '@/utils/formatDashBoard';
 
 import styles from './index.less'
@@ -15,52 +16,67 @@ const { Option } = Select;
 class DashboardManagement extends React.Component {
   columns = [
     {
+      title: '仪表盘名称',
+      dataIndex: 'name',
+      key: 'name',
+      align: 'center',
+    },
+    {
       title: '业务主题场景',
-      dataIndex: 'projectName',
-      key: 'projectName',
-    },
-    {
-      title: '仪表盘所在文件夹',
-      dataIndex: 'groupName',
-      key: 'groupName',
-    },
-    {
-      title: '发布状态',
-      dataIndex: 'status',
-      key: 'status',
+      dataIndex: 'businessTheme',
+      key: 'businessTheme',
+      align: 'center',
     },
     {
       title: '创建人',
-      dataIndex: 'createBy',
-      key: 'createBy',
+      dataIndex: 'createUserId',
+      key: 'createUserId',
+      align: 'center',
     },
     {
       title: '创建时间',
       dataIndex: 'createTime',
       key: 'createTime',
       width: '170px',
+      align: 'center',
       render: val => moment(val).format('YYYY-MM-DD HH:mm:ss'),
     },
     {
-      title: '仪表盘名称',
-      dataIndex: 'name',
-      key: 'name',
+      title: '修改人',
+      dataIndex: 'modifyUserId',
+      key: 'modifyUserId',
+      align: 'center',
     },
     {
-      title: '仪表盘编号',
-      dataIndex: 'id',
-      key: 'id',
+      title: '修改时间',
+      dataIndex: 'modifyDatatime',
+      key: 'modifyDatatime',
+      align: 'center',
+    },
+    {
+      title: '菜单页面关联',
+      dataIndex: 'layout',
+      key: 'layout',
+      align: 'center',
     },
     {
       title: '操作',
       dataIndex: 'action',
       key: 'action',
+      align: 'center',
       // render三个参数：行的值，行数据，行索引
       render: (text, rec) => (
         <span>
           <span className={styles.action} onClick = {() => this.handleEdit(rec)}>编辑</span>
           <Divider type="vertical" />
-          <span className={styles.action} onClick = {() => this.handleDelete(rec)}>删除</span>
+          <Popconfirm
+            title="确认删除吗?"
+            onConfirm={() => this.handleDelete(rec)}
+            icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
+            okType="danger"
+          >
+            <span className={styles.action}>删除</span>
+          </Popconfirm>
         </span>
       ),
     },
@@ -71,10 +87,11 @@ class DashboardManagement extends React.Component {
     this.state = {
       dashboardList: [],
       projectList: [],
-      groupList: [],
       dashboardName: '',
-      selectedProjectId: '',
-      selectedGroupId: '',
+      themeName: '',
+      createUserName: '',
+      selectedProjectName: '',
+      // selectedGroupId: '',
       dashboardVisible: false,
       saveVisible: false,
       containerList: [],
@@ -82,12 +99,14 @@ class DashboardManagement extends React.Component {
   }
 
   componentDidMount() {
-  //  this.getPageData();
+   this.getPageData();
   }
 
   getPageData = async () => {
     const dashboardList = await this.getDashboardListData();
-    this.setState({ dashboardList });
+    if (dashboardList) {
+      this.setState({ dashboardList });
+    }
   }
 
   getDashboardListData = async () => {
@@ -97,8 +116,10 @@ class DashboardManagement extends React.Component {
 
   // 先弹窗
   createDashboard = async () => {
-    const res = await getProject();
-    this.setState({ saveVisible: true, dashboardName: '', projectList: res.data });
+    const res = await getMenuPage();
+    console.log(res);
+    // this.setState({ saveVisible: true, dashboardName: '', projectList: res.data });
+    this.setState({ saveVisible: true, dashboardName: '' });
   }
 
   handleEdit = async rec => {
@@ -128,38 +149,43 @@ class DashboardManagement extends React.Component {
     this.setState({ saveVisible: false });
   }
 
+  handleReset = () => {
+    this.props.form.resetFields();
+  };
+
   saveDashboard = () => {
    // this.setState({ saveVisible: true })
   }
 
   selectProject = async value => {
    // console.log('project', value);
-    const res = await getGroup({ projectId: value });
-    this.setState({ selectedProjectId: value, groupList: res.data });
+    // const res = await getGroup({ projectId: value });
+    this.setState({ selectedProjectName: value });
   }
 
-  selectGroup = value => {
-    // console.log('group', value);
-    this.setState({ selectedGroupId: value });
-  }
+  // selectGroup = value => {
+  //   // console.log('group', value);
+  //   this.setState({ selectedGroupId: value });
+  // }
 
   addNewDashboard = async () => {
-    const { dashboardName, selectedProjectId, selectedGroupId } = this.state;
-    const { userId } = localStorage;
+    const { dashboardName, selectedProjectName, themeName, createUserName } = this.state;
+    // const { userId } = localStorage;
     const res = await addDashboard({
+      // createBy: userId,
       name: dashboardName,
-      createBy: userId,
-      projectId: selectedProjectId,
-      groupId: selectedGroupId,
+      layout: selectedProjectName,
+      businessTheme: themeName,
+      createUserId: createUserName,
      });
     if (res.code === 'U000000') {
-      // const dashboardList = await this.getDashboardListData();
+      const dashboardList = await this.getDashboardListData();
       this.displayId = res.data.id;
       this.setState({
         saveVisible: false,
-       // dashboardList,
+        dashboardList,
         dashboardVisible: true,
-        // dashboardName: '',
+        dashboardName: '',
       });
     }
   }
@@ -179,9 +205,18 @@ class DashboardManagement extends React.Component {
   }
 
   handleNameChange = e => {
-    // console.log(e.target.value)
     const val = e.target.value;
     this.setState({ dashboardName: val });
+  }
+
+  handleThemeChange = e => {
+    const val = e.target.value;
+    this.setState({ themeName: val });
+  }
+
+  handleCreateUserChange = e => {
+    const val = e.target.value;
+    this.setState({ createUserName: val });
   }
 
   // onContainerChange = data => {
@@ -210,6 +245,7 @@ class DashboardManagement extends React.Component {
     if (dashboardList && dashboardList.length) {
       return (
         <Table
+          bordered
           rowSelection={{}}
           rowKey="id"
           dataSource={dashboardList}
@@ -255,15 +291,15 @@ class DashboardManagement extends React.Component {
         height="100%"
       >
         <div className={styles.drawerBody}>
-          <div className={styles.addItem}>
+          {/* <div className={styles.addItem}>
             <Button className={styles.showChartBtn} onClick={this.showChart}>
               + 图表组件
             </Button>
-          </div>
-          {/* <ContainerManagement
+          </div> */}
+          <ContainerManagement
             containerList={containerList}
             onContainerCreate={this.onContainerCreate}
-          /> */}
+          />
         </div>
       </Drawer>
     )
@@ -276,14 +312,15 @@ class DashboardManagement extends React.Component {
       saveVisible,
       dashboardName,
       projectList,
-      groupList,
+      themeName,
+      createUserName,
     } = this.state;
     const listNode = this.renderList()
     return (
       <div className={styles.wrapper}>
         <div className={styles.wrapHeader}>
           <Button className={styles.createBtn} onClick={this.createDashboard}>
-            + 创建仪表板
+            + 创建仪表盘
           </Button>
         </div>
         <div className={styles.wrapMain}>
@@ -294,8 +331,8 @@ class DashboardManagement extends React.Component {
         </div>
         {dashboardVisible && this.renderDashboard()}
         <Modal
-          title="保存仪表板"
           visible={saveVisible}
+          title="创建仪表盘"
           destroyOnClose
           centered
           closable={false}
@@ -303,28 +340,23 @@ class DashboardManagement extends React.Component {
           onCancel={this.closeSave}
         >
           <div className={styles.saveBody}>
-            <label style={{ display: 'block', margin: '5px' }}>仪表板名称：</label>
+            <label style={{ display: 'block', margin: '5px' }}>仪表盘名称：</label>
             <Input placeholder="请输入仪表盘名称" value={dashboardName} onChange={e => this.handleNameChange(e)}/>
-            <label style={{ display: 'block', margin: '5px' }}>仪表板所属主题: </label>
+            <label style={{ display: 'block', margin: '5px' }}>业务主题场景：</label>
+            <Input placeholder="请输入业务主题场景" value={themeName} onChange={e => this.handleThemeChange(e)}/>
+            <label style={{ display: 'block', margin: '5px' }}>创建人：</label>
+            <Input placeholder="请输入创建人" value={createUserName} onChange={e => this.handleCreateUserChange(e)}/>
+            <label style={{ display: 'block', margin: '5px' }}>菜单页面关联：</label>
             <Select onChange={this.selectProject} style={{ width: '100%' }}>
               {
                 projectList.map(item =>
                   <Option key={item.id} value={item.id}>
-                    {item.name}
+                    {item}
                   </Option>,
-                  )
+                )
               }
             </Select>
-            <label style={{ display: 'block', margin: '5px' }}>仪表板存放文件夹: </label>
-            <Select onChange={this.selectGroup} style={{ width: '100%' }}>
-              {
-                groupList.map(item =>
-                  <Option key={item.id} value={item.id}>
-                    {item.name}
-                  </Option>,
-                  )
-              }
-            </Select>
+            <span style={{ display: 'block', marginTop: '10px', color: 'gray' }} >创建后，请在编辑中添加图表组件</span>
           </div>
         </Modal>
       </div>

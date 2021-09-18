@@ -3,10 +3,12 @@ import React from 'react';
 import { connect } from 'dva';
 import { Table, Button, Popconfirm, Form, Divider, Tooltip,
   Modal, Icon, notification } from 'antd';
+// import moment  from 'moment';
 import CreateForm from './createForm';
 import EditableForm from './editable';
 import styles from './index.less';
 import dele from '@/assets/delete.svg';
+import RowDetailsModal from './DetailsModal';
 // const EditableContext = React.createContext();
 // 表格行内编辑
 
@@ -28,199 +30,172 @@ class MenuPage extends React.Component {
       selectedRowKeys: [], // 选择一行
       deleteLoading: false, // 选择多行删除是否加载
       editData: {}, // 某一行编辑时的默认数据
+      tableRow: {}, // 详情
+      isParentLabel: true,
     };
     this.columns = [
       {
-        title: '父节点编号',
-        dataIndex: 'parentCode',
-        key: 'parentCode',
-        fixed: 'left',
-        width: 130,
-        sorter: (a, b) => a.parentCode - b.parentCode,
-        sortDirections: ['descend'],
+        title: '菜单名称',
+        dataIndex: 'classLabel',
+        key: 'classLabel',
+        // fixed: 'left',
+        width: '13%',
         editable: true,
-      },
-      {
-        title: '父标签',
-        dataIndex: 'parentLabel',
-        key: 'parentLabel',
-        width: 140,
-        editable: true,
-        ellipsis: true,
-      },
-      {
-        title: '级别',
-        dataIndex: 'level',
-        key: 'level',
-        width: 120,
-        editable: true,
-        ellipsis: true,
-      },
-      { title: '编号', dataIndex: 'code', key: 'code', width: 120, editable: true, ellipsis: true },
-      { title: '排序编号', dataIndex: 'sort', key: 'sort', width: 120, editable: true, ellipsis: true },
-      {
-        title: '跳转编号',
-        dataIndex: 'jumpCode',
-        key: 'jumpCode',
-        width: 120,
-        editable: true,
-        ellipsis: true,
-      },
-      {
-        title: '跳转路径',
-        dataIndex: 'jumpPath',
-        key: 'jumpPath',
-        width: 120,
-        editable: true,
-        ellipsis: true,
+        align: 'center',
         onCell: () => ({
           style: {
-            maxWidth: 120,
             overflow: 'hidden',
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
           },
         }),
         render: text => (
-          <Tooltip placement="topLeft" title={text}>
+          <Tooltip placement="top" title={text}>
+            {text}
+          </Tooltip>
+        ),
+        sorter: (a, b) => a.classLabel.length - b.classLabel.length,
+      },
+      {
+        title: '菜单级别',
+        dataIndex: 'level',
+        key: 'level',
+        width: '10%',
+        editable: true,
+        align: 'center',
+        sorter: (a, b) => a.level.length - b.level.length,
+      },
+      {
+        title: '父级菜单名称',
+        dataIndex: 'parentLabel',
+        key: 'parentLabel',
+        width: '13%',
+        editable: true,
+        align: 'center',
+        onCell: () => ({
+          style: {
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+          },
+        }),
+        render: text => (
+          <Tooltip placement="top" title={text}>
+            {text}
+          </Tooltip>
+        ),
+      },
+      { title: '排序序号', dataIndex: 'sort', key: 'sort', width: '10%', editable: true, ellipsis: true, align: 'center' },
+      {
+        title: '创建者',
+        dataIndex: 'createUserId',
+        key: 'createUserId',
+        width: '10%',
+        editable: true,
+        align: 'center',
+        onCell: () => ({
+          style: {
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+          },
+        }),
+        render: text => (
+          <Tooltip placement="top" title={text}>
             {text}
           </Tooltip>
         ),
       },
       {
-        title: '布局编号',
-        dataIndex: 'layoutType',
-        key: 'layoutType',
-        width: 120,
+        title: '创建时间',
+        dataIndex: 'createDatatime',
+        key: 'createDatatime',
+        width: '15%',
         editable: true,
-        ellipsis: true,
-      },
-      {
-        title: '组件编号',
-        dataIndex: 'componentCode',
-        key: 'componentCode',
-        width: 120,
-        editable: true,
-        ellipsis: true,
+        align: 'center',
         onCell: () => ({
-            style: {
-              maxWidth: 150,
-              overflow: 'hidden',
-              whiteSpace: 'nowrap',
-              textOverflow: 'ellipsis',
-            },
-          }),
-        render: text => (<Tooltip placement="topLeft" title={text}>{text}</Tooltip>),
+          style: {
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+          },
+        }),
+        render: text => (
+          <Tooltip placement="top" title={text}>
+            {text}
+          </Tooltip>
+        ),
       },
       {
-        title: '类标签',
-        dataIndex: 'classLabel',
-        key: 'classLabel',
-        width: 120,
+        title: '修改者',
+        dataIndex: 'modifyUserId',
+        key: 'modifyUserId',
+        width: '10%',
         editable: true,
-        ellipsis: true,
-      },
-      {
-        title: 'classTttle',
-        dataIndex: 'classTttle',
-        key: 'classTttle',
-        width: 120,
-        editable: true,
-        ellipsis: true,
-      },
-      {
-        title: 'classPath',
-        dataIndex: 'classPath',
-        key: 'classPath',
-        width: 120,
-        editable: true,
-        ellipsis: true,
-      },
-      {
-        title: 'classInfo',
-        dataIndex: 'classInfo',
-        key: 'classInfo',
-        width: 120,
-        editable: true,
-        ellipsis: true,
+        align: 'center',
         onCell: () => ({
-            style: {
-              maxWidth: 120,
-              overflow: 'hidden',
-              whiteSpace: 'nowrap',
-              textOverflow: 'ellipsis',
-            },
-          }),
-        render: text => (<Tooltip placement="topLeft" title={text}>{text}</Tooltip>),
+          style: {
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+          },
+        }),
+        render: text => (
+          <Tooltip placement="top" title={text}>
+            {text}
+          </Tooltip>
+        ),
       },
       {
-        title: 'classLabelEn',
-        dataIndex: 'classLabelEn',
-        key: 'classLabelEn',
-        width: 120,
+        title: '修改时间',
+        dataIndex: 'modifyDatatime',
+        key: 'modifyDatatime',
+        width: '15%',
         editable: true,
-        ellipsis: true,
-      },
-      {
-        title: 'classTttleEn',
-        dataIndex: 'classTttleEn',
-        key: 'classTttleEn',
-        width: 120,
-        editable: true,
-        ellipsis: true,
-      },
-      {
-        title: 'classInfoEn',
-        dataIndex: 'classInfoEn',
-        key: 'classInfoEn',
-        width: 120,
-        editable: true,
-        ellipsis: true,
-      },
-      {
-        title: 'classIcon',
-        dataIndex: 'classIcon',
-        key: 'classIcon',
-        width: 120,
-        editable: true,
-        ellipsis: true,
-      },
-      {
-        title: 'introCrid',
-        dataIndex: 'introCrid',
-        key: 'introCrid',
-        width: 120,
-        editable: true,
-        ellipsis: true,
+        align: 'center',
+        onCell: () => ({
+          style: {
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+          },
+        }),
+        render: text => (
+          <Tooltip placement="top" title={text}>
+            {text}
+          </Tooltip>
+        ),
       },
       {
         title: '操作',
         key: 'Operation',
-        fixed: 'right',
-        width: 200,
+        // fixed: 'right',
+        width: '20%',
         align: 'center',
         render: (text, record) => (
-            <span style={{ width: '100%', display: 'block' }}>
-              <Button
-                type="primary"
-                size="small"
-                onClick={() => this.showEdit(record)}
-                icon="edit"
+          <span style={{ width: '100%', display: 'block' }}>
+            <Button
+              type="primary"
+              size="small"
+              onClick={() => this.showEdit(record)}
+              icon="edit"
+            >
+              编辑
+            </Button>
+            <Divider type="vertical" style={{ margin: '0 10px' }} />
+            {this.props.dataSource.length >= 1 ? (
+              <Popconfirm
+                title="确认删除吗?"
+                onConfirm={() => this.handleDelete(record.id)}
+                icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
+                okType="danger"
               >
-                编辑
-              </Button>
-              <Divider type="vertical" />
-              {this.props.dataSource.length >= 1 ? (
-                <Popconfirm
-                  title="确认删除吗?"
-                  onConfirm={() => this.handleDelete(record.id)}
-                  icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
-                  okType="danger"
-                >
-                  <Button type="danger" size="small" icon="delete"></Button>
-                </Popconfirm>
-              ) : null}
-            </span>
+                <Button type="danger" size="small" icon="delete"></Button>
+              </Popconfirm>
+            ) : null}
+            <Divider type="vertical" style={{ margin: '0 10px' }} />
+            <a href="#!" onClick={() => this.handleRowDetailsModal(record)}>详情</a>
+          </span>
         ),
       },
     ];
@@ -238,9 +213,25 @@ class MenuPage extends React.Component {
           this.setState({ loading: false });
           const args = {
             message: '提示',
-            description: '菜单页面管理获取数据失败',
+            description: '无菜单页面数据',
           };
           notification.info(args);
+        }
+        if (res.status === 500) {
+          this.setState({ loading: false });
+          const args = {
+            message: '提示',
+            description: '服务器未响应',
+          };
+          notification.error(args);
+        }
+        if (!res) {
+          this.setState({ loading: false });
+          const args = {
+            message: '提示',
+            description: '服务器未响应',
+          };
+          notification.error(args);
         }
       },
     });
@@ -248,19 +239,25 @@ class MenuPage extends React.Component {
 
   // 新建一项,添加到表格中去
   showModal = () => {
+    const { dispatch } = this.props;
     this.setState({
       visibleAdd: true,
+    });
+    dispatch({
+      type: 'menuPageModel/getLabel',
+      payload: {},
     });
   };
 
   handleCancel = () => {
-    this.setState({ visibleAdd: false });
+    this.setState({ visibleAdd: false, loading: false });
   };
 
   handleCreate = () => {
     const { form } = this.formRef.props;
     const { dispatch } = this.props;
     form.validateFields((err, values) => {
+      console.log(values);
       if (err) {
         return;
       }
@@ -278,14 +275,11 @@ class MenuPage extends React.Component {
               visibleAdd: false,
               loading: false,
             });
-            // dispatch({
-            //   type: 'menuPageModel/getMenuPage',
-            // })
             const args = {
               message: '提示',
               description: '新建数据成功',
             };
-            notification.info(args);
+            notification.success(args);
           } else {
             this.setState({
               confirmLoading: false,
@@ -321,7 +315,7 @@ class MenuPage extends React.Component {
             message: '提示',
             description: '删除成功',
           };
-          notification.info(args);
+          notification.success(args);
         } else {
           const args = {
             message: '提示',
@@ -352,7 +346,6 @@ class MenuPage extends React.Component {
       selectedRowKeys: [],
       visibleDelete: true,
       deleteLoading: true,
-      loading: true,
     });
     dispatch({
       type: 'menuPageModel/postDeleteMenu',
@@ -362,18 +355,16 @@ class MenuPage extends React.Component {
           this.setState({
             deleteLoading: false,
             visibleDelete: false,
-            loading: false,
           });
           const args = {
             message: '提示',
             description: '批量删除成功',
           };
-          notification.info(args);
+          notification.success(args);
         } else {
           this.setState({
             deleteLoading: false,
             visibleDelete: false,
-            loading: false,
           });
           const args = {
             message: '提示',
@@ -395,10 +386,29 @@ class MenuPage extends React.Component {
       visibleEdit: true,
       editData: record,
     });
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'menuPageModel/getLabel',
+      payload: {},
+      callback: res => {
+        if (res.code === 'U000000') {
+          if (record.level === '1') {
+            this.setState({
+              isParentLabel: true,
+            });
+          }
+          if (record.level === '2') {
+            this.setState({
+              isParentLabel: false,
+            });
+          }
+        }
+      },
+    });
   };
 
   cancelEdit = () => {
-    this.setState({ visibleEdit: false });
+    this.setState({ visibleEdit: false, loading: false });
   };
 
   saveEdit = () => {
@@ -429,7 +439,7 @@ class MenuPage extends React.Component {
             message: '提示',
             description: '跟新数据成功',
           };
-          notification.info(args);
+          notification.success(args);
           } else {
             this.setState({
               confirmLoading: false,
@@ -452,9 +462,22 @@ class MenuPage extends React.Component {
     this.formRefEdit = formRefEdit;
   };
 
+  // 详情
+  handleRowDetailsModal = tableRow => {
+    this.details.showModal();
+    this.setState({
+      tableRow,
+    })
+  }
+
+  onRefDetails = ref => {
+    this.details = ref;
+  }
+
 
   render() {
     const { dataSource } = this.props;
+    console.log(dataSource);
     const {
       confirmLoading,
       visibleAdd,
@@ -465,6 +488,7 @@ class MenuPage extends React.Component {
       visibleEdit,
       editLoading,
       editData,
+      isParentLabel,
     } = this.state;
     const rowSelection = {
       selectedRowKeys,
@@ -474,9 +498,12 @@ class MenuPage extends React.Component {
     const hasSelected = selectedRowKeys.length > 0;
     const titleDelete = <p style={{ fontSize: 30, marginBottom: 5, textAlign: 'center' }}>删除</p>;
     return (
-      <div style={{ margin: '0 15px' }}>
+      <div style={{ marginRight: 20 }}>
         <div className={styles.title}>菜单页面维护</div>
         <div className={styles.bar}>
+          <Button onClick={this.showModal} type="primary" size="large" style={{ marginRight: 30 }}>
+            创建菜单页面
+          </Button>
           <Button
             type="danger"
             size="large"
@@ -485,9 +512,6 @@ class MenuPage extends React.Component {
             icon="delete"
           >
             批量删除
-          </Button>
-          <Button onClick={this.showModal} type="primary" size="large" style={{ marginLeft: 30 }}>
-            添加一项
           </Button>
         </div>
         <Modal
@@ -506,6 +530,7 @@ class MenuPage extends React.Component {
             &nbsp;项吗？
           </p>
         </Modal>
+        <RowDetailsModal tableRow={this.state.tableRow} onRef={this.onRefDetails}/>
         <EditableForm
           wrappedComponentRef={this.saveRef}
           visible={visibleEdit}
@@ -513,6 +538,7 @@ class MenuPage extends React.Component {
           onCreate={this.saveEdit}
           confirmLoading={editLoading}
           editData={editData}
+          isParent={isParentLabel}
         />
         <CreateForm
           wrappedComponentRef={this.saveFormRef}
@@ -528,7 +554,7 @@ class MenuPage extends React.Component {
           bordered
           loading={loading}
           // rowKey="id"
-          scroll={{ x: 1500, y: 470 }}
+          // scroll={{ x: 1500, y: 470 }}
           // pagination={{
           //   onChange: this.cancel,
           // }}
