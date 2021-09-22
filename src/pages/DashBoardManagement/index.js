@@ -239,7 +239,7 @@ class DashboardManagement extends React.Component {
   )
 
   renderDashboard = () => {
-    const { dashboardVisible, containerList } = this.state;
+    const { dashboardVisible } = this.state;
     // console.log(curdashboardId)
     return (
       <Drawer

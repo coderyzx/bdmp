@@ -71,7 +71,7 @@ class BasicLayout extends React.Component {
           boxShadow: ' 0 0 20px rgb(0 0 0 / 20%)',
         }}>
           <div className={styles.logoContainer}>
-            <a href="">
+            <a href="#!">
               <img src={backgroundImg} alt="BDMP logo" />
               <div className={styles.title}>
                 BDMP

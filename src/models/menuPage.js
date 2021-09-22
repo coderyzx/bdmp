@@ -13,7 +13,7 @@ const menuPageModel = {
     // 查询所有
     *getMenuPage ({ callback }, { call, put }) {
       const response = yield call(getMenuPageData);
-      console.log(response);
+      // console.log(response);
       if (response.code === 'U000000') {
         yield put({
           type: 'menuPage',

@@ -14,7 +14,6 @@ class RowEditModal extends Component {
         uploadImage: '',
         imageUrl: '',
         btnLoading: false,
-        isUpdate: true,
       };
   }
 
@@ -100,7 +99,7 @@ class RowEditModal extends Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { editRow } = this.props;
-    const { btnLoading, imageUrl, isUpdate } = this.state;
+    const { btnLoading, imageUrl } = this.state;
     return (
       <Fragment>
         <Modal
@@ -167,7 +166,7 @@ class RowEditModal extends Component {
                   beforeUpload={this.beforeUpload}
                   onChange={this.handleChange}
                 >
-                  <img src={imageUrl} style={{ width: '100%' }} />
+                  <img src={imageUrl} alt="上传图标" style={{ width: '100%' }} />
                 </Upload>,
               )}
             </Form.Item>
