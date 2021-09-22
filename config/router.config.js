@@ -29,7 +29,7 @@ const routes = [
           },
           // 图表类型
           {
-            path: '/templateLib/chartType',
+            path: '/templateLib/typeChart',
             component: './TemplateLib/ChartType',
           },
           // 图表组件
@@ -42,7 +42,7 @@ const routes = [
             path: '/templateLib/dictionary',
             component: './TemplateLib/Dictionary',
           },
-          //仪表盘管理
+          // 仪表盘管理
           {
             path: '/templateLib/dashBoard',
             component: './DashBoardManagement',
@@ -61,7 +61,7 @@ const routes = [
           },
         ],
       },
-       //仪表盘展示
+       // 仪表盘展示
       {
         path: '/dashBoard',
         component: './DashBoard',

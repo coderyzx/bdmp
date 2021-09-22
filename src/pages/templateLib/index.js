@@ -40,7 +40,7 @@ class TemplateLib extends React.Component {
         key: '2',
         type: 'table',
         title: '图表类型管理',
-        path: '/templateLib/chartType',
+        path: '/templateLib/typeChart',
       },
       {
         key: '3',

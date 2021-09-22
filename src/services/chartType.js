@@ -1,80 +1,68 @@
 /** *********图表类型管理请求**************** */
 import request from '@/utils/request';
 // 初始化获取table数据
-export async function getInitial(payload) {
-  return request(`/chartType/consumer/selectByPage/1/${payload}`, {
-      method: 'get',
+export async function getInitial(params) {
+  return request(`/chartType/consumer/selectByPage/1/${params}`, {
+      method: 'GET',
   });
 }
 
 // 获取所有图表类型ID
 export async function getTypeIdList() {
   return request('/chartType/consumer/selectTypeId', {
-    method: 'get',
+    method: 'GET',
   });
 }
 
 // 获取所有图表类型Name
 export async function getTypeNameList() {
   return request('/chartType/consumer/selectTypeName', {
-    method: 'get',
+    method: 'GET',
   });
 }
 
 // 更新page后获取的table数据
-export async function pageChange(payload) {
-  return request(`/chartType/consumer/selectByPage/${payload.current}/${payload.pageSize}`, {
-      method: 'get',
+export async function pageChange(params) {
+  return request(`/chartType/consumer/selectByPage/${params.current}/${params.pageSize}`, {
+      method: 'GET',
   });
 }
 // 编辑行数据
-export async function editeRowData(payload) {
-  // console.log(payload);
+export async function editeRowData(params) {
+  // console.log(params);
   return request('/chartType/consumer/update', {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
+      method: 'POST',
+      data: params,
   });
 }
 // 删除行数据
-export async function deleteRowData(payload) {
-  // console.log(payload);
-  return request(`/chartType/consumer/delete/${payload}`, {
-      method: 'get',
+export async function deleteRowData(params) {
+  // console.log(params);
+  return request(`/chartType/consumer/delete/${params}`, {
+      method: 'GET',
   });
 }
 // 批量删除数据
-export async function deleteSelectedData(payload) {
-  // console.log(payload);
+export async function deleteSelectedData(params) {
+  // console.log(params);
   return request('/chartType/consumer/deleteByIdList', {
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(payload),
+    method: 'POST',
+    data: params,
   });
 }
 // 过滤查询数据
-export async function queryData(payload) {
-  // console.log(payload);
+export async function queryData(params) {
+  // console.log(params);
   return request('/chartType/consumer/selectByConditionAndPage', {
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(payload),
+    method: 'POST',
+    data: params,
   });
 }
 // 新增数据
-export async function addData(payload) {
-  // console.log(payload);
+export async function addData(params) {
+  console.log(params);
   return request('/chartType/consumer/insert', {
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(payload),
+    method: 'POST',
+    data: params,
   });
 }

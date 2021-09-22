@@ -118,7 +118,7 @@ class ChartType extends Component {
       }
 
       handleRowEidtModal = tableRow => {
-        this.edit.showModal();
+        this.edit.showModal(tableRow);
         this.setState({
           tableRow,
         });
@@ -140,7 +140,7 @@ class ChartType extends Component {
 
       // 分页
       pageChange = page => {
-        console.log({ current: page.current, pageSize: page.pageSize })
+        // console.log({ current: page.current, pageSize: page.pageSize })
         const { dispatch } = this.props;
         dispatch({
           type: 'chartType/pageChange',
@@ -206,7 +206,7 @@ class ChartType extends Component {
             key: 'typeIcon',
             width: '10%',
             align: 'center',
-            ...this.getColumnSearchProps('typeIcon'),
+            render: text => <img alt="类型图标" style={{ width: '25px' }} src={text} />,
           },
           {
             title: '描述',

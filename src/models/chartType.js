@@ -86,7 +86,7 @@ export default {
         // 编辑table行数据
       *editRowData({ payload, callback }, { call, put, select }) {
         const { pageSize, current } = yield select(state => state.chartType);
-        yield call(service.editeRowData, { ...payload, creator: 'admin' });
+        yield call(service.editeRowData, payload);
         const resp = yield call(service.pageChange, { pageSize, current });
         const typeIdList = yield call(service.getTypeIdList);
         const typeNameList = yield call(service.getTypeNameList);
@@ -157,7 +157,7 @@ export default {
       // 创建一条table数据
       *addRowData({ payload, callback }, { call, put, select }) {
         const { pageSize } = yield select(state => state.chartType);
-        yield call(service.addData, { ...payload, creator: 'admin' });
+        yield call(service.addData, payload);
         const resp = yield call(service.pageChange, { pageSize, current: 1 });
         const typeIdList = yield call(service.getTypeIdList);
         const typeNameList = yield call(service.getTypeNameList);
