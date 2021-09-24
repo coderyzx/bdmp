@@ -1,6 +1,6 @@
 
 import { getMenuPageData, getMenuDataById, postNewMenu, postUpdateMenu, getDeleteMenu, postDeleteMenuArray, getParentLabel } from '@/services/menuPage';
-import { getMenuPageKey } from '@/utils/templateLib';
+// import { getMenuPageKey } from '@/utils/templateLib';
 
 const menuPageModel = {
   namespace: 'menuPageModel',
@@ -12,19 +12,18 @@ const menuPageModel = {
 
   effects: {
     // 查询所有
-    *getMenuPage ({ callback }, { call, put }) {
+    *getMenuPage ({ callback, failCallback }, { call, put }) {
       const response = yield call(getMenuPageData);
       if (response.code === 'U000000') {
         yield put({
           type: 'menuPage',
           payload: response.data,
         });
-      }
-      if (callback) {
-        callback(response);
-      }
-      if (response === undefined) {
-        callback(response);
+        if (callback) {
+          callback(response);
+        }
+      } else {
+        failCallback(response);
       }
     },
     // 增加
@@ -94,16 +93,18 @@ const menuPageModel = {
       }
     },
     // 查询父名称
-    *getLabel({ payload, callback }, { call, put }) {
+    *getLabel({ payload, callback, failCallback }, { call, put }) {
       const response = yield call(getParentLabel, payload);
       if (response.code === 'U000000') {
         yield put({
           type: 'parentLabel',
           payload: response.data,
         });
-      }
-      if (callback) {
-        callback(response);
+        if (callback) {
+          callback(response);
+        }
+      } else {
+        failCallback(response);
       }
     },
 
@@ -112,13 +113,15 @@ const menuPageModel = {
     menuPage(state, { payload }) {
       return {
         ...state,
-        data: getMenuPageKey(payload),
+        // data: getMenuPageKey(payload),
+        data: payload,
       }
     },
     editData(state, { payload }) {
       return {
         ...state,
-        editData: getMenuPageKey(payload),
+        // editData: getMenuPageKey(payload),
+        editData: payload,
       }
     },
     parentLabel(state, { payload }) {

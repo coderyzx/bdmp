@@ -63,7 +63,7 @@ class MenuPage extends React.Component {
         width: '10%',
         editable: true,
         align: 'center',
-        sorter: (a, b) => a.level.length - b.level.length,
+        sorter: (a, b) => a.level - b.level,
       },
       {
         title: '父级菜单名称',
@@ -207,32 +207,16 @@ class MenuPage extends React.Component {
     dispatch({
       type: 'menuPageModel/getMenuPage',
       payload: {},
-      callback: res => {
+      callback: () => {
         this.setState({ loading: false });
-        if (res.code !== 'U000000') {
-          this.setState({ loading: false });
-          const args = {
-            message: '提示',
-            description: '无菜单页面数据',
-          };
-          notification.info(args);
-        }
-        if (res.status === 500) {
-          this.setState({ loading: false });
-          const args = {
-            message: '提示',
-            description: '服务器未响应',
-          };
-          notification.error(args);
-        }
-        if (!res) {
-          this.setState({ loading: false });
-          const args = {
-            message: '提示',
-            description: '服务器未响应',
-          };
-          notification.error(args);
-        }
+      },
+      failCallback: () => {
+        this.setState({ loading: false });
+        const args = {
+          message: '提示',
+          description: '服务器未响应',
+        };
+        notification.error(args);
       },
     });
   }
@@ -327,14 +311,24 @@ class MenuPage extends React.Component {
     });
   };
 
-  // 删除选择项
+  // 删除多行
   showDelete = () => {
     this.setState({ visibleDelete: true });
   };
 
-  // selectRow = record => {
-  //   // console.log(record);
-  // }
+  // 选中table整行
+  selectRow = record => {
+    console.log(record);
+    const { selectedRowKeys } = this.state;
+    console.log(selectedRowKeys);
+    const selectRow = selectedRowKeys;
+    if (selectRow.indexOf(record.id) >= 0) {
+      selectRow.splice(selectRow.indexOf(record.id), 1);
+    } else {
+      selectRow.push(record.id);
+    }
+    this.setState({ selectedRowKeys: selectRow })
+  }
 
   onSelectChange = selectedRowKeys => {
     this.setState({ selectedRowKeys });
@@ -474,10 +468,8 @@ class MenuPage extends React.Component {
     this.details = ref;
   }
 
-
   render() {
     const { dataSource } = this.props;
-    console.log(dataSource);
     const {
       confirmLoading,
       visibleAdd,
@@ -494,7 +486,6 @@ class MenuPage extends React.Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     };
-    // console.log(rowSelection);
     const hasSelected = selectedRowKeys.length > 0;
     const titleDelete = <p style={{ fontSize: 30, marginBottom: 5, textAlign: 'center' }}>删除</p>;
     return (
@@ -502,7 +493,7 @@ class MenuPage extends React.Component {
         <div className={styles.title}>菜单页面维护</div>
         <div className={styles.bar}>
           <Button onClick={this.showModal} type="primary" size="large" style={{ marginRight: 30 }}>
-            创建菜单页面
+            +创建菜单页面
           </Button>
           <Button
             type="danger"
@@ -553,17 +544,17 @@ class MenuPage extends React.Component {
           dataSource={dataSource}
           bordered
           loading={loading}
-          // rowKey="id"
+          rowKey="id"
           // scroll={{ x: 1500, y: 470 }}
           // pagination={{
           //   onChange: this.cancel,
           // }}
           rowSelection={rowSelection}
-          // onRow={record => ({
-          //   onClick: () => {
-          //     this.selectRow(record);
-          //   },
-          // })}
+          onRow={record => ({
+            onDoubleClick: () => {
+              this.selectRow(record);
+            },
+          })}
         />
       </div>
     );

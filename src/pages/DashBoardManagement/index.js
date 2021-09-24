@@ -1,18 +1,25 @@
 import React from 'react';
 import moment from 'moment';
-import { Button, Empty, Table, Divider, Drawer, Icon, Modal, Input, Select, Popconfirm } from 'antd';
-
-import { getDashboardList, addDashboard, deleteDashboard, getMenuPage,
-//  getGroup,
-  createContainer2Dashboard,
-  getContainerForDashboard } from '@/services/dashBoard';
+import { Button, Empty, Table, Divider, Drawer, Icon, Modal, Input, Form, Select, Popconfirm, notification, Spin } from 'antd';
+import { connect } from 'dva';
+import dele from '@/assets/delete.svg';
+// import { getDashboardList, addDashboard, deleteDashboard, getMenuPage,
+//   createContainer2Dashboard,
+//   getContainerForDashboard } from '@/services/dashBoard';
 import ContainerManagement from './components/ContainerManagement';
 import { addNewContainer2Dashboard } from '@/utils/formatDashBoard';
-
 import styles from './index.less'
+import CreateForm from './components/CreatForm';
 
 const { Option } = Select;
 
+@connect(({ dashBoard }) => ({
+  totalCount: dashBoard.totalCount,
+  current: dashBoard.current,
+  pageSize: dashBoard.pageSize,
+  dashboardList: dashBoard.dashboardList,
+  menuList: dashBoard.menuList,
+}))
 class DashboardManagement extends React.Component {
   columns = [
     {
@@ -69,6 +76,8 @@ class DashboardManagement extends React.Component {
         <span>
           <span className={styles.action} onClick = {() => this.handleEdit(rec)}>编辑</span>
           <Divider type="vertical" />
+          <span className={styles.action} onClick = {() => this.addChart(rec)}>添加图表</span>
+          <Divider type="vertical" />
           <Popconfirm
             title="确认删除吗?"
             onConfirm={() => this.handleDelete(rec)}
@@ -85,175 +94,340 @@ class DashboardManagement extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      dashboardList: [],
-      projectList: [],
       dashboardName: '',
       themeName: '',
       createUserName: '',
       selectedProjectName: '',
-      // selectedGroupId: '',
       dashboardVisible: false,
       saveVisible: false,
       containerList: [],
+      selectedRowKeys: [],
+      visibleDelete: false,
+      examDataLoading: false,
     }
   }
 
   componentDidMount() {
-   this.getPageData();
+    const pagination = {
+      current: 1,
+      pageSize: 10,
+    };
+    this.getPageData(pagination);
   }
 
-  getPageData = async () => {
-    const dashboardList = await this.getDashboardListData();
-    if (dashboardList) {
-      this.setState({ dashboardList });
-    }
+  getPageData = pagination => {
+    const { dispatch } = this.props;
+    this.setState({ examDataLoading: true });
+    dispatch({
+      type: 'dashBoard/getList',
+      payload: pagination,
+      callback: () => {
+        this.setState({
+          examDataLoading: false,
+        });
+      },
+      failCallback: () => {
+        this.setState({
+          examDataLoading: false,
+        });
+        const args = {
+          message: '提示',
+          description: '操作失败',
+        };
+        notification.info(args);
+      },
+    });
   }
 
-  getDashboardListData = async () => {
-    const res = await getDashboardList();
-    return res.data;
+  // getDashboardListData = async pagination => {
+  //   const res = await getDashboardList(pagination);
+  //   return res.data;
+  // }
+
+  // 分页
+  pageChange = page => {
+    const newPage = {};
+    newPage.current = page.current;
+    newPage.pageSize = page.pageSize;
+    this.getPageData(newPage)
+    // dispatch({
+    //   type: 'dashBoard/getList',
+    //   payload: { current: page.current, pageSize: page.pageSize },
+    //   callback: () => {
+    //     this.setState({
+    //       examDataLoading: false,
+    //     });
+    //   },
+    // });
+    // const newPage = this.state.pagination;
+    // newPage.current = page.current;
+    // newPage.pageSize = page.pageSize;
+    // this.setState({ pagination: newPage })
   }
 
   // 先弹窗
-  createDashboard = async () => {
-    const res = await getMenuPage();
-    console.log(res);
-    // this.setState({ saveVisible: true, dashboardName: '', projectList: res.data });
-    this.setState({ saveVisible: true, dashboardName: '' });
-  }
-
-  handleEdit = async rec => {
-    const { name, id } = rec;
-    this.displayId = id;
-    const res = await getContainerForDashboard(this.displayId);
-    if (res.code === 'U000000') {
-      this.setState({
-        containerList: res.data,
-        dashboardVisible: true,
-        dashboardName: name,
-      })
-    }
-  }
-
-  closeDashboard = async () => {
-    const dashboardList = await this.getDashboardListData();
-    this.displayId = null;
+  createDashboard = () => {
     this.setState({
-      dashboardVisible: false,
-      dashboardList,
-      containerList: [],
+      saveVisible: true,
     });
+  }
+
+  // 新增
+  addNewDashboard = () => {
+    // const { dashboardName, selectedProjectName, themeName,
+    // createUserName } = this.state;
+    const { form } = this.formRef.props;
+    const { dispatch, current, pageSize } = this.props;
+    // const pagination = { current, pageSize };
+    form.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      dispatch({
+        type: 'dashBoard/addList',
+        payload: { values, current, pageSize },
+        callback: res => {
+          if (res.code === 'U000000') {
+            this.setState({
+              saveVisible: false,
+            });
+            const args = {
+              message: '提示',
+              description: '新建数据成功',
+            };
+            notification.success(args);
+          } else {
+            this.setState({
+              saveVisible: false,
+            });
+            const args = {
+              message: '提示',
+              description: '新建数据失败',
+            };
+            notification.info(args);
+          }
+        },
+      });
+      form.resetFields();
+    });
+      // const { current, pageSize } = this.props;
+      // const pagination = { current, pageSize }
+      // const data = await this.getDashboardListData(pagination);
+      // const dashboardList = data.lists;
+      // this.displayId = res.data.id;
   }
 
   closeSave = () => {
     this.setState({ saveVisible: false });
   }
 
-  handleReset = () => {
-    this.props.form.resetFields();
+  saveFormRef = formRef => {
+    this.formRef = formRef;
   };
 
   saveDashboard = () => {
    // this.setState({ saveVisible: true })
   }
 
-  selectProject = async value => {
-   // console.log('project', value);
-    // const res = await getGroup({ projectId: value });
-    this.setState({ selectedProjectName: value });
-  }
-
-  // selectGroup = value => {
-  //   // console.log('group', value);
-  //   this.setState({ selectedGroupId: value });
-  // }
-
-  addNewDashboard = async () => {
-    const { dashboardName, selectedProjectName, themeName, createUserName } = this.state;
-    // const { userId } = localStorage;
-    const res = await addDashboard({
-      // createBy: userId,
-      name: dashboardName,
-      layout: selectedProjectName,
-      businessTheme: themeName,
-      createUserId: createUserName,
-     });
-    if (res.code === 'U000000') {
-      const dashboardList = await this.getDashboardListData();
-      this.displayId = res.data.id;
-      this.setState({
-        saveVisible: false,
-        dashboardList,
-        dashboardVisible: true,
-        dashboardName: '',
-      });
-    }
-  }
-
-  handleDelete = async rec => {
-    // console.log(rec);
-    const { id } = rec;
-    const res = await deleteDashboard(id);
-    if (res.code === 'U000000') {
-      const dashboardList = await this.getDashboardListData();
-      this.setState({
-        saveVisible: false,
-        dashboardName: '',
-        dashboardList,
-      });
-    }
-  }
-
-  handleNameChange = e => {
-    const val = e.target.value;
-    this.setState({ dashboardName: val });
-  }
-
-  handleThemeChange = e => {
-    const val = e.target.value;
-    this.setState({ themeName: val });
-  }
-
-  handleCreateUserChange = e => {
-    const val = e.target.value;
-    this.setState({ createUserName: val });
-  }
-
-  // onContainerChange = data => {
-  //   this.containersData = data;
-  //   const reqParams = addNewContainer2Dashboard(this.containersData)
-  // }
-
-  onContainerCreate = async (data, callback) => {
-    this.containersData = data;
-    const reqParams = addNewContainer2Dashboard(this.containersData);
-    const { userId } = localStorage;
-    const res = await createContainer2Dashboard(this.displayId, reqParams, {
-      createBy: userId,
+  // 编辑
+  handleEdit = rec => {
+    this.setState({
+      saveVisible: true,
     });
-    if (res.code === 'U000000' && callback) {
-      callback();
-    }
+    const { name, id } = rec;
+    this.displayId = id;
+    // const res = await getContainerForDashboard(this.displayId);
+    // if (res.code === 'U000000') {
+    //   this.setState({
+    //     containerList: res.data,
+    //     dashboardVisible: true,
+    //     dashboardName: name,
+    //   })
+    // }
   }
+
+  // 添加图表
+  // addChart = async rec => {
+  //   const { name, id } = rec;
+  //   this.displayId = id;
+  //   const res = await getContainerForDashboard(this.displayId);
+  //   if (res.code === 'U000000') {
+  //     this.setState({
+  //       containerList: res.data,
+  //       dashboardVisible: true,
+  //       dashboardName: name,
+  //     })
+  //   }
+  // }
+
+  // closeDashboard = async () => {
+  //   const { pagination } = this.state;
+  //   const data = await this.getDashboardListData(pagination);
+  //   const dashboardList = data.lists;
+  //   this.displayId = null;
+  //   this.setState({
+  //     dashboardVisible: false,
+  //     dashboardList,
+  //     containerList: [],
+  //   });
+  // }
+
+  // 删除
+  handleDelete = rec => {
+    const { id } = rec;
+    const { dispatch, current, pageSize } = this.props;
+    dispatch({
+      type: 'dashBoard/deleteById',
+      payload: { id, current, pageSize },
+      callback: res => {
+        if (res.code === 'U000000') {
+          const args = {
+            message: '提示',
+            description: '删除成功',
+          };
+          notification.success(args);
+        } else {
+          const args = {
+            message: '提示',
+            description: '删除失败',
+          };
+          notification.info(args);
+        }
+      },
+    });
+  }
+
+  // onContainerCreate = async (data, callback) => {
+  //   this.containersData = data;
+  //   const reqParams = addNewContainer2Dashboard(this.containersData);
+  //   const { userId } = localStorage;
+  //   const res = await createContainer2Dashboard(this.displayId, reqParams, {
+  //     createBy: userId,
+  //   });
+  //   if (res.code === 'U000000' && callback) {
+  //     callback();
+  //   }
+  // }
 
   showSaveModal = () => {
     console.log(this.containersData);
   }
 
-  renderList = () => {
-    const { dashboardList } = this.state;
-    if (dashboardList && dashboardList.length) {
-      return (
-        <Table
-          bordered
-          rowSelection={{}}
-          rowKey="id"
-          dataSource={dashboardList}
-          columns={this.columns}
-        />
-      )
+  // 删除多行
+  showDelete = () => {
+    this.setState({ visibleDelete: true });
+  };
+
+  // 选中table整行
+  selectRow = record => {
+    const { selectedRowKeys } = this.state;
+    const selectRow = selectedRowKeys;
+    if (selectRow.indexOf(record.id) >= 0) {
+      selectRow.splice(selectRow.indexOf(record.id), 1);
+    } else {
+      selectRow.push(record.id);
     }
-    return (<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />);
+    this.setState({ selectedRowKeys: selectRow })
+  }
+
+  onSelectChange = selectedRowKeys => {
+    this.setState({ selectedRowKeys });
+  };
+
+  deleteSelection = selectedRowKeys => {
+    const { dispatch, current, pageSize } = this.props;
+    this.setState({
+      selectedRowKeys: [],
+      visibleDelete: true,
+    });
+    dispatch({
+      type: 'dashBoard/deleteList',
+      payload: { selectedRowKeys, current, pageSize },
+      callback: res => {
+        if (res.code === 'U000000') {
+          this.setState({
+            visibleDelete: false,
+          });
+          const args = {
+            message: '提示',
+            description: '批量删除成功',
+          };
+          notification.success(args);
+        } else {
+          this.setState({
+            visibleDelete: false,
+          });
+          const args = {
+            message: '提示',
+            description: '批量删除失败',
+          };
+          notification.info(args);
+        }
+      },
+    });
+  };
+
+  deleteSelectionCancel = () => {
+    this.setState({ visibleDelete: false });
+  };
+
+  renderList = () => {
+    const { selectedRowKeys, visibleDelete, examDataLoading } = this.state;
+    const { totalCount, current, pageSize, dashboardList } = this.props;
+    const pagination = { total: totalCount, current, pageSize }
+    const paginationProps = {
+      showQuickJumper: true,
+      showSizeChanger: true,
+      ...pagination,
+      showTotal: () => `共${totalCount}条`,
+    }
+    const rowSelection = {
+      selectedRowKeys,
+      onChange: this.onSelectChange,
+    };
+    const hasSelected = selectedRowKeys.length > 0;
+    const titleDelete = <p style={{ fontSize: 30, marginBottom: 5, textAlign: 'center' }}>删除</p>;
+    const renderList = dashboardList.length > 0 && !examDataLoading;
+    const emptyList = dashboardList.length === 0 && !examDataLoading;
+    return (
+      <>
+        { examDataLoading && <div className={styles.spin}><Spin />加载中...</div>}
+        { emptyList && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}/> }
+        { renderList &&
+        <>
+          <Table
+            bordered
+            rowKey="id"
+            dataSource={dashboardList}
+            columns={this.columns}
+            pagination={paginationProps}
+            onChange={this.pageChange}
+            rowSelection={rowSelection}
+            onRow={record => ({
+              onDoubleClick: () => {
+                this.selectRow(record);
+              },
+            })}
+          />
+          <Modal
+          okType="danger"
+          title={titleDelete}
+          visible={visibleDelete}
+          onOk={() => this.deleteSelection(selectedRowKeys)}
+          onCancel={this.deleteSelectionCancel}
+          >
+            <p style={{ textAlign: 'center', marginBottom: 15 }}>
+              <img src={dele} />
+            </p>
+            <p className={styles.selectItem}>
+              确认删除所选择的&nbsp;<b>{hasSelected ? `${selectedRowKeys.length}` : ''}</b>
+              &nbsp;项吗？
+            </p>
+          </Modal>
+        </>
+        }
+      </>
+    )
   }
 
   renderDrawerTitle = () => (
@@ -307,37 +481,67 @@ class DashboardManagement extends React.Component {
 
   render() {
     const {
-      dashboardList,
       dashboardVisible,
       saveVisible,
       dashboardName,
-      projectList,
       themeName,
       createUserName,
+      selectedRowKeys,
     } = this.state;
+    const { menuList, totalCount } = this.props;
     const listNode = this.renderList()
+    const hasSelected = selectedRowKeys.length > 0;
     return (
       <div className={styles.wrapper}>
         <div className={styles.wrapHeader}>
-          <Button className={styles.createBtn} onClick={this.createDashboard}>
+          <Button className={styles.createBtn} onClick={this.createDashboard} type="primary" size="large" >
             + 创建仪表盘
+          </Button>
+          <Button
+            type="danger"
+            size="large"
+            onClick={this.showDelete}
+            disabled={!hasSelected}
+            icon="delete"
+            style={{ fontSize: 18 }}
+          >
+            批量删除
           </Button>
         </div>
         <div className={styles.wrapMain}>
-          <div className={styles.Listdesc}>{`仪表板列表 | 共${dashboardList && dashboardList.length}条记录`}</div>
+          <span className={styles.desc} style={{ margin: 10, fontSize: 16 }}>
+            {`仪表板列表 | 共${totalCount || 0}条记录`}
+          </span>
           <div className={styles.dashboardListStyle}>
             {listNode}
           </div>
         </div>
         {dashboardVisible && this.renderDashboard()}
-        <Modal
+        <CreateForm
+          wrappedComponentRef={this.saveFormRef}
+          visible={saveVisible}
+          onCancel={this.closeSave}
+          onCreate={this.addNewDashboard}
+        />
+        {/* <Modal
           visible={saveVisible}
           title="创建仪表盘"
           destroyOnClose
           centered
-          closable={false}
-          onOk={this.addNewDashboard}
+          // closable={false}
+          // onOk={this.addNewDashboard}
           onCancel={this.closeSave}
+          footer={[
+            <Button key="back" onClick={this.closeSave}>
+              取消
+            </Button>,
+            <Button key="reset" type="danger" onClick={this.handleReset}>
+              重置
+            </Button>,
+            <Button key="submit" type="primary" onClick={this.addNewDashboard}>
+              确定
+            </Button>,
+          ]}
         >
           <div className={styles.saveBody}>
             <label style={{ display: 'block', margin: '5px' }}>仪表盘名称：</label>
@@ -346,19 +550,25 @@ class DashboardManagement extends React.Component {
             <Input placeholder="请输入业务主题场景" value={themeName} onChange={e => this.handleThemeChange(e)}/>
             <label style={{ display: 'block', margin: '5px' }}>创建人：</label>
             <Input placeholder="请输入创建人" value={createUserName} onChange={e => this.handleCreateUserChange(e)}/>
-            <label style={{ display: 'block', margin: '5px' }}>菜单页面关联：</label>
-            <Select onChange={this.selectProject} style={{ width: '100%' }}>
+            <label style={{ display: 'block', margin: '5px' }}>关联菜单页面：</label>
+            <Select
+            onChange={this.selectProject}
+            style={{ width: '100%' }}
+            filterOption={(input, option) =>
+              option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+            >
               {
-                projectList.map(item =>
+                (menuList || []).map(item =>
                   <Option key={item.id} value={item.id}>
                     {item}
                   </Option>,
                 )
               }
             </Select>
-            <span style={{ display: 'block', marginTop: '10px', color: 'gray' }} >创建后，请在编辑中添加图表组件</span>
+            <span style={{ display: 'block', marginTop: '10px', color: 'green' }} >温馨提示：创建仪表盘后，请添加图表</span>
           </div>
-        </Modal>
+        </Modal> */}
       </div>
     )
   }

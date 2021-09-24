@@ -89,7 +89,6 @@ class BasicLayout extends React.Component {
     const { location } = props;
     let key; let index;
     titleList.forEach(item => {
-      console.log(item);
       if (location.pathname === item.path || location.pathname.includes(item.path)) {
         // key = $i
         key = item.value

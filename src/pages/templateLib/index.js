@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'dva';
 import { Layout, Menu, Icon, notification } from 'antd';
 import router from 'umi/router';
-import dele from '@/assets/logo.png';
+// import dele from '@/assets/logo.png';
+import styles from './index.less';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -143,8 +144,6 @@ class TemplateLib extends React.Component {
 
   render() {
     const { children, chartType } = this.props;
-    console.log(chartType);
-    // const { selectedKeys, openKeys } = this.state;
     const { defaultSelectedKeys, defaultOpenKeys } = this.option;
     const defaultSelect = {};
     if (defaultSelectedKeys) {
@@ -196,11 +195,11 @@ class TemplateLib extends React.Component {
                           itemChart.typeName &&
                           <Menu.Item key={`subitemChart${itemChart.id}`}
                           onClick={() => router.push(`/templateLib/chart?typeName=${itemChart.typeName}`)}
+                          style={{ display: 'flex', alignItems: 'center' }}
                           >
                             {/* <Icon type={itemChart.typeIcon} /> */}
-                            <img src={dele} alt="" style={{ height: 30, width: 30, marginRight: 8 }} />
-                            {/* <img src="http://10.5.65.30:8091/image/f4a0ba8b-6f9f-465f-bd22-90f7e36f3f37.jpeg" alt=""/> */}
-                            <span>{itemChart.typeName}</span>
+                            <img src={itemChart.typeIcon} alt="" style={{ height: 30, width: 30, marginRight: 8 }} />
+                            <span className={styles.typeName}>{itemChart.typeName}</span>
                           </Menu.Item>
                         ))
                       :

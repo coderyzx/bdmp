@@ -1,93 +1,131 @@
 // import { requestUap } from '@/utils/request';
 import request from '@/utils/request';
 
-const doMain = process.env.apiURL;
+// const doMain = process.env.apiURL;
 
-export async function createContainer2Dashboard (displayId, data, params) {
-  return request(`${doMain}api/${displayId}/widget/addBatch`, {
-    method: 'post',
-    params,
-    data,
-  });
-}
-
-export async function getContainerForDashboard (displayId) {
-  return request(`${doMain}api/${displayId}/widget/list`, {
-    method: 'post',
-  });
-}
-
+// export async function createContainer2Dashboard (displayId, data, params) {
+//   return request(`${doMain}api/${displayId}/widget/addBatch`, {
+//     method: 'post',
+//     params,
+//     data,
+//   });
+// }
 
 // 请求仪表盘的所有数据
-export async function getDashboardList(data) {
-  return request('/api/consumer/findAllDashBoard', {
+export async function getDashboardList(params) {
+  return request(`/api/consumer/findAllDashBoard/${params.current}/${params.pageSize}`, {
     method: 'GET',
-    data,
   });
 }
 
 // 查询所有子菜单
-export async function getMenuPage(params) {
-  return request('api/consumer/findAllSubmenu', {
+export async function getMenuPage() {
+  return request('/api/consumer/findAllSubmenu', {
+    method: 'GET',
+  });
+}
+
+// 新增仪表盘记录
+export async function addDashboard(payload) {
+  return request('/api/consumer/insertDashBoardSelective', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+}
+
+// 删除仪表盘
+export async function deleteDashboard(payload) {
+  return request(`/api/consumer/deleteDashBoardByPrimaryKey/${payload}`, {
     method: 'get',
-    params,
   });
 }
 
-export async function addDashboard(params) {
-  return request(`${doMain}api/display/add`, {
+// 批量删除仪表盘
+export async function deleteDashboardByArray(payload) {
+  return request('/api/consumer/deleteDashBoardByArray', {
     method: 'post',
-    params,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
   });
 }
 
-export async function deleteDashboard(data) {
-  return request.delete(`${doMain}api/display/delete/${data}`)
-}
-
-export async function addProject(params) {
-  return request(`${doMain}api/project/add`, {
+// 添加图表组件到仪表盘
+export async function addCharttoDash(payload) {
+  return request('/api/consumer/addCharttoDash', {
     method: 'post',
-    params,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
   });
 }
 
-export async function updateProject(data) {
-  return request(`${doMain}api/project/update/${data.id}`, {
+// 更新仪表盘信息
+export async function updateDashBoard(payload) {
+  return request('/api/consumer/updateDashBoardByPrimaryKeySelective', {
     method: 'post',
-    data: data.projectUpdate,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
   });
 }
 
-export async function deleteProject(data) {
-  return request.delete(`${doMain}api/project/delete/${data}`)
-}
-
-export async function addGroup(params) {
-  return request(`${doMain}api/displayGroup/add`, {
-    method: 'post',
-    params,
+// 根据id查询仪表盘信息
+export async function getContainerForDashboard (id) {
+  return request(`api/consumer/selectDashBoardByPrimaryKey/${id}`, {
+    method: 'get',
   });
 }
 
-export async function deleteGroup(data) {
-  const { id, ...payload } = data;
-  return request(`${doMain}api/displayGroup/delete/${id}`, {
-    method: 'delete',
-    params: payload,
-  })
-}
+// export async function addProject(params) {
+//   return request(`${doMain}api/project/add`, {
+//     method: 'post',
+//     params,
+//   });
+// }
 
-export async function getGroup(params) {
-  return request(`${doMain}api/displayGroup/list`, {
-    method: 'post',
-    params,
-  });
-}
+// export async function updateProject(data) {
+//   return request(`${doMain}api/project/update/${data.id}`, {
+//     method: 'post',
+//     data: data.projectUpdate,
+//   });
+// }
 
-export async function updateGroup(data) {
-  return request(`${doMain}api/displayGroup/update/${data.id}`, {
-    method: 'post',
-    params: data.groupUpdate,
-  });
-}
+// export async function deleteProject(data) {
+//   return request.delete(`${doMain}api/project/delete/${data}`)
+// }
+
+// export async function addGroup(params) {
+//   return request(`${doMain}api/displayGroup/add`, {
+//     method: 'post',
+//     params,
+//   });
+// }
+
+// export async function deleteGroup(data) {
+//   const { id, ...payload } = data;
+//   return request(`${doMain}api/displayGroup/delete/${id}`, {
+//     method: 'delete',
+//     params: payload,
+//   })
+// }
+
+// export async function getGroup(params) {
+//   return request(`${doMain}api/displayGroup/list`, {
+//     method: 'post',
+//     params,
+//   });
+// }
+
+// export async function updateGroup(data) {
+//   return request(`${doMain}api/displayGroup/update/${data.id}`, {
+//     method: 'post',
+//     params: data.groupUpdate,
+//   });
+// }
