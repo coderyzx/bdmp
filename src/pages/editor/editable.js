@@ -40,7 +40,7 @@ class Editable extends React.Component {
       >
         <Form layout="vertical">
           <Form.Item label="图表类型">
-            {getFieldDecorator('typeName', {
+            {getFieldDecorator('typename', {
               rules: [{ required: true, message: '请输入图表类型!' }],
               initialValue: editData.typename,
             })(

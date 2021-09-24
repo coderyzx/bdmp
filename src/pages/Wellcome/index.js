@@ -2,7 +2,7 @@ import React from 'react';
 import { Layout } from 'antd';
 import styles from './wellcome.less';
 import bigData from '@/assets/bigdata.jpeg'
-
+// import LesMiserables from '@/assets/LesMiserables.png'
 const { Footer } = Layout;
 class Wellcome extends React.Component {
     constructor (props) {

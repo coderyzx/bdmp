@@ -50,3 +50,10 @@ export async function getMenuDataById(payload) {
     payload,
   })
 }
+// 查询父级菜单名称
+export async function getParentLabel(payload) {
+  return request('/api//consumer/findParentLabel', {
+    method: 'GET',
+    payload,
+  })
+}

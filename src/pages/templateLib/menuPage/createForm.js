@@ -1,145 +1,145 @@
 import React from 'react';
-import { Modal, Form, Input, Col, Row } from 'antd';
+import { Modal, Form, Input, Select, Button } from 'antd';
+import { connect } from 'dva';
 
-const CreateForm = Form.create({
-  name: 'form_in_modal',
-})(
-  // eslint-disable-next-line
-  class extends React.Component {
-    render() {
-      const { visible, onCancel, onCreate, form, confirmLoading } = this.props;
-      const { getFieldDecorator } = form;
-      // console.log(this.props);
-      return (
-        <Modal
-          visible={visible}
-          title="创建菜单页面维护"
-          okText="添加"
-          onCancel={onCancel}
-          onOk={onCreate}
-          width={1000}
-          confirmLoading={confirmLoading}
-          destroyOnClose= "true"
-        >
-          <Form layout="inline" >
-            <Row gutter={8}>
-              <Col span={8}>
-                <Form.Item label="父节点编号">
-                  {getFieldDecorator('parentCode', {
-                    rules: [{ required: true, message: '请输入父节点编号!' }],
-                  })(<Input min={0} max={1000} placeholder="number" />)}
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item label="父标签">
-                  {getFieldDecorator('parentLabel', {
-                    rules: [{ required: true, message: '请输入父标签' }],
-                  })(<Input type="textarea" />)}
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item label="级别">
-                {getFieldDecorator('level', {
-                    rules: [{ required: true, message: '请输入级别' }],
-                  })(<Input type="textarea" />)}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={8}>
-                <Form.Item label="编号">
-                  {getFieldDecorator('code')(<Input type="textarea" />)}
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item label="排序编号">
-                {getFieldDecorator('sort')(<Input type="textarea" />)}
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item label="跳转编号">
-                {getFieldDecorator('jumpCode')(<Input type="textarea" />)}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={8}>
-                <Form.Item label="跳转路径">
-                  {getFieldDecorator('jumpPath')(<Input type="textarea" />)}
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item label="布局编号">
-                  {getFieldDecorator('layoutType')(<Input type="textarea" />)}
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item label="组件编号">
-                  {getFieldDecorator('componentCode')(<Input type="textarea" />)}
-                </Form.Item>
-              </Col>
-            </Row>
-            <div style={{ fontSize: '14px', margin: '20px 0' }} >以下为选填</div>
-            <Form.Item label="类标签">
-              {getFieldDecorator('classLabel')(<Input type="textarea" />)}
-            </Form.Item>
-            <Form.Item label="classTttle">
-              {getFieldDecorator('classTttle')(<Input type="textarea" />)}
-            </Form.Item>
-            <Form.Item label="classPath">
-              {getFieldDecorator('classPath')(<Input type="textarea" />)}
-            </Form.Item>
-            <Form.Item label="classInfo">
-              {getFieldDecorator('classInfo')(<Input type="textarea" />)}
-            </Form.Item>
-            <Form.Item label="classLabelEn">
-              {getFieldDecorator('classLabelEn')(<Input type="textarea" />)}
-            </Form.Item>
-            <Form.Item label="classTttleEn">
-              {getFieldDecorator('classTttleEn')(<Input type="textarea" />)}
-            </Form.Item>
-            <Form.Item label="classInfoEn">
-              {getFieldDecorator('classInfoEn')(<Input type="textarea" />)}
-            </Form.Item>
-            <Form.Item label="classIcon">
-              {getFieldDecorator('classIcon')(<Input type="textarea" />)}
-            </Form.Item>
-            <Form.Item label="introCrid">
-              {getFieldDecorator('introCrid')(<Input type="textarea" />)}
-            </Form.Item>
-            {/* 新增加9个字段 */}
-            {/* <Form.Item label="active">
-              {getFieldDecorator('active')(<Input type="textarea" />)}
-            </Form.Item>
-            <Form.Item label="backgroud">
-              {getFieldDecorator('backgroud')(<Input type="textarea" />)}
-            </Form.Item>
-            <Form.Item label="createDatatime">
-              {getFieldDecorator('createDatatime')(<Input type="textarea" />)}
-            </Form.Item>
-            <Form.Item label="createUserId">
-              {getFieldDecorator('createUserId')(<Input type="textarea" />)}
-            </Form.Item>
-            <Form.Item label="deleted">
-              {getFieldDecorator('deleted')(<Input type="textarea" />)}
-            </Form.Item>
-            <Form.Item label="mark">
-              {getFieldDecorator('mark')(<Input type="textarea" />)}
-            </Form.Item>
-            <Form.Item label="modifyDatatime">
-              {getFieldDecorator('modifyDatatime')(<Input type="textarea" />)}
-            </Form.Item>
-            <Form.Item label="modifyUserId">
-              {getFieldDecorator('modifyUserId')(<Input type="textarea" />)}
-            </Form.Item>
-            <Form.Item label="version">
-              {getFieldDecorator('version')(<Input type="textarea" />)}
-            </Form.Item> */}
-          </Form>
-        </Modal>
-      );
-    }
+const { Option } = Select;
+
+const list = [
+  {
+    title: '排序序号',
+    key: 'sort',
   },
-);
+  {
+    title: '创建者',
+    key: 'createUserId',
+  },
+];
+@connect(({ menuPageModel }) => ({
+  parentLabel: menuPageModel.parentLabel,
+}))
+@Form.create({ name: 'form_in_creat' })
+class CreateForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isParentLabel: true,
+      // parentLabel: [],
+    }
+  }
+
+  componentDidMount () {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'menuPageModel/getLabel',
+      payload: {},
+      callback: res => {
+        if (res.code === 'U000000') {
+          this.setState({
+            isParentLabel: true,
+          });
+        }
+      },
+    });
+  }
+
+  handleChange = value => {
+    if (value === '1') {
+      this.setState({ isParentLabel: false })
+    } else if (value === '2') {
+      this.setState({ isParentLabel: true })
+    }
+  }
+
+  handleReset = () => {
+    this.props.form.resetFields();
+  };
+
+
+  render() {
+    const { visible, onCancel, onCreate, confirmLoading, form, parentLabel } = this.props;
+    // console.log(parentLabel);
+    const { getFieldDecorator } = form;
+    const { isParentLabel } = this.state;
+    return (
+      <Modal
+        visible={visible}
+        title="创建菜单页面维护"
+        // okText="添加"
+        onCancel={onCancel}
+        onOk={onCreate}
+        width={700}
+        confirmLoading={confirmLoading}
+        destroyOnClose
+        footer={[
+          <Button key="back" onClick={onCancel}>
+            取消
+          </Button>,
+          <Button key="reset" type="danger" onClick={this.handleReset}>
+            重置
+          </Button>,
+          <Button key="submit" type="primary" onClick={onCreate}>
+            确定
+          </Button>,
+        ]}
+      >
+        <Form labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} >
+          <Form.Item label="菜单名称" key="classLabel">
+            {getFieldDecorator('classLabel', {
+              rules: [{ required: true, message: '请输入菜单名称!' },
+              { whitespace: true }],
+            })(<Input placeholder="菜单名称" />)}
+          </Form.Item>
+          <Form.Item label="菜单级别" key="level">
+            {getFieldDecorator('level', {
+              rules: [{ required: true, message: '请选择菜单级别!' },
+              { whitespace: true }],
+            })(
+            <Select style={{ width: 120 }} placeholder="菜单级别"
+            onChange={this.handleChange}>
+              <Option value="1">1</Option>
+              <Option value="2">2</Option>
+            </Select>,
+            )}
+          </Form.Item>
+          { isParentLabel &&
+            <Form.Item label="父级菜单名称" >
+              {getFieldDecorator('parentLabel', {
+                rules: [{ required: true, message: '请选择父级菜单名称!' },
+                { whitespace: true }],
+              })(
+                <Select
+                showSearch
+                style={{ width: 200 }}
+                placeholder="选择一个父级菜单"
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+                // disabled={isParentLabel}
+                >
+                {
+                  (parentLabel || []).map(item => (
+                    <Option key={item} value={item}>{item}</Option>
+                  ))
+                }
+                </Select>,
+              )}
+            </Form.Item>
+          }
+          {
+            list.map(item => (
+              <Form.Item label={item.title} key={item.key}>
+              {getFieldDecorator(`${item.key}`, {
+                rules: [{ required: true, message: `请输入${item.title}!` },
+                { whitespace: true }],
+              })(<Input placeholder={item.title} />)}
+              </Form.Item>
+            ))
+          }
+        </Form>
+      </Modal>
+    );
+  }
+}
 
 export default CreateForm;

@@ -2,10 +2,11 @@ import React from 'react';
 import ReactECharts from 'echarts-for-react';
 import { connect } from 'dva'
 import router from 'umi/router'
-import { Layout, Button, Icon, notification } from 'antd';
+import { Layout, Button, Icon, notification, Spin } from 'antd';
 import Mirror from './mirror';
 import styles from './index.less';
-import EditableForm from './editable'
+import EditableForm from './editable';
+import { addToolOption } from '@/utils/chart';
 
 const { Content } = Layout;
 
@@ -22,6 +23,7 @@ class Editor extends React.Component {
       loading: false,
       optionValue: {},
       isShow: false,
+      isLoading: true,
     };
   }
 
@@ -32,12 +34,24 @@ class Editor extends React.Component {
     dispatch({
       type: 'chartModel/getChart',
       payload: id,
-      callback: () => {
-        const { chartEdit } = this.props;
-        this.setState({
-          optionValue: chartEdit.option,
-          isShow: true,
-        })
+      callback: response => {
+        if (response.code === 'U000000') {
+          const { chartEdit } = this.props;
+          this.setState({
+            optionValue: chartEdit.option,
+            isShow: true,
+            isLoading: false,
+          })
+        } else {
+          const args = {
+            message: '提示',
+            description: '获取图表代码数据失败',
+          };
+          this.setState({
+            isLoading: false,
+          })
+          notification.info(args);
+        }
       },
     })
   }
@@ -48,12 +62,24 @@ class Editor extends React.Component {
       dispatch({
         type: 'chartModel/getChart',
         payload: newProps.location.query.id,
-        callback: () => {
-          const { chartEdit } = this.props;
-          this.setState({
-            optionValue: chartEdit.option,
-            isShow: true,
-          })
+        callback: response => {
+          if (response.code === 'U000000') {
+            const { chartEdit } = this.props;
+            this.setState({
+              optionValue: chartEdit.option,
+              isShow: true,
+              isLoading: false,
+            })
+          } else {
+            const args = {
+              message: '提示',
+              description: '获取图表代码数据失败',
+            };
+            this.setState({
+              isLoading: false,
+            })
+            notification.info(args);
+          }
         },
       })
     }
@@ -91,6 +117,11 @@ class Editor extends React.Component {
               payload: id,
             })
             this.setState({ visible: false });
+            const args = {
+              message: '提示',
+              description: '保存图表类型和名称成功',
+            };
+            notification.success(args);
           } else {
             this.setState({ visible: false });
             const args = {
@@ -142,7 +173,9 @@ class Editor extends React.Component {
             message: '提示',
             description: '保存图表option成功',
           };
-          notification.info(args);
+          const { chartEdit } = this.props;
+          notification.success(args);
+          router.push(`/templateLib/chart?typeName=${chartEdit.typename}`)
         } else {
           const args = {
             message: '提示',
@@ -162,9 +195,6 @@ class Editor extends React.Component {
     dispatch({
       type: 'chartModel/getChartList',
       payload: chartEdit.typename,
-      // callback: () => {
-      //   router.goBack()
-      // },
     });
     router.goBack()
   }
@@ -178,7 +208,8 @@ class Editor extends React.Component {
   render() {
     const { chartEdit } = this.props;
     // console.log(chartEdit);
-    const { visible, loading, optionValue, isShow } = this.state;
+    const { visible, loading, optionValue, isShow, isLoading } = this.state;
+    // const examDataLoading = loading.
     return (
       <Content
         className={styles.content}
@@ -215,6 +246,7 @@ class Editor extends React.Component {
             </Button>
           </div>
         </div>
+        { isLoading && <div className={styles.spin}><Spin size="large" tip="加载中...数据较为复杂请稍后" /></div>}
         {isShow && <div className={styles.box} >
           <div className={styles.mirror}>
             <div className={styles.mirrorTitle} >
@@ -238,8 +270,10 @@ class Editor extends React.Component {
               ref={e => {
                 this.echarts_react = e;
               }}
-              option = {optionValue}
+              option = {addToolOption(optionValue)}
               className={styles.chartContent}
+              // style={{ width: '99%',
+              //   height: '100%' }}
             />
           </div>
         </div>

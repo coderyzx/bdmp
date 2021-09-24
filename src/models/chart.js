@@ -1,5 +1,4 @@
 import { getChartByTypeName, postChartData, getDelete, postUpdate, getChartById, getTypeList, getTypeName } from '@/services/chart';
-import { openNotificationServer } from '@/utils/notification';
 
 const chartModel = {
   namespace: 'chartModel',
@@ -12,58 +11,45 @@ const chartModel = {
 
   effects: {
     // 获取所有chart
-    *getChartList({ payload }, { call, put }) {
+    *getChartList({ payload, callback }, { call, put }) {
       const response = yield call(getChartByTypeName, payload);
-      if (response) {
-        yield put({
-          type: 'chartList',
-          payload: response,
-        });
-      } else if (response.status === 500) {
-        openNotificationServer();
+      yield put({
+        type: 'chartList',
+        payload: response.data,
+      });
+      if (callback) {
+        callback(response);
+      }
+      if (response === undefined) {
+        callback(response);
       }
     },
     // 新增chart
     *postNewChart({ payload, callback }, { call }) {
       const response = yield call(postChartData, payload);
-      if (response) {
         callback(response);
-      } else {
-        callback(response);
-      }
     },
     // 删除chart
     *getDeleteChart({ payload, callback }, { call }) {
       const response = yield call(getDelete, payload);
-      if (response === 200) {
-        callback(response);
-      } else if (response.status === 500) {
-        openNotificationServer();
-      }
+      callback(response);
     },
     // 修改chart
     *postUpdateChart({ payload, callback }, { call }) {
       const response = yield call(postUpdate, payload);
       console.log(response);
-      if (response.code === 'U000000') {
-        callback(response);
-      } else {
-        callback(response);
-      }
+      callback(response);
     },
     // 查一个chart，用于编辑的时候查询一个chart
     *getChart({ payload, callback }, { call, put }) {
-      // console.log(payload);
       const response = yield call(getChartById, payload);
-      // console.log(response);
-      if (response) {
-        yield put({
-          type: 'chartEdit',
-          payload: response,
-        });
-        if (callback) {
-          callback();
-        }
+      console.log(response);
+      yield put({
+        type: 'chartEdit',
+        payload: response.data,
+      });
+      if (callback) {
+        callback(response);
       }
     },
 
@@ -76,7 +62,7 @@ const chartModel = {
           payload: response.data,
         });
       } else {
-        callback()
+        callback(response)
       }
     },
     // 获取图表类型的名称
@@ -88,7 +74,7 @@ const chartModel = {
           payload: response.data,
         });
       } else {
-        callback()
+        callback(response)
       }
     },
 
@@ -96,7 +82,7 @@ const chartModel = {
   },
   reducers: {
     chartList(state, { payload }) {
-      // console.log(payload);
+      // console.log(state, payload);
       return {
         ...state,
         chartList: payload,

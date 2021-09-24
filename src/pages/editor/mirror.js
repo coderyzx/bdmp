@@ -54,7 +54,7 @@ class Mirror extends React.Component {
     }
     // this.editConfig.value = value;
     this.CodeMirrorEditor = codemirror.fromTextArea(this.edit, this.editConfig);
-    this.CodeMirrorEditor.setSize('100%', 'calc(100vh - 163px)');
+    this.CodeMirrorEditor.setSize('100%', 'calc(100vh - 150px)');
     // if (value) {
     //   this.CodeMirrorEditor.setValue(value);
     //   setTimeout(() => {

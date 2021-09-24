@@ -5,25 +5,30 @@
   flex-direction: column;
   margin: 0 25px;
   .wrapHeader {
-    margin: 15px 0;
+    margin: 20px 0;
     .createBtn {
-      border: 1px solid @themeColor;
-      color: @themeColor;
-      height: 40px;
+      // border: 1px solid @themeColor;
+      // color: @themeColor;
       margin-right: 20px;
+      font-size: 18px;
     }
   }
   .wrapMain {
-    .listdesc {
-      margin: 15px;
-      font-size: 18px;
-    }
     .dashboardListStyle {
       flex: 1;
       overflow: auto;
       .action {
         cursor: pointer;
         color: @themeColor;
+      }
+      .spin {
+        margin-top: 200px;
+        margin-left: 600px;
+        :global {
+          .ant-spin {
+            margin-right: 20px;
+          }
+        }
       }
     }
   }
@@ -88,6 +93,13 @@
   .saveBody{
     display: flex;
     flex-direction: column;
+  }
+
+  .selectItem{
+    display: block;
+    font-size: 20px;
+    margin:0 auto;
+    text-align: center;
   }
 
 }

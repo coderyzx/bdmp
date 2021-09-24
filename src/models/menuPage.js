@@ -1,27 +1,29 @@
 
-import { getMenuPageData, getMenuDataById, postNewMenu, postUpdateMenu, getDeleteMenu, postDeleteMenuArray } from '@/services/menuPage';
-import { getMenuPageKey } from '@/utils/templateLib';
+import { getMenuPageData, getMenuDataById, postNewMenu, postUpdateMenu, getDeleteMenu, postDeleteMenuArray, getParentLabel } from '@/services/menuPage';
+// import { getMenuPageKey } from '@/utils/templateLib';
 
 const menuPageModel = {
   namespace: 'menuPageModel',
   state: {
     data: [],
     editData: [],
+    parentLabel: [],
   },
 
   effects: {
     // 查询所有
-    *getMenuPage ({ callback }, { call, put }) {
+    *getMenuPage ({ callback, failCallback }, { call, put }) {
       const response = yield call(getMenuPageData);
-      // console.log(response);
       if (response.code === 'U000000') {
         yield put({
           type: 'menuPage',
           payload: response.data,
         });
-        callback(response);
+        if (callback) {
+          callback(response);
+        }
       } else {
-        callback(response);
+        failCallback(response);
       }
     },
     // 增加
@@ -33,23 +35,19 @@ const menuPageModel = {
           type: 'menuPage',
           payload: res.data,
         });
-        callback(res);
-      } else {
+      }
+      if (callback) {
         callback(response);
       }
     },
     // 查询单一行ID
     *getMenuById({ payload, callback }, { call, put }) {
       const response = yield call(getMenuDataById, payload);
-      if (response.code === 'U000000') {
         yield put({
           type: 'editData',
           payload: response.data,
         });
-        callback(response);
-      } else {
-        callback(response);
-      }
+      callback(response);
     },
     // 修改
     *postEditMenu({ payload, callback }, { call, put }) {
@@ -61,8 +59,8 @@ const menuPageModel = {
           type: 'menuPage',
           payload: res.data,
         });
-        callback(res);
-      } else {
+      }
+      if (callback) {
         callback(response);
       }
     },
@@ -75,8 +73,8 @@ const menuPageModel = {
           type: 'menuPage',
           payload: res.data,
         });
-        callback(res);
-      } else {
+      }
+      if (callback) {
         callback(response);
       }
     },
@@ -89,25 +87,47 @@ const menuPageModel = {
           type: 'menuPage',
           payload: res.data,
         });
-        callback(res);
-      } else {
+      }
+      if (callback) {
         callback(response);
       }
     },
-
+    // 查询父名称
+    *getLabel({ payload, callback, failCallback }, { call, put }) {
+      const response = yield call(getParentLabel, payload);
+      if (response.code === 'U000000') {
+        yield put({
+          type: 'parentLabel',
+          payload: response.data,
+        });
+        if (callback) {
+          callback(response);
+        }
+      } else {
+        failCallback(response);
+      }
+    },
 
   },
   reducers: {
     menuPage(state, { payload }) {
       return {
         ...state,
-        data: getMenuPageKey(payload),
+        // data: getMenuPageKey(payload),
+        data: payload,
       }
     },
     editData(state, { payload }) {
       return {
         ...state,
-        editData: getMenuPageKey(payload),
+        // editData: getMenuPageKey(payload),
+        editData: payload,
+      }
+    },
+    parentLabel(state, { payload }) {
+      return {
+        ...state,
+        parentLabel: payload,
       }
     },
 

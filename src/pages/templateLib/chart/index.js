@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'dva'
 import router from 'umi/router';
 import ReactECharts from 'echarts-for-react';
-import { Icon, Button, Tooltip, Modal } from 'antd';
+import { Icon, Button, Tooltip, Modal, notification, Spin } from 'antd';
 import styles from './index.less';
 import CreateChart from './creatChart'
 import dele from '@/assets/delete.svg';
@@ -25,16 +25,20 @@ class Chart extends React.Component {
       visibleDeleteChart: false,
       // isSpinLoading: true,
       // typeName: '',
+      isShow: '',
+      isLoading: true,
     }
   }
 
   componentDidMount () {
     const { dispatch } = this.props;
     const { typeName } = this.props.location.query;
-    // console.log(typeName);
     dispatch({
       type: 'chartModel/getChartList',
       payload: typeName,
+      callback: response => {
+        this.setState({ isShow: response.msgCode, isLoading: false });
+      },
     });
   }
 
@@ -43,9 +47,13 @@ class Chart extends React.Component {
     if (nextProps.location.query.typeName !== this.props.location.query.typeName) {
       const { dispatch } = this.props;
       const type = nextProps.location.query.typeName;
+      this.setState({ isLoading: true });
       dispatch({
         type: 'chartModel/getChartList',
         payload: type,
+        callback: response => {
+          this.setState({ isShow: response.msgCode, isLoading: false });
+        },
       });
     }
    }
@@ -71,19 +79,36 @@ class Chart extends React.Component {
       });
       // 校验通过，调接口传参
       console.log(values);
+      const { typeName } = this.props.location.query;
       dispatch({
         type: 'chartModel/postNewChart',
         payload: values,
-        callback: () => {
-          const type = this.props.location.query.typeName;
-          dispatch({
-            type: 'chartModel/getChartList',
-            payload: type,
-          });
-          this.setState({
-            confirmLoading: false,
-            visibleCreateChart: false,
-          });
+        callback: res => {
+          if (res.code === 'U000000') {
+            dispatch({
+              type: 'chartModel/getChartList',
+              payload: typeName,
+            });
+            this.setState({
+              confirmLoading: false,
+              visibleCreateChart: false,
+            });
+            const args = {
+              message: '提示',
+              description: '新建图表成功',
+            };
+            notification.success(args);
+          } else {
+            this.setState({
+              confirmLoading: false,
+              visibleCreateChart: false,
+            });
+            const args = {
+              message: '提示',
+              description: '新建图表失败',
+            };
+            notification.info(args);
+          }
         },
       });
       form.resetFields();
@@ -112,7 +137,7 @@ class Chart extends React.Component {
       type: 'chartModel/getDeleteChart',
       payload: deleteId,
       callback: res => {
-        if (res === 200) {
+        if (res.code === 'U000000') {
           const type = this.props.location.query.typeName;
           dispatch({
             type: 'chartModel/getChartList',
@@ -122,11 +147,22 @@ class Chart extends React.Component {
             deleteLoading: false,
             visibleDeleteChart: false,
           });
+          const args = {
+            message: '提示',
+            description: '删除成功',
+          };
+          notification.success(args);
+        } else {
+          this.setState({
+            deleteLoading: false,
+            visibleDeleteChart: false,
+          });
+          const args = {
+            message: '提示',
+            description: '删除失败',
+          };
+          notification.info(args);
         }
-        this.setState({
-          deleteLoading: false,
-          visibleDeleteChart: false,
-        });
       },
     });
   };
@@ -140,8 +176,9 @@ class Chart extends React.Component {
     const { chartList } = this.props;
     const { typeName } = this.props.location.query;
     const { confirmLoading, visibleCreateChart, deleteLoading,
-    visibleDeleteChart } = this.state;
+    visibleDeleteChart, isShow, isLoading } = this.state;
     const titleDelete = <p style={{ fontSize: 30, marginBottom: 5, textAlign: 'center' }}>删除</p>
+    // console.log(chartList);
     return (
       <div style={{ margin: '0 10px', minHeight: 'calc(100vh - 67x)' }}>
         <div className={styles.chartTypeHead} >
@@ -174,8 +211,8 @@ class Chart extends React.Component {
             </p>
           </Modal>
         </div>
-        {
-          chartList.length ?
+        { isLoading && <div className={styles.spin}><Spin size="large" tip="加载中...图表较为复杂请稍后" /></div>}
+        {!isLoading &&
           (chartList || []).map(item => (
             <div key={item.id} style={{ marginRight: '-15px', marginLeft: '-15px' }}>
               <div className={styles.colItem} >
@@ -189,7 +226,8 @@ class Chart extends React.Component {
                           // option = {handleOption(eval("(" + item.optionjson +")"))}
                           // option = {handleOption(eval(`(${item.optionjson})`))}
                           option = {handleOption(item.option)}
-                          style={{ width: '95%', height: '100%' }}
+                          // option = {item.option}
+                          style={{ width: '100%', height: '100%' }}
                         />
                     </div>
                     <div className={styles.mask} >
@@ -213,12 +251,13 @@ class Chart extends React.Component {
                       </div>
                     </div>
                   </div>
-                  <h4 className={styles.title}>{item.title}</h4>
+                  <div className={styles.title}>{item.title}</div>
                 </div>
               </div>
             </div>
           ))
-          :
+        }
+        { isShow === 'FAIL' &&
           <div style={{
             display: 'flex',
             justifyContent: 'center',
