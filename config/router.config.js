@@ -29,7 +29,7 @@ const routes = [
           },
           // 图表类型
           {
-            path: '/templateLib/chartType',
+            path: '/templateLib/typeChart',
             component: './TemplateLib/ChartType',
           },
           // 图表组件

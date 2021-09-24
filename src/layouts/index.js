@@ -6,59 +6,121 @@ import styles from './index.less';
 
 const { Header } = Layout;
 
-// eslint-disable-next-line react/prefer-stateless-function
+const text = [
+  {
+    text: <span>登陆管理</span>,
+    type: 'login',
+    path: '/login',
+    title: '退出',
+    key: 1,
+  },
+  {
+    text: <span>进入主页</span>,
+    type: 'home',
+    path: '/',
+    title: '主页',
+    key: 2,
+  },
+  {
+    text: <span>个人中心</span>,
+    type: 'user',
+    path: '/user"',
+    title: '个人',
+    key: 3,
+  },
+];
+const titleList = [
+  {
+    value: 1,
+    path: '/dashBoard',
+    title: '仪表盘',
+  },
+  {
+    value: 2,
+    path: '/templateLib',
+    title: '模板库',
+  },
+  {
+    value: 3,
+    path: '/metaData',
+    title: '元数据管理',
+  },
+  {
+    value: 4,
+    path: '/evaluReport',
+    title: '测评报告',
+  },
+  {
+    value: 5,
+    path: '/dataProcessing',
+    title: '数据加工厂',
+  },
+];
+
 class BasicLayout extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      // selectedKeys: [],
+    }
+    this.option = this.getPropsKey(props);
+  }
+
+  // componentDidMount() {
+  //   console.log(this.props.location);
+  //   titleList.map(item => {
+  //     if (item.path === this.props.location.pathname) {
+  //       const key = [];
+  //       key.push(item.key);
+  //       this.setState({ selectedKeys: key })
+  //     }
+  //     return null;
+  //   });
+  // }
+
+  componentWillReceiveProps(nextProps) {
+    // 监听路由参数变化，重新渲染
+    if (nextProps.location.pathname !== this.props.location.pathname) {
+      this.option = this.getPropsKey(nextProps)
+    }
+  }
+
+  getPropsKey = props => {
+    const { location } = props;
+    let key; let index;
+    titleList.forEach(item => {
+      if (location.pathname === item.path || location.pathname.includes(item.path)) {
+        // key = $i
+        key = item.value
+      }
+    });
+    let defaultOpenKeys; let defaultSelectedKeys;
+    if (key !== undefined) {
+        defaultOpenKeys = `sub${key}`;
+    }
+    if (index !== undefined) {
+      defaultSelectedKeys = `subitem${key}${index}`;
+    }
+    return {
+      defaultOpenKeys: defaultOpenKeys || '',
+      defaultSelectedKeys: defaultSelectedKeys || '',
+    }
+  }
+
   render() {
-    const text = [
-      {
-        text: <span>登陆管理</span>,
-        type: 'login',
-        path: '/login',
-        title: '退出',
-        key: 1,
-      },
-      {
-        text: <span>进入主页</span>,
-        type: 'home',
-        path: '/',
-        title: '主页',
-        key: 2,
-      },
-      {
-        text: <span>个人中心</span>,
-        type: 'user',
-        path: '/user"',
-        title: '个人',
-        key: 3,
-      },
-    ];
-    const titleList = [
-      {
-        key: 1,
-        path: '/dashBoard',
-        title: '仪表盘',
-      },
-      {
-        key: 2,
-        path: '/templateLib',
-        title: '模板库',
-      },
-      {
-        key: 3,
-        path: '/metaData',
-        title: '元数据管理',
-      },
-      {
-        key: 4,
-        path: '/evaluReport',
-        title: '测评报告',
-      },
-      {
-        key: 5,
-        path: '/dataProcessing',
-        title: '数据加工厂',
-      },
-    ];
+    // const { selectedKeys } = this.state;
+    const { history } = this.props;
+    const { defaultSelectedKeys, defaultOpenKeys } = this.option;
+    const defaultSelect = {};
+    if (defaultSelectedKeys) {
+      defaultSelect.defaultOpenKeys = [defaultOpenKeys];
+      defaultSelect.defaultSelectedKeys = [defaultSelectedKeys];
+      defaultSelect.selectable = [defaultOpenKeys];
+      defaultSelect.selectedKeys = [defaultSelectedKeys];
+    } else {
+      defaultSelect.defaultSelectedKeys = [defaultOpenKeys];
+      defaultSelect.selectedKeys = [defaultOpenKeys];
+    }
     return (
       <Layout>
         <Header
@@ -81,12 +143,12 @@ class BasicLayout extends React.Component {
           <Menu
           // theme= "dark"
           mode="horizontal"
-          // defaultSelectedKeys={['1']}
+          {...defaultSelect}
           style={{ lineHeight: '64px', fontSize: '18px' }}
           >
             {
               titleList.map(item => (
-                <Menu.Item key={item.key} onClick={() => router.push(item.path)}>
+                <Menu.Item key={`sub${item.value}`} onClick={() => history.push(item.path)}>
                   {item.title}
                 </Menu.Item>
               ))
