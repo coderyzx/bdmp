@@ -1,11 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import { Modal, Form, Input, Button, Upload, message } from 'antd';
 import { connect } from 'dva';
-import object from 'lodash/object';
 
 const { TextArea } = Input;
 @connect()
-@Form.create({ name: 'coordinated' })
+@Form.create({ name: 'edit' })
 class RowEditModal extends Component {
   constructor(props) {
     super(props)
@@ -14,6 +13,8 @@ class RowEditModal extends Component {
         uploadImage: '',
         imageUrl: '',
         btnLoading: false,
+        typeId: '',
+        typeName: '',
       };
   }
 
@@ -21,10 +22,12 @@ class RowEditModal extends Component {
     this.props.onRef(this);
   }
 
-  showModal = ({ typeIcon }) => {
+  showModal = ({ typeIcon, typeName, typeId }) => {
     this.setState({
       visible: true,
       imageUrl: typeIcon,
+      typeName,
+      typeId,
     });
   };
 
@@ -40,7 +43,7 @@ class RowEditModal extends Component {
       upfile.append('file', uploadImage);
       upfile.append('creator', 'admin');
       upfile.append('id', editRow.id);
-      const formList = object.keys(values);
+      const formList = Object.keys(values);
       for (let i = 0; i < formList.length; i += 1) {
         upfile.append(formList[i], values[formList[i]]);
       }
@@ -69,6 +72,24 @@ class RowEditModal extends Component {
   handleReset = () => {
     this.props.form.resetFields();
   };
+
+  getSuffix = (value, maxLength) => {
+    const valueLength = value ? value.length : 0
+    return <div style={{ color: 'rgba(0, 0, 0, 0.25)', marginRight: '8px' }}>{valueLength ? `${valueLength}/${maxLength}` : `0/${maxLength}`}</div>
+  }
+
+  handleChangeValue = e => {
+    if (e.target.id === 'edit_typeId') {
+      this.setState({
+        typeId: e.target.value,
+      });
+    }
+    if (e.target.id === 'edit_typeName') {
+      this.setState({
+        typeName: e.target.value,
+      });
+    }
+  }
 
   getBase64 = (img, callback) => {
     const reader = new FileReader();
@@ -99,7 +120,7 @@ class RowEditModal extends Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { editRow } = this.props;
-    const { btnLoading, imageUrl } = this.state;
+    const { btnLoading, imageUrl, typeId, typeName } = this.state;
     return (
       <Fragment>
         <Modal
@@ -126,7 +147,11 @@ class RowEditModal extends Component {
                 initialValue: editRow.typeId,
                 validateTrigger: 'onSubmit',
               })(
-                <Input placeholder="请输入类型编号" autoComplete="off" />,
+                <Input placeholder="请输入类型编号" autoComplete="off"
+                       allowClear maxLength={ 10 }
+                       suffix = {this.getSuffix(typeId, 10)}
+                       onChange={this.handleChangeValue}
+                />,
               )}
             </Form.Item>
             <Form.Item label="类型名称">
@@ -137,7 +162,11 @@ class RowEditModal extends Component {
                 initialValue: editRow.typeName,
                 validateTrigger: 'onSubmit',
               })(
-                <Input placeholder="请输入类型名称" autoComplete="off"/>,
+                <Input placeholder="请输入类型名称" autoComplete="off"
+                       allowClear maxLength={ 10 }
+                       suffix = {this.getSuffix(typeName, 10)}
+                       onChange={this.handleChangeValue}
+                />,
               )}
             </Form.Item>
             <Form.Item label="描述">
@@ -151,6 +180,7 @@ class RowEditModal extends Component {
                 <TextArea
                   placeholder="请输入描述内容"
                   rows={4} autoSize={{ minRows: 3, maxRows: 5 }}
+                  allowClear
                 />,
               )}
             </Form.Item>

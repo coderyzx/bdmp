@@ -7,7 +7,7 @@ const { Option } = Select;
   typeIdList: chartType.typeIdList,
   typeNameList: chartType.typeNameList,
   }))
-@Form.create({ name: 'advanced_search' })
+@Form.create({ name: 'filter' })
 class Filter extends Component {
   handleSave = e => {
     e.preventDefault();
@@ -37,10 +37,11 @@ class Filter extends Component {
     const { typeIdList, typeNameList } = this.props;
     return (
       <Form layout="inline" className="ant-advanced-search-form" >
-        <Form.Item label="创建时间">{getFieldDecorator('createDate')(<DatePicker showTime format="YYYY-MM-DD" />)}
+        <Form.Item label="创建时间">{getFieldDecorator('createDate')(<DatePicker showTime allowClear format="YYYY-MM-DD" />)}
         </Form.Item>
         <Form.Item label="类型编号">{getFieldDecorator('typeId')(<Select placeholder="请输入类型编号"
                    showSearch
+                   allowClear
                    style={{ width: 150 }}
                    optionFilterProp="children"
                    filterOption={(input, option) =>
@@ -55,6 +56,7 @@ class Filter extends Component {
         </Form.Item>
         <Form.Item label="类型名称">{getFieldDecorator('typeName')(<Select placeholder="请选择类型名称"
                    showSearch
+                   allowClear
                    style={{ width: 150 }}
                    optionFilterProp="children"
                    filterOption={(input, option) =>

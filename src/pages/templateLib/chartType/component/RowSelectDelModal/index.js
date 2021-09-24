@@ -4,7 +4,12 @@ import { connect } from 'dva';
 
 @connect(({ chartType }) => ({ selectedRowKeys: chartType.selectedRowKeys }))
 class RowSelectDelModal extends Component {
-  state = { visible: false };
+  constructor(props) {
+    super(props);
+    this.state = {
+      visible: false,
+    }
+  }
 
   showModal = () => {
     this.setState({

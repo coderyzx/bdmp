@@ -37,7 +37,7 @@ class RowDetailsModal extends Component {
           <Descriptions layout="vertical">
             <Descriptions.Item label="类型编号">{rowDetailsData.typeId}</Descriptions.Item>
             <Descriptions.Item label="类型名称">{rowDetailsData.typeName}</Descriptions.Item>
-            <Descriptions.Item label="类型图标">{rowDetailsData.typeIcon}</Descriptions.Item>
+            <Descriptions.Item label="类型图标"><img alt="类型图标" style={{ width: '25px' }} src={rowDetailsData.typeIcon} /></Descriptions.Item>
             <Descriptions.Item label="描述">
               <Tooltip title={rowDetailsData.description}>
                 {rowDetailsData.description}

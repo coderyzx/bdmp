@@ -1,13 +1,13 @@
 import React, { Fragment } from 'react';
 import { Modal, Form, Input, Button, Upload, Icon, message } from 'antd';
 import { connect } from 'dva';
-import object from 'lodash/object';
+
 // import { addData } from '@/services/chartType'
 // import styles from './index.less';
 
 const { TextArea } = Input;
 @connect()
-@Form.create({ name: 'advanced_search' })
+@Form.create({ name: 'add' })
 class RowAddModal extends React.Component {
   constructor(props) {
     super(props)
@@ -16,9 +16,11 @@ class RowAddModal extends React.Component {
         previewVisible: false,
         previewImage: '',
         fileList: [],
-        uploadImage: '',
+        uploadImage: null,
         btnLoading: false,
         isUpdate: false,
+        typeId: '',
+        typeName: '',
       };
 }
 
@@ -35,12 +37,13 @@ class RowAddModal extends React.Component {
     const { uploadImage } = this.state;
     const upfile = new FormData();
     this.props.form.validateFields((err, values) => {
+      console.log(this.props.form.getFieldsValue());
       if (err) {
         return
       }
       upfile.append('file', uploadImage);
       upfile.append('creator', 'admin');
-      const formList = object.keys(values);
+      const formList = Object.keys(values);
       for (let i = 0; i < formList.length; i += 1) {
         upfile.append(formList[i], values[formList[i]]);
       }
@@ -67,7 +70,7 @@ class RowAddModal extends React.Component {
     });
   };
 
-  // 重置输入数据
+  // 重置模态框的输入数据
   handleReset = () => {
     this.props.form.resetFields();
     this.setState({
@@ -75,37 +78,72 @@ class RowAddModal extends React.Component {
     })
   };
 
-  handleChange = info => {
-    const newFileList = [...info.fileList];
-    this.setState({ fileList: newFileList });
+  getSuffix = (value, maxLength) => {
+    const valueLength = value ? value.length : 0
+    return <div style={{ color: 'rgba(0, 0, 0, 0.25)', marginRight: '8px' }}>{valueLength ? `${valueLength}/${maxLength}` : `0/${maxLength}`}</div>
+  }
+
+  // input输入改变时触发
+  handleChangeValue = e => {
+    if (e.target.id === 'add_typeId') {
+      this.setState({
+        typeId: e.target.value,
+      });
+    }
+    if (e.target.id === 'add_typeName') {
+      this.setState({
+        typeName: e.target.value,
+      });
+    }
+  }
+
+  // 上传状态改变时触发
+  handleChange = ({ file, fileList }) => {
+    console.log(file)
+    console.log(fileList)
+    console.log(file.status);
+    console.log(this.props.form.getFieldsValue());
+    if (file.status === undefined) {
+      this.setState({
+        isUpdate: false,
+      })
+    }
+    if (file.status === 'done') {
+      console.log(file)
+      this.setState({
+        uploadImage: file.originFileObj,
+      });
+    }
+    this.setState({ fileList: file.status ? [...fileList] : this.state.fileList });
   };
 
+  // 转换文件格式为base64
   getBase64 = (img, callback) => {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result));
     reader.readAsDataURL(img);
   };
 
-  beforeUpload = async file => {
-    console.log('updateFile:', file);
+  // 上传文件前
+  beforeUpload = file => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
       message.error('只能上传JPG/PNG格式图片!');
-      return false;
     }
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
       message.error('上传图片大小不能超过2M!');
-      return false;
     }
-    this.setState({
-      uploadImage: file,
-    })
-    return true
+    if (!isJpgOrPng || !isLt2M) {
+      this.props.form.setFieldsValue({ imagUrl: null })
+    }
+    return isJpgOrPng && isLt2M;
   };
 
+  // 取消预览
   cancelPreview = () => this.setState({ previewVisible: false });
 
+  // 预览图片
   handlePreview = file => {
     if (file.url || file.preview) {
       this.setState({
@@ -114,7 +152,6 @@ class RowAddModal extends React.Component {
       });
     } else {
       this.getBase64(file.originFileObj, imageUrl => {
-        console.log('imageUrl:', imageUrl)
         file.preview = imageUrl;
         this.setState({
           previewVisible: true,
@@ -132,7 +169,7 @@ class RowAddModal extends React.Component {
         <div className="ant-upload-text">上传图标</div>
       </div>
     );
-    const { previewVisible, previewImage, fileList } = this.state;
+    const { previewVisible, previewImage, fileList, typeId, typeName } = this.state;
     // 默认开启预览,删除,不开启下载功能。
     const showUploadList = {
       showPreviewIcon: true, showRemoveIcon: true, showDownloadIcon: false,
@@ -169,9 +206,13 @@ class RowAddModal extends React.Component {
                 rules: [{ required: true, message: '请输入类型编号!' },
                         { whitespace: true },
                 ],
-                validateTrigger: 'onSubmit',
+                // validateTrigger: 'onSubmit',
               })(
-                <Input placeholder="请输入类型编号" autoComplete="off"/>,
+                <Input placeholder="请输入类型编号" autoComplete="off"
+                       allowClear maxLength={ 10 }
+                       suffix = {this.getSuffix(typeId, 10)}
+                       onChange={this.handleChangeValue}
+                />,
               )}
             </Form.Item>
             <Form.Item label="类型名称">
@@ -179,9 +220,13 @@ class RowAddModal extends React.Component {
                 rules: [{ required: true, message: '请输入类型名称!' },
                         { whitespace: true },
                 ],
-                validateTrigger: 'onSubmit',
+                // validateTrigger: 'onSubmit',
               })(
-                <Input placeholder="请输入类型名称" autoComplete="off"/>,
+                <Input placeholder="请输入类型名称" autoComplete="off"
+                       allowClear maxLength={ 10 }
+                       suffix = {this.getSuffix(typeName, 10)}
+                       onChange={this.handleChangeValue}
+                />,
               )}
             </Form.Item>
             <Form.Item label="描述">
@@ -189,11 +234,12 @@ class RowAddModal extends React.Component {
                 rules: [{ required: true, message: '请输入描述内容!' },
                         { whitespace: true },
                 ],
-                validateTrigger: 'onSubmit',
+                // validateTrigger: 'onSubmit',
               })(
                 <TextArea
                   placeholder="请输入描述内容"
                   rows={4} autoSize={{ minRows: 3, maxRows: 5 }}
+                  allowClear
                 />,
               )}
             </Form.Item>
@@ -202,7 +248,7 @@ class RowAddModal extends React.Component {
                   rules: [
                     { required: !isUpdate, message: '请上传类型图标' },
                   ],
-                  validateTrigger: 'onSubmit',
+                  // validateTrigger: 'onSubmit',
                   valuePropName: 'file',
                 })(
                   <div className="clearfix">
@@ -217,7 +263,7 @@ class RowAddModal extends React.Component {
                       onChange={this.handleChange}
                     >
                       {fileList.length > 0 ? null : uploadButton}
-                    </Upload>,
+                    </Upload>
                     <Modal visible={previewVisible} footer={null} onCancel={this.cancelPreview}>
                       <img alt="previewImg" style={{ width: '100%' }} src={previewImage} />
                     </Modal>
