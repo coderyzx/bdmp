@@ -1,7 +1,7 @@
 import React from 'react';
 import { Layout, Menu, Icon, Tooltip, Button } from 'antd';
 import router from 'umi/router';
-import backgroundImg from '@/assets/bigdata.jpeg';
+import backgroundImg from '@/assets/bigdata.png';
 import styles from './index.less';
 
 const { Header } = Layout;
@@ -133,15 +133,12 @@ class BasicLayout extends React.Component {
           boxShadow: ' 0 0 20px rgb(0 0 0 / 20%)',
         }}>
           <div className={styles.logoContainer}>
-            <a href="">
-              <img src={backgroundImg} alt="BDMP logo" />
-              <div className={styles.title}>
-                BDMP
-              </div>
+            <a href="#!">
+              <img src={backgroundImg} alt="BDMP logo"/>
             </a>
           </div>
           <Menu
-          // theme= "dark"
+          theme= "dark"
           mode="horizontal"
           {...defaultSelect}
           style={{ lineHeight: '64px', fontSize: '18px' }}

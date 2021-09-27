@@ -42,7 +42,7 @@ const routes = [
             path: '/templateLib/dictionary',
             component: './TemplateLib/Dictionary',
           },
-          //仪表盘管理
+          // 仪表盘管理
           {
             path: '/templateLib/dashBoard',
             component: './DashBoardManagement',
@@ -61,7 +61,7 @@ const routes = [
           },
         ],
       },
-       //仪表盘展示
+       // 仪表盘展示
       {
         path: '/dashBoard',
         component: './DashBoard',

@@ -514,7 +514,7 @@ class MenuPage extends React.Component {
           confirmLoading={deleteLoading}
         >
           <p style={{ textAlign: 'center', marginBottom: 15 }}>
-            <img src={dele} />
+            <img src={dele} alt=""/>
           </p>
           <p className={styles.selectItem}>
             确认删除所选择的&nbsp;<b>{hasSelected ? `${selectedRowKeys.length}` : ''}</b>

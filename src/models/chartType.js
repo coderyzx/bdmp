@@ -19,16 +19,12 @@ export default {
       // 进入table页面展示数据
       showData(state, { resp, typeIdList, typeNameList }) {
         const respData = resp.data;
-        // let typeIdList = respData.lists.map(item => (item.typeId));
-        // let typeNameList = respData.lists.map(item => (item.typeName));
         let currentData = [...respData.lists];
         currentData = respData.lists.map((item, index) => {
           const time = moment(item.createDate);
           currentData[index].createDate = time.format('YYYY/MM/DD HH:mm:ss');
           return currentData[index];
         })
-        // typeIdList = [...new Set(typeIdList)];
-        // typeNameList = [...new Set(typeNameList)];
         return { ...state,
                 chartTypeData: currentData,
                 typeIdList,
@@ -74,7 +70,7 @@ export default {
       },
       // 更改page后的数据
       *pageChange({ payload }, { call, put, select }) {
-        const resp = yield call(service.pageChange, payload);
+        const resp = yield call(service.pageChangeData, payload);
         const { typeIdList, typeNameList } = yield select(state => state.chartType);
         yield put({
           type: 'showData',
@@ -86,8 +82,8 @@ export default {
         // 编辑table行数据
       *editRowData({ payload, callback }, { call, put, select }) {
         const { pageSize, current } = yield select(state => state.chartType);
-        yield call(service.editeRowData, { ...payload, creator: 'admin' });
-        const resp = yield call(service.pageChange, { pageSize, current });
+        yield call(service.editeRowData, payload);
+        const resp = yield call(service.pageChangeData, { pageSize, current });
         const typeIdList = yield call(service.getTypeIdList);
         const typeNameList = yield call(service.getTypeNameList);
         yield put({
@@ -102,12 +98,12 @@ export default {
       *deleteSelectedRow({ callback }, { call, put, select }) {
         const { pageSize, current, selectedRowKeys } = yield select(state => state.chartType);
         yield call(service.deleteSelectedData, selectedRowKeys);
-        let resp = yield call(service.pageChange, { pageSize, current });
+        let resp = yield call(service.pageChangeData, { pageSize, current });
         const typeIdList = yield call(service.getTypeIdList);
         const typeNameList = yield call(service.getTypeNameList);
         if (resp.data.lists.length === 0 && current > 1) {
           const update = { current: current - 1, pageSize };
-          resp = yield call(service.pageChange, update);
+          resp = yield call(service.pageChangeData, update);
           yield put({
             type: 'showData',
             resp,
@@ -116,7 +112,7 @@ export default {
           });
         } else {
           const update = { current, pageSize };
-          resp = yield call(service.pageChange, update);
+          resp = yield call(service.pageChangeData, update);
           yield put({
             type: 'showData',
             resp,
@@ -130,12 +126,12 @@ export default {
       *singleRowDelete({ payload, callback }, { call, put, select }) {
         const { pageSize, current } = yield select(state => state.chartType);
         yield call(service.deleteRowData, payload);
-        let resp = yield call(service.pageChange, { pageSize, current });
+        let resp = yield call(service.pageChangeData, { pageSize, current });
         const typeIdList = yield call(service.getTypeIdList);
         const typeNameList = yield call(service.getTypeNameList);
         if (resp.data.lists.length === 0 && current > 1) {
           const update = { current: current - 1, pageSize };
-          resp = yield call(service.pageChange, update);
+          resp = yield call(service.pageChangeData, update);
           yield put({
             type: 'showData',
             resp,
@@ -144,7 +140,7 @@ export default {
           });
         } else {
           const update = { current, pageSize };
-          resp = yield call(service.pageChange, update);
+          resp = yield call(service.pageChangeData, update);
           yield put({
             type: 'showData',
             resp,
@@ -157,8 +153,8 @@ export default {
       // 创建一条table数据
       *addRowData({ payload, callback }, { call, put, select }) {
         const { pageSize } = yield select(state => state.chartType);
-        yield call(service.addData, { ...payload, creator: 'admin' });
-        const resp = yield call(service.pageChange, { pageSize, current: 1 });
+        yield call(service.addData, payload);
+        const resp = yield call(service.pageChangeData, { pageSize, current: 1 });
         const typeIdList = yield call(service.getTypeIdList);
         const typeNameList = yield call(service.getTypeNameList);
         yield put({

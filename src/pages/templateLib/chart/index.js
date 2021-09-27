@@ -204,7 +204,7 @@ class Chart extends React.Component {
             confirmLoading={deleteLoading}
           >
             <p style={{ textAlign: 'center', marginBottom: 15 }}>
-              <img src={dele} />
+              <img src={dele} alt="" />
             </p>
             <p className={styles.selectItem}>
               确认删除吗？
@@ -265,7 +265,7 @@ class Chart extends React.Component {
             flexDirection: 'column',
             marginTop: 200,
             }}>
-            <img src={noData} />
+            <img src={noData} alt=""/>
             <span style={{ fontSize: 20, marginTop: 10 }}>暂无图表，点击新增创建一个吧~</span>
           </div>
         }

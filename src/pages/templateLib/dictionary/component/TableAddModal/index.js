@@ -74,7 +74,7 @@ class TableAddModal extends React.Component {
                 rules: [{ required: true, message: 'Please select your type_id!' },
                         { whitespace: true }],
               })(
-                <Input placeholder="请输入字典编号" autoComplete="off"/>,
+                <Input placeholder="请输入字典编号" autoComplete="off" allowClear/>,
               )}
             </Form.Item>
             <Form.Item label="字典名称">
@@ -82,7 +82,7 @@ class TableAddModal extends React.Component {
                 rules: [{ required: true, message: 'Please select your type!' },
                         { whitespace: true }],
               })(
-                <Input placeholder="请输入字典名称" autoComplete="off"/>,
+                <Input placeholder="请输入字典名称" autoComplete="off" allowClear/>,
               )}
             </Form.Item>
             <Form.Item label="描述">
@@ -93,6 +93,7 @@ class TableAddModal extends React.Component {
                 <TextArea
                   placeholder="请输入描述内容"
                   rows={4} autoSize={{ minRows: 3, maxRows: 5 }}
+                  allowClear
                 />,
               )}
             </Form.Item>
