@@ -1,10 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import { Modal, Descriptions, Tooltip } from 'antd';
-import { connect } from 'dva';
 
-@connect()
 class RowDetailsModal extends Component {
-  state = { visible: false };
+  constructor(props) {
+    super(props);
+    this.state = {
+      visible: false,
+    }
+  }
 
   componentDidMount() {
     this.props.onRef(this);

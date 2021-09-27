@@ -1,12 +1,9 @@
 import React, { Fragment } from 'react';
 import { Modal, Form, Input, Button, Upload, Icon, message } from 'antd';
-import { connect } from 'dva';
-
-// import { addData } from '@/services/chartType'
+import { addData, pageChangeData, getTypeIdList, getTypeNameList } from '@/services/chartType';
 // import styles from './index.less';
 
 const { TextArea } = Input;
-@connect()
 @Form.create({ name: 'add' })
 class RowAddModal extends React.Component {
   constructor(props) {
@@ -18,9 +15,9 @@ class RowAddModal extends React.Component {
         fileList: [],
         uploadImage: null,
         btnLoading: false,
-        isUpdate: false,
         typeId: '',
         typeName: '',
+        fileType: true,
       };
 }
 
@@ -31,13 +28,15 @@ class RowAddModal extends React.Component {
   };
 
   // 上传新增的所有数据
-  handleOk = e => {
+  handleOk = async e => {
     e.preventDefault();
-    const { dispatch } = this.props;
-    const { uploadImage } = this.state;
+    const { uploadImage, fileType } = this.state;
     const upfile = new FormData();
+
+    if (!fileType) {
+      this.props.form.setFieldsValue({ imagUrl: null });
+    }
     this.props.form.validateFields((err, values) => {
-      console.log(this.props.form.getFieldsValue());
       if (err) {
         return
       }
@@ -48,17 +47,17 @@ class RowAddModal extends React.Component {
         upfile.append(formList[i], values[formList[i]]);
       }
       this.setState({ btnLoading: true });
-      dispatch({
-        type: 'chartType/addRowData',
-        payload: upfile,
-        callback: () => {
-          this.handleReset();
-          this.setState({
-            visible: false,
-            btnLoading: false,
-          })
-        },
-      });
+    });
+    const { pageSize } = this.props;
+    await addData(upfile);
+    const resp = await pageChangeData({ pageSize, current: 1 });
+    const typeIdList = await getTypeIdList();
+    const typeNameList = await getTypeNameList();
+    await this.props.updateData(resp, typeIdList, typeNameList);
+    this.handleReset();
+    this.setState({
+      visible: false,
+      btnLoading: false,
     });
   };
 
@@ -67,6 +66,8 @@ class RowAddModal extends React.Component {
     this.setState({
       visible: false,
       fileList: [],
+      typeId: '',
+      typeName: '',
     });
   };
 
@@ -75,12 +76,16 @@ class RowAddModal extends React.Component {
     this.props.form.resetFields();
     this.setState({
       fileList: [],
+      typeId: '',
+      typeName: '',
     })
   };
 
   getSuffix = (value, maxLength) => {
     const valueLength = value ? value.length : 0
-    return <div style={{ color: 'rgba(0, 0, 0, 0.25)', marginRight: '8px' }}>{valueLength ? `${valueLength}/${maxLength}` : `0/${maxLength}`}</div>
+    return (<div style={{ color: 'rgba(0, 0, 0, 0.25)', marginRight: '8px' }}>
+              {valueLength ? `${valueLength}/${maxLength}` : `0/${maxLength}`}
+           </div>);
   }
 
   // input输入改变时触发
@@ -99,15 +104,7 @@ class RowAddModal extends React.Component {
 
   // 上传状态改变时触发
   handleChange = ({ file, fileList }) => {
-    console.log(file)
-    console.log(fileList)
     console.log(file.status);
-    console.log(this.props.form.getFieldsValue());
-    if (file.status === undefined) {
-      this.setState({
-        isUpdate: false,
-      })
-    }
     if (file.status === 'done') {
       console.log(file)
       this.setState({
@@ -129,13 +126,13 @@ class RowAddModal extends React.Component {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
       message.error('只能上传JPG/PNG格式图片!');
+      this.setState({
+        fileType: isJpgOrPng,
+      })
     }
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
       message.error('上传图片大小不能超过2M!');
-    }
-    if (!isJpgOrPng || !isLt2M) {
-      this.props.form.setFieldsValue({ imagUrl: null })
     }
     return isJpgOrPng && isLt2M;
   };
@@ -174,7 +171,7 @@ class RowAddModal extends React.Component {
     const showUploadList = {
       showPreviewIcon: true, showRemoveIcon: true, showDownloadIcon: false,
     };
-    const { btnLoading, isUpdate } = this.state;
+    const { btnLoading } = this.state;
     return (
       <Fragment>
         <Button type="primary"
@@ -206,7 +203,7 @@ class RowAddModal extends React.Component {
                 rules: [{ required: true, message: '请输入类型编号!' },
                         { whitespace: true },
                 ],
-                // validateTrigger: 'onSubmit',
+                validateTrigger: 'onSubmit',
               })(
                 <Input placeholder="请输入类型编号" autoComplete="off"
                        allowClear maxLength={ 10 }
@@ -220,7 +217,7 @@ class RowAddModal extends React.Component {
                 rules: [{ required: true, message: '请输入类型名称!' },
                         { whitespace: true },
                 ],
-                // validateTrigger: 'onSubmit',
+                validateTrigger: 'onSubmit',
               })(
                 <Input placeholder="请输入类型名称" autoComplete="off"
                        allowClear maxLength={ 10 }
@@ -234,7 +231,7 @@ class RowAddModal extends React.Component {
                 rules: [{ required: true, message: '请输入描述内容!' },
                         { whitespace: true },
                 ],
-                // validateTrigger: 'onSubmit',
+                validateTrigger: 'onSubmit',
               })(
                 <TextArea
                   placeholder="请输入描述内容"
@@ -246,14 +243,15 @@ class RowAddModal extends React.Component {
             <Form.Item label="类型图标">
                 {getFieldDecorator('imagUrl', {
                   rules: [
-                    { required: !isUpdate, message: '请上传类型图标' },
+                    { required: true, message: '请上传类型图标' },
                   ],
-                  // validateTrigger: 'onSubmit',
+                  validateTrigger: 'onSubmit',
                   valuePropName: 'file',
                 })(
                   <div className="clearfix">
                     <Upload
                       name="avatar"
+                      accept="image/png, image/jpeg"
                       listType="picture-card"
                       className="avatar-uploader"
                       fileList={fileList}

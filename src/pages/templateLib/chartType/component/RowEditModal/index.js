@@ -1,9 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { Modal, Form, Input, Button, Upload, message } from 'antd';
-import { connect } from 'dva';
+import { editeRowData, pageChangeData, getTypeIdList, getTypeNameList } from '@/services/chartType';
 
 const { TextArea } = Input;
-@connect()
 @Form.create({ name: 'edit' })
 class RowEditModal extends Component {
   constructor(props) {
@@ -31,12 +30,13 @@ class RowEditModal extends Component {
     });
   };
 
-  handleOk = e => {
+  handleOk = async e => {
     e.preventDefault();
-    const { editRow, dispatch } = this.props;
+    const { editRow } = this.props;
     const { uploadImage } = this.state;
     const upfile = new FormData();
     this.props.form.validateFields((err, values) => {
+      console.log(this.props.form.getFieldsValue());
       if (err) {
         return
       }
@@ -48,23 +48,24 @@ class RowEditModal extends Component {
         upfile.append(formList[i], values[formList[i]]);
       }
       this.setState({ btnLoading: true });
-      dispatch({
-        type: 'chartType/editRowData',
-        payload: upfile,
-        callback: () => {
-          this.handleReset();
-          this.setState({
-            visible: false,
-            btnLoading: false,
-          })
-        },
-      });
+    });
+    const { pageSize, current } = this.props;
+    await editeRowData(upfile);
+    const resp = await pageChangeData({ pageSize, current });
+    const typeIdList = await getTypeIdList();
+    const typeNameList = await getTypeNameList();
+    await this.props.updateData(resp, typeIdList, typeNameList);
+    this.setState({
+      visible: false,
+      btnLoading: false,
     });
   };
 
   handleCancel = () => {
     this.setState({
       visible: false,
+      // typeId: '',
+      // typeName: '',
     });
   };
 
@@ -185,9 +186,6 @@ class RowEditModal extends Component {
               )}
             </Form.Item>
             <Form.Item label="类型图标">
-              {getFieldDecorator('typeIcon', {
-                valuePropName: 'file',
-              })(
                 <Upload
                   name="avatar"
                   className="avatar-uploader"
@@ -197,8 +195,7 @@ class RowEditModal extends Component {
                   onChange={this.handleChange}
                 >
                   <img src={imageUrl} alt="上传图标" style={{ width: '100%' }} />
-                </Upload>,
-              )}
+                </Upload>
             </Form.Item>
           </Form>
         </Modal>

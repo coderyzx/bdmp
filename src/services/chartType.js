@@ -22,7 +22,7 @@ export async function getTypeNameList() {
 }
 
 // 更新page后获取的table数据
-export async function pageChange(params) {
+export async function pageChangeData(params) {
   return request(`/chartType/consumer/selectByPage/${params.current}/${params.pageSize}`, {
       method: 'GET',
   });
@@ -60,7 +60,6 @@ export async function queryData(params) {
 }
 // 新增数据
 export async function addData(params) {
-  console.log(params);
   return request('/chartType/consumer/insert', {
     method: 'POST',
     data: params,
