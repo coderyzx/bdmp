@@ -183,7 +183,7 @@ class Chart extends React.Component {
       <div style={{ margin: '0 10px', minHeight: 'calc(100vh - 67x)' }}>
         <div className={styles.chartTypeHead} >
           <h3 className={styles.chartTypeName}>{typeName}</h3>
-          <Button type="primary" size="large" className={styles.chartNew}
+          <Button type="primary" className={styles.chartNew}
            onClick={this.showModal}
           >
             新增图表
@@ -204,7 +204,7 @@ class Chart extends React.Component {
             confirmLoading={deleteLoading}
           >
             <p style={{ textAlign: 'center', marginBottom: 15 }}>
-              <img src={dele} alt="" />
+              <img src={dele} alt="404" />
             </p>
             <p className={styles.selectItem}>
               确认删除吗？
@@ -265,8 +265,8 @@ class Chart extends React.Component {
             flexDirection: 'column',
             marginTop: 200,
             }}>
-            <img src={noData} alt=""/>
-            <span style={{ fontSize: 20, marginTop: 10 }}>暂无图表，点击新增创建一个吧~</span>
+            <img src={noData} alt="404"/>
+            <span style={{ fontSize: 20, marginTop: 10 }}>暂无图表，点击新增一个吧~</span>
           </div>
         }
       </div>

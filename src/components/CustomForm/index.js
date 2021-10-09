@@ -80,7 +80,7 @@ class CustomForm extends Component {
             {...comProps}
             onChange={e => this.handleOnChange(e.target.value, configItem)}
           />
-          <img src={`/code?randomStr=${refreshCode || currentRandom}`} alt="" />
+          <img src={`/code?randomStr=${refreshCode || currentRandom}`} alt="404" />
           <i className={`iconfont icon-magnifying-glass- ${styles.refresh}`} onClick={() => { this.refreshCode() }}></i>
         </div>
       )

@@ -159,7 +159,6 @@ class Editor extends React.Component {
     const newData = {};
     newData.optionjson = JSON.stringify(optionValue, null, '\t');
     newData.id = id;
-    console.log(newData);
     dispatch({
       type: 'chartModel/postUpdateChart',
       payload: newData,
@@ -223,7 +222,7 @@ class Editor extends React.Component {
           editData={chartEdit}
         />
         <div className={styles.bar} >
-          <Button type="primary" size="large"
+          <Button type="primary"
             onClick={this.goBack}
             className={styles.goBack}
           >
@@ -231,13 +230,13 @@ class Editor extends React.Component {
             返回
           </Button>
           <div>
-            <Button type="primary" size="large" className={styles.title}
+            <Button type="primary" className={styles.title}
               onClick={this.showEdit}
             >
               {chartEdit.title}
               <Icon type="edit" />
             </Button>
-            <Button type="primary" size="large"
+            <Button type="primary"
               onClick={this.handleSave}
               className={styles.save}
             >

@@ -1,5 +1,5 @@
 
-import { getLogin } from '@/services/global';
+import { getLogin, getRegister } from '@/services/global';
 
 const loginModel = {
   namespace: 'loginModel',
@@ -10,17 +10,15 @@ const loginModel = {
   },
   effects: {
 
-    *submit({ payload }, { call, put }) {
-      // console.log('payload:', payload);
-      const response = yield call(getLogin, payload.username, payload.password);
+    *submit({ payload, callback }, { call }) {
+      const response = yield call(getLogin, payload);
       // console.log(response);
-      if (response.code === 'U000000' && response.data.username === payload.username && response.data.password === payload.password) {
-        yield put({
-          type: 'login',
-          payload: response.data.data,
-        });
-        // console.log(loginStatus);
-      }
+      callback(response);
+    },
+
+    *register({ payload, callback }, { call }) {
+      const response = yield call(getRegister, payload);
+      callback(response);
     },
   },
   reducers: {
@@ -31,7 +29,6 @@ const loginModel = {
         loginStatus: payload,
       }
     },
-
   },
 };
 

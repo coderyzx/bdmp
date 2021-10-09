@@ -1,10 +1,21 @@
 import request from '@/utils/request';
 
-export async function getLogin(username, password) {
-  // console.log(username, password);
-  return request(`/api/query/login?username=${username}&password=${password}`, {
-      method: 'get',
-      username,
-      password,
+export async function getLogin(payload) {
+  return request('/api/consumer/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function getRegister(payload) {
+  return request('/api/consumer/register', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
   });
 }

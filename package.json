@@ -10,7 +10,7 @@
   "dependencies": {
     "@ant-design/pro-layout": "^4.10.5",
     "@react-pdf/renderer": "^1.6.8",
-    "antd": "3.26.0",
+    "antd": "3.26.19",
     "classnames": "^2.2.6",
     "codemirror": "^5.62.2",
     "dva": "2.4.1",

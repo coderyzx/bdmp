@@ -4,7 +4,11 @@
 const routes = [
   {
     path: '/login',
-    component: './login',
+    component: './Login',
+  },
+  {
+    path: '/register',
+    component: './Login/register',
   },
   {
     path: '/',

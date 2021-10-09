@@ -66,23 +66,23 @@ class BasicLayout extends React.Component {
     this.option = this.getPropsKey(props);
   }
 
-  // componentDidMount() {
-  //   console.log(this.props.location);
-  //   titleList.map(item => {
-  //     if (item.path === this.props.location.pathname) {
-  //       const key = [];
-  //       key.push(item.key);
-  //       this.setState({ selectedKeys: key })
-  //     }
-  //     return null;
-  //   });
-  // }
+  componentWillMount () {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      router.push('/login');
+    }
+  }
 
   componentWillReceiveProps(nextProps) {
     // 监听路由参数变化，重新渲染
     if (nextProps.location.pathname !== this.props.location.pathname) {
       this.option = this.getPropsKey(nextProps)
     }
+  }
+
+  handleLogout = path => {
+    localStorage.removeItem('token');
+    router.push(path);
   }
 
   getPropsKey = props => {
@@ -134,7 +134,10 @@ class BasicLayout extends React.Component {
         }}>
           <div className={styles.logoContainer}>
             <a href="#!">
-              <img src={backgroundImg} alt="BDMP logo"/>
+              <img src={backgroundImg} alt="BDMP logo" />
+              <div className={styles.title}>
+                BDMP
+              </div>
             </a>
           </div>
           <Menu
@@ -155,7 +158,9 @@ class BasicLayout extends React.Component {
             {
               text.map(item => (
                 <Tooltip placement="bottom" title={item.text} key={item.key} >
-                  <Button style={{ posititon: 'absolute', float: 'right', top: -50, marginRight: 30 }} onClick={() => router.push(item.path)}>
+                  <Button style={{ posititon: 'absolute', float: 'right', top: -50, marginRight: 30 }}
+                    onClick={item.key === 1 ?
+                    () => this.handleLogout(item.path) : () => router.push(item.path)}>
                     <Icon type={item.type} />
                     {item.title}
                   </Button>
@@ -164,7 +169,7 @@ class BasicLayout extends React.Component {
             }
           </span>
         </Header>
-        <Layout style={{ paddingTop: 67 }}>
+        <Layout style={{ paddingTop: 67, backgroundColor: 'white' }}>
           { this.props.children }
         </Layout>
       </Layout>

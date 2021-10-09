@@ -10,7 +10,6 @@
       // border: 1px solid @themeColor;
       // color: @themeColor;
       margin-right: 20px;
-      font-size: 18px;
     }
   }
   .wrapMain {
@@ -22,8 +21,10 @@
         color: @themeColor;
       }
       .spin {
-        margin-top: 200px;
-        margin-left: 600px;
+        display: flex;
+        min-height: 500px;
+        align-items: center;
+        justify-content: center;
         :global {
           .ant-spin {
             margin-right: 20px;
@@ -46,14 +47,22 @@
     .left {
       display: flex;
       align-items: center;
-      cursor: pointer;
-      .icon{
-        display: block;
-        font-size: 20px;
-      }
-      span {
-        display: block;
-        margin: 0 5px;
+      .leftBack{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        cursor: pointer;
+        .icon{
+          display: block;
+          font-size: 20px;
+        }
+        span {
+          display: block;
+          margin: 0 5px;
+          width: 70;
+          font-size: 20px;
+          color:rgb(87, 84, 84);
+        }
       }
       :global {
         .ant-input {
@@ -70,11 +79,12 @@
         }
       }
       .nameInput{
-        font-size: 18px;
+        font-size: 20px;
         // color: var(--main-text-color);
         // font-weight: bold;
-        padding-right: 40px;
-        width: 200px;
+        color: #40a9ff;
+        border-bottom: 1px solid #ccc;
+        margin-left: 40px;
       }
     }
     // .right {
