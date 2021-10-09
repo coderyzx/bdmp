@@ -37,10 +37,11 @@ class Filter extends Component {
     const { typeIdList, typeNameList } = this.props;
     return (
       <Form layout="inline" className="ant-advanced-search-form" >
-        <Form.Item label="创建时间">{getFieldDecorator('create_datetime')(<DatePicker showTime format="YYYY-MM-DD" />)}
+        <Form.Item label="创建时间">{getFieldDecorator('create_datetime')(<DatePicker showTime allowClear format="YYYY-MM-DD" />)}
         </Form.Item>
         <Form.Item label="字典编号">{getFieldDecorator('type_id')(<Select placeholder="请选择字典编号"
                    showSearch
+                   allowClear
                    style={{ width: 150 }}
                    optionFilterProp="children"
                    filterOption={(input, option) =>
@@ -53,6 +54,7 @@ class Filter extends Component {
         </Form.Item>
         <Form.Item label="字典名称">{getFieldDecorator('type')(<Select placeholder="请选择字典名称"
                    showSearch
+                   allowClear
                    style={{ width: 150 }}
                    optionFilterProp="children"
                    filterOption={(input, option) =>

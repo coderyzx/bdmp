@@ -23,5 +23,6 @@ module.exports = {
     'no-unneeded-ternary': 0,
     'react/jsx-indent': 0,
     'no-console':0,
+    'no-param-reassign':0,
   }
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Layout, Menu, Icon, Tooltip, Button } from 'antd';
 import router from 'umi/router';
-import backgroundImg from '@/assets/bigdata.jpeg';
+import backgroundImg from '@/assets/bigdata.png';
 import styles from './index.less';
 
 const { Header } = Layout;
@@ -141,7 +141,7 @@ class BasicLayout extends React.Component {
             </a>
           </div>
           <Menu
-          // theme= "dark"
+          theme= "dark"
           mode="horizontal"
           {...defaultSelect}
           style={{ lineHeight: '64px', fontSize: '18px' }}
