@@ -1,34 +1,86 @@
 .dashboardMamagementWrap {
   // .choiceChartsWrap {
   // }
+  .left {
+    display: flex;
+    align-items: center;
+    .leftBack{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      cursor: pointer;
+    }
+
+  }
   .containerItem {
     cursor: move;
-    .containerTitle {
-      cursor: pointer;
+    border: 1px solid #d5d7e0;
+    box-shadow: 2px 2px 5px #ddd;
+    border-radius: 8px;
+    .containerHeader {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      height: 10%;
+      padding: 0 24px;
+      border-bottom: 1px solid #d5d7e0;
+      .containerTitle {
+        flex: 1;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 500;
+        width: 400px;
+        color: #707fca;
+        text-overflow:ellipsis;
+        overflow:hidden;
+        white-space:nowrap;
+      }
+      .containerDelete {
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 400;
+      }
+    }
+  }
+  .spin {
+    text-align: center;
+    // margin-bottom: 20px;
+    padding: 30px 50px;
+    margin: 200px 0;
+    :global {
+      .ant-spin {
+        font-size: 18px;
+      }
     }
   }
 }
 
 .tabChartWrap {
-  padding-top: 15px;
-  height: 520px;
-  overflow-y: auto;
+  padding-top: 5px;
+  height: 500px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
   .tabChartItem {
-    margin-bottom: 15px;
     cursor: pointer;
     position: relative;
+    margin: 0 10px;
+    width:280px;
     i {
       position: absolute;
-      font-size: 22px;
-      top: 0px;
-      right: 15px;
+      font-size: 20px;
+      top: 2px;
+      right: 5px;
     }
     .img {
       width: 100%;
-      height: 120px;
-      img {
-        width: 100%;
-      }
+      height: 225px;
+      padding:25px 0;
+      border-radius: 2px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, .1);
     }
     .name {
       text-align: center;

@@ -2,7 +2,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Table, Button, Popconfirm, Form, Divider, Tooltip,
-  Modal, Icon, notification } from 'antd';
+  Modal, Icon, notification, Empty, Spin } from 'antd';
 // import moment  from 'moment';
 import CreateForm from './createForm';
 import EditableForm from './editable';
@@ -174,14 +174,9 @@ class MenuPage extends React.Component {
         align: 'center',
         render: (text, record) => (
           <span style={{ width: '100%', display: 'block' }}>
-            <Button
-              type="primary"
-              size="small"
-              onClick={() => this.showEdit(record)}
-              icon="edit"
-            >
-              编辑
-            </Button>
+            <span onClick={() => this.showEdit(record)} style={{ color: '#40a9ff', cursor: 'pointer' }}>
+              <Icon type="edit" style={{ color: '#40a9ff' }} />  编辑
+            </span>
             <Divider type="vertical" style={{ margin: '0 10px' }} />
             {this.props.dataSource.length >= 1 ? (
               <Popconfirm
@@ -190,7 +185,9 @@ class MenuPage extends React.Component {
                 icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
                 okType="danger"
               >
-                <Button type="danger" size="small" icon="delete"></Button>
+                <span style={{ color: '#40a9ff', cursor: 'pointer' }}>
+                  <Icon type="delete" style={{ color: '#40a9ff' }} />  删除
+                </span>
               </Popconfirm>
             ) : null}
             <Divider type="vertical" style={{ margin: '0 10px' }} />
@@ -318,9 +315,7 @@ class MenuPage extends React.Component {
 
   // 选中table整行
   selectRow = record => {
-    console.log(record);
     const { selectedRowKeys } = this.state;
-    console.log(selectedRowKeys);
     const selectRow = selectedRowKeys;
     if (selectRow.indexOf(record.id) >= 0) {
       selectRow.splice(selectRow.indexOf(record.id), 1);
@@ -488,16 +483,17 @@ class MenuPage extends React.Component {
     };
     const hasSelected = selectedRowKeys.length > 0;
     const titleDelete = <p style={{ fontSize: 30, marginBottom: 5, textAlign: 'center' }}>删除</p>;
+    const renderList = dataSource.length > 0 && !loading;
+    const emptyList = dataSource.length === 0 && !loading;
     return (
-      <div style={{ marginRight: 20 }}>
+      <div style={{ marginRight: 20 }} className={styles.tableContent} >
         <div className={styles.title}>菜单页面维护</div>
         <div className={styles.bar}>
-          <Button onClick={this.showModal} type="primary" size="large" style={{ marginRight: 30 }}>
+          <Button onClick={this.showModal} type="primary" style={{ marginRight: 30 }}>
             +创建菜单页面
           </Button>
           <Button
             type="danger"
-            size="large"
             onClick={this.showDelete}
             disabled={!hasSelected}
             icon="delete"
@@ -505,57 +501,63 @@ class MenuPage extends React.Component {
             批量删除
           </Button>
         </div>
-        <Modal
-          okType="danger"
-          title={titleDelete}
-          visible={visibleDelete}
-          onOk={() => this.deleteSelection(selectedRowKeys)}
-          onCancel={this.deleteSelectionCancel}
-          confirmLoading={deleteLoading}
-        >
-          <p style={{ textAlign: 'center', marginBottom: 15 }}>
-            <img src={dele} />
-          </p>
-          <p className={styles.selectItem}>
-            确认删除所选择的&nbsp;<b>{hasSelected ? `${selectedRowKeys.length}` : ''}</b>
-            &nbsp;项吗？
-          </p>
-        </Modal>
-        <RowDetailsModal tableRow={this.state.tableRow} onRef={this.onRefDetails}/>
-        <EditableForm
-          wrappedComponentRef={this.saveRef}
-          visible={visibleEdit}
-          onCancel={this.cancelEdit}
-          onCreate={this.saveEdit}
-          confirmLoading={editLoading}
-          editData={editData}
-          isParent={isParentLabel}
-        />
-        <CreateForm
-          wrappedComponentRef={this.saveFormRef}
-          visible={visibleAdd}
-          onCancel={this.handleCancel}
-          onCreate={this.handleCreate}
-          confirmLoading={confirmLoading}
-        />
-        <Table
-          // components={components}
-          columns={this.columns}
-          dataSource={dataSource}
-          bordered
-          loading={loading}
-          rowKey="id"
-          // scroll={{ x: 1500, y: 470 }}
-          // pagination={{
-          //   onChange: this.cancel,
-          // }}
-          rowSelection={rowSelection}
-          onRow={record => ({
-            onDoubleClick: () => {
-              this.selectRow(record);
-            },
-          })}
-        />
+        { loading && <div className={styles.spin}><Spin />加载中...</div>}
+        { emptyList && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}/> }
+        { renderList &&
+        <>
+          <Modal
+            okType="danger"
+            title={titleDelete}
+            visible={visibleDelete}
+            onOk={() => this.deleteSelection(selectedRowKeys)}
+            onCancel={this.deleteSelectionCancel}
+            confirmLoading={deleteLoading}
+          >
+            <p style={{ textAlign: 'center', marginBottom: 15 }}>
+              <img src={dele} alt="404"/>
+            </p>
+            <p className={styles.selectItem}>
+              确认删除所选择的&nbsp;<b>{hasSelected ? `${selectedRowKeys.length}` : ''}</b>
+              &nbsp;项吗？
+            </p>
+          </Modal>
+          <RowDetailsModal tableRow={this.state.tableRow} onRef={this.onRefDetails}/>
+          <EditableForm
+            wrappedComponentRef={this.saveRef}
+            visible={visibleEdit}
+            onCancel={this.cancelEdit}
+            onCreate={this.saveEdit}
+            confirmLoading={editLoading}
+            editData={editData}
+            isParent={isParentLabel}
+          />
+          <CreateForm
+            wrappedComponentRef={this.saveFormRef}
+            visible={visibleAdd}
+            onCancel={this.handleCancel}
+            onCreate={this.handleCreate}
+            confirmLoading={confirmLoading}
+          />
+          <Table
+            // components={components}
+            columns={this.columns}
+            dataSource={dataSource}
+            bordered
+            // loading={loading}
+            rowKey="id"
+            // scroll={{ x: 1500, y: 470 }}
+            // pagination={{
+            //   onChange: this.cancel,
+            // }}
+            rowSelection={rowSelection}
+            onRow={record => ({
+              onDoubleClick: () => {
+                this.selectRow(record);
+              },
+            })}
+          />
+        </>
+        }
       </div>
     );
   }

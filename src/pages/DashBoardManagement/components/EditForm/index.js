@@ -7,8 +7,8 @@ const { Option } = Select;
 @connect(({ dashBoard }) => ({
   subMenuList: dashBoard.subMenuList,
 }))
-@Form.create({ name: 'form_in_dashBoard' })
-class CreateForm extends React.Component {
+@Form.create({ name: 'EditForm' })
+class EditForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -38,34 +38,42 @@ class CreateForm extends React.Component {
   };
 
   render() {
-    const { visible, onCancel, onCreate, form, subMenuList } = this.props;
+    const { visible, onCancel, onCreate, form, subMenuList, data } = this.props;
     const { getFieldDecorator } = form;
     const list = [
       {
         title: '仪表盘名称',
         key: 'name',
+        value: data.name,
       },
       {
         title: '业务主题场景',
         key: 'businessTheme',
+        value: data.businessTheme,
       },
       {
         title: '创建人',
         key: 'createUserId',
+        value: data.createUserId,
       },
       {
         title: '关联菜单页面',
         key: 'classLabel',
+        value: data.classLabel,
+      },
+      {
+        title: '修改人',
+        key: 'modifyUserId',
+        value: data.modifyUserId,
       },
     ];
     return (
       <Modal
         visible={visible}
-        title="创建仪表盘"
-        // centered
+        title="修改仪表盘信息"
+        width={700}
         onCancel={onCancel}
         destroyOnClose
-        width={700}
         footer={[
           <Button key="back" onClick={onCancel}>
             取消
@@ -85,6 +93,7 @@ class CreateForm extends React.Component {
               <Form.Item label={item.title} key={item.key}>
                 {getFieldDecorator(`${item.key}`, {
                   rules: [{ required: true, message: `请选择${item.title}!` }],
+                  initialValue: item.value,
                 })(
                   <Select
                   showSearch
@@ -110,15 +119,15 @@ class CreateForm extends React.Component {
               {getFieldDecorator(`${item.key}`, {
                 rules: [{ required: true, message: `请输入${item.title}!` },
                 { whitespace: true }],
+                initialValue: item.value,
               })(<Input placeholder={`请输入${item.title}`} />)}
               </Form.Item>
             ))
           }
         </Form>
-        <span style={{ color: 'green', fontSize: 16, margin: 50 }} >温馨提示：创建仪表盘后，请添加图表</span>
       </Modal>
     );
   }
 }
 
-export default CreateForm;
+export default EditForm;

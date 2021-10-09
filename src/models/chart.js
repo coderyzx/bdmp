@@ -1,4 +1,4 @@
-import { getChartByTypeName, postChartData, getDelete, postUpdate, getChartById, getTypeList, getTypeName } from '@/services/chart';
+import { getChartByTypeName, postChartData, getDelete, postUpdate, getChartById, getTypeList, getTypeName, getAllChart } from '@/services/chart';
 
 const chartModel = {
   namespace: 'chartModel',
@@ -7,10 +7,11 @@ const chartModel = {
     chartType: [],
     chartTypeName: [],
     chartEdit: {},
+    allChart: [],
   },
 
   effects: {
-    // 获取所有chart
+    // 获取对应类型的所有chart
     *getChartList({ payload, callback }, { call, put }) {
       const response = yield call(getChartByTypeName, payload);
       yield put({
@@ -77,7 +78,18 @@ const chartModel = {
         callback(response)
       }
     },
-
+    // 获取所有
+    *getAll({ payload, callback }, { call, put }) {
+      const response = yield call(getAllChart, payload);
+      if (response.code === 'U000000') {
+        yield put({
+          type: 'allChart',
+          payload: response.data,
+        });
+      } else {
+        callback(response)
+      }
+    },
 
   },
   reducers: {
@@ -107,6 +119,13 @@ const chartModel = {
       return {
         ...state,
         chartTypeName: payload,
+      }
+    },
+    allChart(state, { payload }) {
+      // console.log(payload);
+      return {
+        ...state,
+        allChart: payload,
       }
     },
 

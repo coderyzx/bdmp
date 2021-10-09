@@ -1,7 +1,7 @@
 import React from 'react';
-import { Layout } from 'antd';
+import noData from '@/assets/noData.svg';
+import styles from './index.less';
 
-const { Footer } = Layout;
 class MetaData extends React.Component {
     constructor (props) {
         super(props);
@@ -10,9 +10,9 @@ class MetaData extends React.Component {
 
     render () {
       return (
-        <div >
-          <div >元数据</div>
-          <Footer style={{ textAlign: 'center' }}>UIH ©2021 Created by UIH-BDMP</Footer>
+        <div className={styles.noData}>
+          <img src={noData} alt="404" />
+          <span style={{ fontSize: 20, marginTop: 10 }}>暂无内容~</span>
         </div>
       )
     }

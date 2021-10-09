@@ -23,7 +23,6 @@ class ChartView extends React.Component {
   render() {
     const { chartOption = {}, height } = this.props;
     this.currentChartOption = chartOption;
-    // console.log(chartOption)
     return (
       <ReactECharts
         key={new Date().getTime()}

@@ -40,11 +40,18 @@ export async function postUpdate(payload) {
 }
 // 根据id查询option记录
 export async function getChartById(id) {
-  // console.log(id);
   return request(`/api/chartOption/selectByPrimaryKey/${id}`, {
       method: 'get',
   });
 }
+
+// 查询所有的图表
+export async function getAllChart() {
+  return request('/api/chartOption/findAllChartOption', {
+      method: 'get',
+  });
+}
+
 // 查询图表类型信息
 export async function getTypeList() {
   return request('/chartType/consumer/selectTypeAll', {

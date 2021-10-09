@@ -24,7 +24,6 @@ class DetailsModal extends Component {
 
   render() {
     const rowDetailsData = this.props.tableRow;
-    console.log(rowDetailsData);
     return (
       <>
         <Modal

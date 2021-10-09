@@ -74,22 +74,42 @@ export function handleOption (option) {
       delete result[i].data;
     }
     if (i === 'series') {
-      result[i].forEach(item => {
-        if (item.label) {
-          delete item.label.position;
+      Object.keys(result[i][0]).forEach(item => {
+        if (result[i][0][item] === 'label') {
+          delete result[i][0][item].position;
         }
-        if (item.emphasis) {
-          delete item.emphasis;
+        if (result[i][0][item] === 'emphasis') {
+          delete result[i][0][item];
+        }
+        // if (result[i][0][item] === 'detail') {
+        //   Object.keys(result[i][0][item]).forEach(e => {
+        //     if (result[i][0][item][e] === 'fontSize') {
+        //       result[i][0][item][e] = 0;
+        //     }
+        //   })
+        // }
+        // if (result[i][0][item] === 'data') {
+        //   // console.log( result[i][0][item]);
+        //   result[i][0][item].forEach(e => {
+        //     Object.keys(result[i][0][item][e]).forEach(elel => {
+        //       if (result[i][0][item][e][elel] === 'name') {
+        //         result[i][0][item][e][elel] = null;
+        //       }
+        //     })
+        //   })
+        // }
+        if (result[i][0][item] === 'labelLine') {
+          Object.keys(result[i][0][item]).forEach(elem => {
+            if (result[i][0][item][elem] === 'lineStyle') {
+              Object.keys(result[i][0][item][elem]).forEach(el => {
+                if (result[i][0][item][elem][el] === 'width') {
+                  result[i][0][item][elem][el] = 0;
+                }
+              })
+            }
+          })
         }
       })
-      // for (const j of result[i]) {
-      //   if (j.label) {
-      //     delete j.label.position;
-      //   }
-      //   if (j.emphasis) {
-      //     delete j.emphasis;
-      //   }
-      // }
     }
   })
   return result
