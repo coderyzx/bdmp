@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import { Modal, Form, Input, Button, Upload, Icon, message } from 'antd';
 import { addData, pageChangeData, getTypeIdList, getTypeNameList } from '@/services/chartType';
-// import styles from './index.less';
 
 const { TextArea } = Input;
 @Form.create({ name: 'add' })
@@ -32,12 +31,14 @@ class RowAddModal extends React.Component {
     e.preventDefault();
     const { uploadImage, fileType } = this.state;
     const upfile = new FormData();
+    let error = null;
 
     if (!fileType) {
       this.props.form.setFieldsValue({ imagUrl: null });
     }
     this.props.form.validateFields((err, values) => {
       if (err) {
+        error = err;
         return
       }
       upfile.append('file', uploadImage);
@@ -48,17 +49,19 @@ class RowAddModal extends React.Component {
       }
       this.setState({ btnLoading: true });
     });
-    const { pageSize } = this.props;
-    await addData(upfile);
-    const resp = await pageChangeData({ pageSize, current: 1 });
-    const typeIdList = await getTypeIdList();
-    const typeNameList = await getTypeNameList();
-    await this.props.updateData(resp, typeIdList, typeNameList);
-    this.handleReset();
-    this.setState({
-      visible: false,
-      btnLoading: false,
-    });
+    if (!error) {
+      const { pageSize } = this.props;
+      await addData(upfile);
+      const resp = await pageChangeData({ pageSize, current: 1 });
+      const typeIdList = await getTypeIdList();
+      const typeNameList = await getTypeNameList();
+      await this.props.updateData(resp, typeIdList, typeNameList);
+      this.handleReset();
+      this.setState({
+        visible: false,
+        btnLoading: false,
+      });
+    }
   };
 
   // 关闭模态框

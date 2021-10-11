@@ -35,9 +35,11 @@ class RowEditModal extends Component {
     const { editRow } = this.props;
     const { uploadImage } = this.state;
     const upfile = new FormData();
+    let error = null;
     this.props.form.validateFields((err, values) => {
       console.log(this.props.form.getFieldsValue());
       if (err) {
+        error = err;
         return
       }
       upfile.append('file', uploadImage);
@@ -49,16 +51,18 @@ class RowEditModal extends Component {
       }
       this.setState({ btnLoading: true });
     });
-    const { pageSize, current } = this.props;
-    await editeRowData(upfile);
-    const resp = await pageChangeData({ pageSize, current });
-    const typeIdList = await getTypeIdList();
-    const typeNameList = await getTypeNameList();
-    await this.props.updateData(resp, typeIdList, typeNameList);
-    this.setState({
-      visible: false,
-      btnLoading: false,
-    });
+    if (!error) {
+      const { pageSize, current } = this.props;
+      await editeRowData(upfile);
+      const resp = await pageChangeData({ pageSize, current });
+      const typeIdList = await getTypeIdList();
+      const typeNameList = await getTypeNameList();
+      await this.props.updateData(resp, typeIdList, typeNameList);
+      this.setState({
+        visible: false,
+        btnLoading: false,
+      });
+    }
   };
 
   handleCancel = () => {
