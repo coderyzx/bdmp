@@ -1,9 +1,124 @@
- .loginForm {
-  max-width: 300px;
+.bodyContainer {
+  overflow: auto;
+  background-size: cover;
+  background-attachment: fixed;
+  min-height: 100%;
+  min-width: 1000px;
+  height: auto !important;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  height: 100%;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-color: #fff;
+  .bgContainer{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 937px;
+    .img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      visibility: unset;
+    }
+  }
+  .contentWrap {
+    flex: 1 0 auto;
+    .logo {
+      position: absolute;
+      top: 44px;
+      height: 56px;
+      right: 80px;
+      img {
+        height: 100%;
+        max-width: 100%;
+      }
+    }
+    .wrapper{
+      position: relative;
+      width: 480px;
+      background: rgba(255,255,255,0.85);
+      border-radius: 4px;
+      margin: 0 120px 0 auto;
+      border-radius: 8px;
+      text-align: center;
+      .loginContainer{
+        visibility: unset;
+        padding-bottom: 58px;
+        text-align: center;
+        margin: 0 50px;
+          .header{
+            .title{
+              margin-top: 140px;
+              padding-top: 50px;
+              font-size: 32px;
+              color: #1F2127;
+              font-weight: bold;
+              font-family: 'MicrosoftYaHei';
+              text-align: center;
+              display: block;
+            }
+            p {
+              display: block;
+              margin-top: 0;
+              margin-bottom: 1em;
+            }
+            img{
+              width: 55px;
+              height: 55px;
+            }
+          }
+          .loginForm {
+            max-width: 380px;
+            margin-top: 20px;
+            .loginFormForgot {
+              float: right;
+            }
+            .loginFormButton {
+              width: 100%;
+              height: 40px;
+              margin-top:20px;
+              border: 1px solid rgba(57,88,230,0.80);
+              border-radius: 2px;
+              font-size: 16px;
+              background: linear-gradient(225deg, #7996FA 0%, #3C5BCF 100%);
+            }
+            .formWrap{
+              display: flex;
+              justify-content: space-between;
+            }
+            :global {
+              .ant-form-item {
+                .ant-col{
+                  .ant-form-item-control {
+                    .ant-form-explain{
+                      display: flex;
+                    }
+                  }
+                }
+              }
+            }
+          }
+
+      }
+    }
+  }
+  .copyright{
+    font-size: 16px;
+    color: #FFFFFF;
+    text-align: center;
+    line-height: 28px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 40px;
+  }
 }
-.loginFormForgot {
-  float: right;
-}
-.loginFormButton {
-  width: 100%;
-}
+
+
+

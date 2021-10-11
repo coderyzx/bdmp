@@ -35,15 +35,15 @@ const menu = [
   },
   {
     value: '5',
-    type: 'form',
-    title: 'form表单管理',
-    path: '/templateLib/form',
-  },
-  {
-    value: '6',
     type: 'dashboard',
     title: '仪表盘管理',
     path: '/templateLib/dashBoard',
+  },
+  {
+    value: '6',
+    type: 'form',
+    title: 'form表单管理',
+    path: '/templateLib/form',
   },
   {
     value: '7',
@@ -166,7 +166,6 @@ class TemplateLib extends React.Component {
             // background: 'black',
             zIndex: 10,
             left: 0,
-
           }}>
           <Menu
             // theme='dark'
@@ -185,7 +184,7 @@ class TemplateLib extends React.Component {
                   title={
                     <span>
                       <Icon type={ item.type }/>
-                      <span>{item.title}</span>
+                      <span style={{ fontSize: 16 }}>{item.title}</span>
                     </span>
                   }
                   >
@@ -195,10 +194,10 @@ class TemplateLib extends React.Component {
                           itemChart.typeName &&
                           <Menu.Item key={`subitemChart${itemChart.id}`}
                           onClick={() => router.push(`/templateLib/chart?typeName=${itemChart.typeName}`)}
-                          style={{ display: 'flex', alignItems: 'center' }}
+                          style={{ display: 'flex', alignItems: 'center', fontSize: 16 }}
                           >
                             {/* <Icon type={itemChart.typeIcon} /> */}
-                            <img src={itemChart.typeIcon} alt="" style={{ height: 30, width: 30, marginRight: 8 }} />
+                            <img src={itemChart.typeIcon} alt="404" style={{ height: 20, width: 20, marginRight: 8 }} />
                             <span className={styles.typeName}>{itemChart.typeName}</span>
                           </Menu.Item>
                         ))
@@ -211,7 +210,9 @@ class TemplateLib extends React.Component {
                     }
                   </SubMenu>
                 :
-                  <Menu.Item key={`subChart${item.value}`} onClick={() => router.push(item.path)}>
+                  <Menu.Item key={`subChart${item.value}`} onClick={() => router.push(item.path)}
+                  style={{ fontSize: 16 }}
+                  >
                     <Icon type= { item.type } /><span>{item.title} </span>
                   </Menu.Item>
               ))

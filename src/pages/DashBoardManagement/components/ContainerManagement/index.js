@@ -1,52 +1,98 @@
 import React from 'react';
-import { Drawer, Button, Modal, Tabs, Row, Col, Icon, Card, message } from 'antd';
-import object from 'lodash/object';
+import { Drawer, Button, Modal, Icon, message, Layout, Typography } from 'antd';
+// import object from 'lodash/object';
+import ReactECharts from 'echarts-for-react';
+import { connect } from 'dva';
 import ReactGridLayout from '@/components/ReactGridLayout';
-import AttributeBoard from '@/components/AttributeBoard';
+import AttributeBoard from './component/AttributeBoard';
 import attributeConfig from './config/attributeConfigMenu';
-import { getChartList, getChartTypeList } from '@/services/charts';
 import ChartView from '@/components/ChartView';
-import { formatChartsRes } from '@/utils/formatRespones';
+// import { formatChartsRes } from '@/utils/formatRespones';
 import { getContainerLayout, setItemId } from '@/utils/formatDashBoard';
 import styles from './index.less';
+import { handleOption } from '@/utils/templateLib';
 
-const { TabPane } = Tabs;
 
+const { Paragraph } = Typography;
+// const { TabPane } = Tabs;
+
+@connect(({ chartModel }) => ({
+  chartList: chartModel.chartList,
+  chartTypeName: chartModel.chartTypeName,
+  allChart: chartModel.allChart,
+}))
 class ContainerManagement extends React.Component {
   constructor (props) {
     super(props);
     const { containerList } = props;
+    // const { containerList, dashboardId } = props;
     this.state = {
       drawerVisible: false,
       modalVisible: false,
-      activeKey: 'all',
-      chartsData: {},
-      renderChartData: containerList,
+      // dashboardId,
+      renderChartData: containerList.data || [],
     };
     this.container = {};
-    this.layoutChangeData = [];
+    this.layoutChangeData = containerList.optionLayouts || [];
+    this.params = {
+      data: [],
+      layout: [],
+    };
   }
 
   componentDidMount () {
+    this.queryChartListName();
+    this.queryChartTypeList();
   }
 
-  queryChartTypeList = async () => {
-    const res = await getChartTypeList();
-    return res.data;
+  queryChartTypeList = () => {
+    const { dispatch } = this.props;
+    // const number = 1;
+    // chartTypeName.forEach(item => {
+    //   this.queryChartList(item);
+    // })
+    dispatch({
+      type: 'chartModel/getAll',
+    });
   }
 
-  queryChartList = async id => {
-    const res = await getChartList({ chartTypeId: id });
-    return res.data;
+  // queryChartTypeList = () => {
+  //   const { dispatch, chartTypeName } = this.props;
+  //   // const number = 1;
+  //   // chartTypeName.forEach(item => {
+  //   //   this.queryChartList(item);
+  //   // })
+  //   dispatch({
+  //     type: 'chartModel/getAll',
+  //   });
+  // }
+
+  // queryChartList = () => {
+  //   const { dispatch } = this.props;
+  //   dispatch({
+  //     type: 'chartModel/getChartList',
+  //     callback : res => {
+  //     }
+  //   });
+  // }
+
+  queryChartListName = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'chartModel/getChartTypeName',
+    });
   }
 
-  showDrawer = item => {
-    const { curContainerId } = item;
-    this.curContainerId = curContainerId;
+  showDrawer = (e, item) => {
+    e.preventDefault();
+    // e.stopPropagation();
+    const { id } = item;
+    this.curContainerId = id;
     this.container[this.curContainerId] = item;
     this.setState({
       drawerVisible: true,
     });
+    return false;
   };
 
   onClose = () => {
@@ -56,48 +102,83 @@ class ContainerManagement extends React.Component {
   };
 
   onAttributeChange = (field, value) => {
-    this.container[this.curContainer][field] = value;
-    // console.log(this.container);
+    // this.container[this.curContainer][field] = value;
+    this.container[field] = value;
   }
 
-  showChoiceCharts = async () => {
-    const chartTypeList = await this.queryChartTypeList();
-    const chartsData = await this.queryChartList();
-    const chartObj = formatChartsRes(chartTypeList, chartsData);
+  saveContainerInfo = () => {
+    // const { renderChartData, dashboardId } = this.state;
+    // const result = renderChartData.map(ele => {
+    //   let item = ele;
+    //   if (item.id === curContainer.id) {
+    //     item = curContainer;
+    //   }
+    //   return item;
+    // })
+    // 保存时，把当前id的container放到container里
+    // this.container[this.curContainerId] = curContainer;
+    const { data } = this.params;
+    data.forEach((item, index) => {
+      if (item.id === this.container[this.curContainerId].id) {
+        if (this.container.style) {
+          data[index].style = this.container.style
+        }
+        if (this.container.type) {
+          data[index].type = this.container.type
+        }
+      }
+    })
+    this.setState({
+      drawerVisible: false,
+    })
+  }
+
+  showChoiceCharts = () => {
     this.choiceArr = [];
     this.setState({
       modalVisible: true,
-      chartsData: chartObj,
     });
   }
 
-  onTabChange = activeKey => {
-    this.setState({ activeKey });
-  };
+  // onTabChange = activeKey => {
+  //   this.queryChartListName(activeKey);
+  //   // this.setState({ activeKey });
+  // };
 
-  renderPanes = () => {
-    const { chartsData } = this.state;
-    const result = [];
-    const allChartValue = [];
-    object.forIn(chartsData, (v, k) => {
-      allChartValue.push(...v);
-      result.push((
-        <TabPane tab={k} key={k}>
-          {this.renderTabContent(v)}
-        </TabPane>
-      ))
-    });
-    result.unshift((
-      <TabPane tab="全部" key="all" >
-        {this.renderTabContent(allChartValue)}
-      </TabPane>
-    ));
-    return result;
-  }
+
+  // renderPanes = () => {
+  //   const { chartTypeList } = this.state;
+  //   const allChartValue = [];
+  //   object.forIn(chartsData, (v, k) => {
+  //     allChartValue.push(...v);
+  //     result.push((
+  //       <TabPane tab={k} key={k}>
+  //         {this.renderTabContent(v)}
+  //       </TabPane>
+  //     ))
+  //   });
+  //   result.unshift((
+  //     <TabPane tab="全部" key="all" >
+  //       {this.renderTabContent(allChartValue)}
+  //     </TabPane>
+  //   ));
+  //   return result;
+  //   // const result = [];
+  //   // chartTypeList.forEach(item => {
+  //   //   result.push((
+  //   //     <TabPane tab={item} key={item}>
+  //   //       {/* 123 */}
+  //   //       {this.renderTabContent(item)}
+  //   //     </TabPane>
+  //   //   ))
+  //   // });
+  //   // return result;
+  // }
 
   choiceOn = ele => {
     const val = ele;
     const { chartsData } = this.state;
+    // const { chartList } = this.props;
     const flag = !val.choice;
     if (flag && this.choiceArr.length === 5) {
       message.error('一次最多选择5个， 谢谢');
@@ -117,33 +198,43 @@ class ContainerManagement extends React.Component {
     });
   }
 
-  renderTabContent = datas => {
+  renderTabContent = () => {
+    const { allChart } = this.props;
+    console.log(allChart);
     let result = null;
-    if (datas && datas.length) {
-      const node = [];
-      datas.forEach(ele => {
-        const { name, id, thumb, choice } = ele;
-        node.push(
-          <Col
-            key={id}
-            span={4}
-            className={styles.tabChartItem}
-            onClick={() => { this.choiceOn(ele) }}>
-            { choice && <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" /> }
-            <div className={styles.img}>
-              <img src={`${process.env.defaultImgDomain}/chart/${thumb}`} alt="" />
-            </div>
-            <div className={styles.name}>
-              {name}
-            </div>
-          </Col>,
-        );
-      });
-
+    if (allChart && allChart.length) {
       result = (
-        <Row gutter={24} className={styles.tabChartWrap}>
-          {node}
-        </Row>
+        <div className={styles.tabChartWrap}>
+          {
+            allChart.map(ele => (
+              // ele.typename !== '关系图' && ele.typename !== '平行坐标系' &&
+              <div
+                key={ele.id}
+                className={styles.tabChartItem}
+                onClick={() => { this.choiceOn(ele) }}>
+                { ele.choice && <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" /> }
+                <div className={styles.img}
+                 style={{ border: `${ele.choice ? '1px solid #5063C2' : ''}`, borderRadius: `${ele.choice ? '2px' : ''}` }}
+                >
+                  <ReactECharts
+                    ref={e => {
+                    this.echarts_react = e;
+                    }}
+                    option = {handleOption(ele.option)}
+                    style={{ height: '100%' }}
+                  />
+                </div>
+                <Paragraph
+                  className={styles.name}
+                  ellipsis={{ rows: 1 }}
+                  title={ele.title}
+                >
+                  {ele.title}
+                </Paragraph>
+              </div>
+            ))
+          }
+       </div>
       );
     }
     return result;
@@ -156,11 +247,46 @@ class ContainerManagement extends React.Component {
   }
 
   renderDrawer = () => {
-    const { drawerVisible } = this.state;
-    const { chartOptions, curContainerId } = this.container[this.curContainerId];
+    const { drawerVisible, renderChartData } = this.state;
+    // const { id, option } = ele;
+    const { option, title } = this.container[this.curContainerId];
+    const headerContent = (
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        cursor: 'pointer',
+        color: 'rgba(24, 144, 255, 0.8)',
+        }}>
+        <div onClick={this.onClose}
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          cursor: 'pointer',
+          }}
+        >
+          <Icon type="left-circle" theme="filled" className={styles.icon} style={{ fontSize: 20, display: 'block' }} />
+          <span
+          style={{
+            color: '#575454',
+            fontSize: 20,
+            display: 'block',
+            margin: '0 5px',
+            }}>
+            返回
+          </span>
+        </div>
+        <span style={{
+          borderBottom: '1px solid #d5d7e0',
+          fontSize: 20,
+          color: '#40a9ff',
+          display: 'block',
+          marginLeft: 40 }}>{title}</span>
+      </div>
+    )
     return (
       <Drawer
-        title={curContainerId}
+        title={headerContent}
         placement="top"
         visible={drawerVisible}
         getContainer={document.body}
@@ -173,13 +299,16 @@ class ContainerManagement extends React.Component {
         <div className={styles.drawerBody}>
           <div className={styles.chartView}>
             <ChartView
-              chartOption={JSON.parse(chartOptions)}
+              chartOption={option}
             />
           </div>
           <div className={styles.attributeView}>
             <AttributeBoard
               menus={attributeConfig}
               onChange={(field, value) => { this.onAttributeChange(field, value) }}
+              handleComfirm={this.saveContainerInfo}
+              dataSelf={this.container[this.curContainerId]}
+              dataLink={renderChartData}
             />
           </div>
         </div>
@@ -192,50 +321,117 @@ class ContainerManagement extends React.Component {
     const { onContainerCreate } = this.props;
     setItemId(this.choiceArr);
     const result = [...renderChartData, ...this.choiceArr];
-    onContainerCreate(this.choiceArr, () => {
-      this.setState({
-        renderChartData: result,
-        modalVisible: false,
-      })
-    });
+    const layout = getContainerLayout(
+      result,
+      this.layoutChangeData,
+      result.length,
+    );
+    this.setState({
+      renderChartData: result,
+      modalVisible: false,
+    })
+    this.params.data = result; // 新增的
+    this.params.layout = layout;
+    onContainerCreate(this.params);
+    this.choiceArr = [];
   }
 
   renderModal = () => {
-    const { modalVisible, activeKey } = this.state;
-    const contentNode = this.renderPanes();
+    const { modalVisible } = this.state;
     return (
       <Modal
-          title="选择图表"
-          visible={modalVisible}
-          destroyOnClose
-          width={1000}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
+        title="选择图表"
+        visible={modalVisible}
+        destroyOnClose
+        width={1000}
+        onOk={this.handleOk}
+        onCancel={this.handleCancel}
       >
-        <Tabs
-          onChange={this.onTabChange}
-          activeKey={activeKey}
-        >
-          {contentNode}
-        </Tabs>
+        <Layout style={{
+          background: '#fff',
+          overflowY: 'auto',
+          height: '550px',
+        }}
+          >
+          {this.renderTabContent()}
+        </Layout>
       </Modal>
     )
   }
 
+  // onLayoutChange = l => {
+  //   this.layoutChangeData = l;
+  // }
+
   onLayoutChange = l => {
+    const { onContainerCreate } = this.props;
+    const { renderChartData } = this.state;
     this.layoutChangeData = l;
+    this.params.layout = l;
+    this.params.data = renderChartData
+    onContainerCreate(this.params);
   }
 
   renderCardTitle = item => {
-    const title = `点击可以编辑${item.id}容器详细内容`;
+    const title = `点击编辑${item.title}`;
     return (
       <div
         className={styles.containerTitle}
-        onClick={() => { this.showDrawer(item) }}
+        onClick={e => { this.showDrawer(e, item) }}
       >
         {title}
       </div>
     )
+  }
+
+  renderDelete = item => (
+    <Button
+      type="primary"
+      className={styles.containerDelete}
+      onClick={e => { this.deleteItem(e, item) }}>
+        删除
+    </Button>
+  )
+
+  deleteItem = (e, item) => {
+    e.preventDefault();
+    const { onContainerCreate } = this.props;
+    const { renderChartData } = this.state;
+    const result = [];
+    renderChartData.forEach(ele => {
+      const { id } = ele;
+      if (id !== item.id) {
+        result.push(ele);
+      }
+    });
+    let layoutIndex = -1;
+    this.params.data.forEach((ele, i) => {
+      if (ele.id === item.id) layoutIndex = i
+    })
+    this.layoutChangeData.splice(layoutIndex, 1);
+    this.setState({
+      renderChartData: result,
+    });
+    // 对比历史删除状态
+    // 检查是否是已经存在的容器，是的话进入 deleteWidgetList
+    // const findIndex = this.curContainerIds.indexOf(item.id);
+    // if (findIndex !== -1) {
+    //   this.params.deleteWidgetList.push({ id: item.id });
+    // } else {
+    //   // 是前端添加的容器，从添加列表删除
+    //   let index = -1;
+    //   this.params.data.forEach((ele, i) => {
+    //     if (ele.id === item.id) index = i
+    //   })
+    //   this.params.data.splice(index, 1);
+    // }
+    let index = -1;
+    this.params.data.forEach((ele, i) => {
+      if (ele.id === item.id) index = i
+    })
+    this.params.data.splice(index, 1);
+    this.params.layout = this.layoutChangeData;
+    onContainerCreate(this.params);
   }
 
   renderContainers = () => {
@@ -243,20 +439,17 @@ class ContainerManagement extends React.Component {
     const result = [];
     if (renderChartData && renderChartData.length) {
       renderChartData.forEach(ele => {
-        const { chartOptions, id, chartOption } = ele;
-        const options = JSON.parse(chartOptions || chartOption)
+        const { id, option } = ele;
         result.push(
           <div key={id} id={id} className={styles.containerItem}>
-            <Card
-              title={this.renderCardTitle(ele)}
-              style={{ height: '100%' }}
-              bodyStyle={{ height: '100%' }}
-            >
+            <div className={styles.containerHeader}>
+              {this.renderCardTitle(ele)}
+              {this.renderDelete(ele)}
+            </div>
               <ChartView
                 height="90%"
-                chartOption={options}
+                chartOption={option}
               />
-            </Card>
           </div>,
         )
       });

@@ -21,7 +21,9 @@ class ReactGridLayout extends React.Component {
 
   onLayoutChange = l => {
     const { onChange } = this.props;
-    onChange(l);
+    if (onChange) {
+      onChange(l);
+    }
   }
 
   render() {
