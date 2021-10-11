@@ -35,6 +35,7 @@ class ChartType extends Component {
     const resp = await getInitial(10);
     const typeIdList = await getTypeIdList();
     const typeNameList = await getTypeNameList();
+    this.setState({ verified: false });
     this.getChartTypeData(resp, typeIdList, typeNameList);
   }
 

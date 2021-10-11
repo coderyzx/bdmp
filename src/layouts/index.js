@@ -1,7 +1,7 @@
 import React from 'react';
 import { Layout, Menu, Icon, Tooltip, Button } from 'antd';
 import router from 'umi/router';
-import backgroundImg from '@/assets/bigdata.png';
+import backgroundImg from '@/assets/bigdata3.png';
 import styles from './index.less';
 
 const { Header } = Layout;
@@ -125,7 +125,7 @@ class BasicLayout extends React.Component {
       <Layout>
         <Header
         style={{
-          position: 'fixed',
+          position: 'flex',
           zIndex: 1000,
           width: '100%',
           padding: 0,
@@ -164,7 +164,7 @@ class BasicLayout extends React.Component {
             }
           </span>
         </Header>
-        <Layout style={{ paddingTop: 67 }}>
+        <Layout style={{ paddingTop: 2 }}>
           { this.props.children }
         </Layout>
       </Layout>
