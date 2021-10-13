@@ -129,18 +129,13 @@ class TemplateLib extends React.Component {
       defaultSelectedKeys: defaultSelectedKeys || '',
     }
   }
-  // const { dispatch } = this.props;
-  // dispatch({
-  //   type: 'chartModel/getChartType',
-  //   payload: {},
-  //   callback: () => {
-  //     notification.open({
-  //       message: '读取图表类型信息失败',
-  //       description: '报错, 暂时没有图表类型，请求失败，服务未找到',
-  //       icon: <Icon type="smile" rotate={180} theme="twoTone" twoToneColor="#108ee9" />,
-  //     })
-  //   },
-  // });
+
+  renderChartMenu = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'chartModel/getChartType',
+    });
+  }
 
   render() {
     const { children, chartType } = this.props;
@@ -187,6 +182,7 @@ class TemplateLib extends React.Component {
                       <span style={{ fontSize: 16 }}>{item.title}</span>
                     </span>
                   }
+                  onTitleClick={this.renderChartMenu}
                   >
                     {
                       chartType ?

@@ -38,13 +38,11 @@ const chartModel = {
     // 修改chart
     *postUpdateChart({ payload, callback }, { call }) {
       const response = yield call(postUpdate, payload);
-      console.log(response);
       callback(response);
     },
     // 查一个chart，用于编辑的时候查询一个chart
     *getChart({ payload, callback }, { call, put }) {
       const response = yield call(getChartById, payload);
-      console.log(response);
       yield put({
         type: 'chartEdit',
         payload: response.data,
@@ -94,35 +92,30 @@ const chartModel = {
   },
   reducers: {
     chartList(state, { payload }) {
-      // console.log(state, payload);
       return {
         ...state,
         chartList: payload,
       }
     },
     chartEdit(state, { payload }) {
-      // console.log(payload);
       return {
         ...state,
         chartEdit: payload,
       }
     },
     chartType(state, { payload }) {
-      // console.log(payload);
       return {
         ...state,
         chartType: payload,
       }
     },
     chartTypeName(state, { payload }) {
-      // console.log(payload);
       return {
         ...state,
         chartTypeName: payload,
       }
     },
     allChart(state, { payload }) {
-      // console.log(payload);
       return {
         ...state,
         allChart: payload,

@@ -86,6 +86,10 @@ const routes = [
         path: '/dataProcessing',
         component: './DataProcessing',
       },
+      {
+        path: '/user',
+        component: './User',
+      },
     ],
 
   },

@@ -220,7 +220,7 @@ class DashBoard extends React.Component {
         { !isLoading && containers.length === 0 && id &&
           <div className={styles.noData}>
             <img src={noData} alt="404" />
-            <span style={{ fontSize: 20, marginTop: 10 }}>暂无仪表盘图表内容，快去添加吧~</span>
+            <span style={{ fontSize: 20, marginTop: 10 }}>暂无仪表盘内容，快去添加吧~</span>
           </div>
         }
         { isShow &&

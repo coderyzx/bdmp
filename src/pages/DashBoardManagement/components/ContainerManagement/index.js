@@ -31,6 +31,7 @@ class ContainerManagement extends React.Component {
       modalVisible: false,
       // dashboardId,
       renderChartData: containerList.data || [],
+      // renderTime: '',
     };
     this.container = {};
     this.layoutChangeData = containerList.optionLayouts || [];
@@ -200,7 +201,6 @@ class ContainerManagement extends React.Component {
 
   renderTabContent = () => {
     const { allChart } = this.props;
-    console.log(allChart);
     let result = null;
     if (allChart && allChart.length) {
       result = (
@@ -332,8 +332,8 @@ class ContainerManagement extends React.Component {
     })
     this.params.data = result; // 新增的
     this.params.layout = layout;
-    onContainerCreate(this.params);
     this.choiceArr = [];
+    onContainerCreate(this.params);
   }
 
   renderModal = () => {
@@ -463,6 +463,20 @@ class ContainerManagement extends React.Component {
       containers: result,
     };
   }
+
+  // renderTime = () => {
+  //   this.timer = setTimeout(() => {
+  //     const now = new Date();
+  //     const year = now.getFullYear(); // 得到年份
+  //     const month = now.getMonth() + 1;// 得到月份
+  //     const date = now.getDate();// 得到日期
+  //     const hour = now.getHours();// 得到小时数
+  //     const minute = now.getMinutes();// 得到分钟数
+  //     const second = now.getSeconds();// 得到秒数
+  //     const renderTime = `${year}-${month}-${date}-${hour}:${minute}:${second}`
+  //     this.setState({ renderTime })
+  //   }, 1000);
+  // }
 
   render () {
     const { drawerVisible, modalVisible } = this.state;

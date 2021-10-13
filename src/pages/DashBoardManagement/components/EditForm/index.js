@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Form, Input, Select, Button, notification } from 'antd';
+import { Modal, Form, Input, Select, Button } from 'antd';
 import { connect } from 'dva';
 
 const { Option } = Select;
@@ -21,15 +21,6 @@ class EditForm extends React.Component {
     const { dispatch } = this.props;
     dispatch({
       type: 'dashBoard/getMenu',
-      callback: res => {
-        if (res.code !== 'U000000') {
-          const args = {
-            message: '提示',
-            description: '获取菜单失败',
-          };
-          notification.info(args);
-        }
-      },
     });
   }
 

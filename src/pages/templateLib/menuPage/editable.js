@@ -128,12 +128,12 @@ class EditableForm extends React.Component {
               initialValue: editData.sort,
             })(<Input placeholder="菜单名称" />)}
           </Form.Item>
-          <Form.Item label="修改者" key="modifyUserId">
+          <Form.Item label="修改人" key="modifyUserId">
             {getFieldDecorator('modifyUserId', {
-              rules: [{ required: true, message: '请输入修改者!' },
+              rules: [{ required: true, message: '请输入修改人!' },
               { whitespace: true }],
               initialValue: editData.modifyUserId,
-            })(<Input placeholder="修改者" />)}
+            })(<Input placeholder="修改人" />)}
           </Form.Item>
         </Form>
       </Modal>

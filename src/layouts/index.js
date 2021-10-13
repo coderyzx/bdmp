@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Menu, Icon, Tooltip, Button } from 'antd';
+import { Layout, Menu, Tooltip, Avatar } from 'antd';
 import router from 'umi/router';
 import backgroundImg from '@/assets/bigdata3.png';
 import styles from './index.less';
@@ -8,14 +8,14 @@ const { Header } = Layout;
 
 const text = [
   {
-    text: <span>登陆管理</span>,
+    text: <span>退出</span>,
     type: 'login',
     path: '/login',
     title: '退出',
     key: 1,
   },
   {
-    text: <span>进入主页</span>,
+    text: <span>主页</span>,
     type: 'home',
     path: '/',
     title: '主页',
@@ -24,7 +24,7 @@ const text = [
   {
     text: <span>个人中心</span>,
     type: 'user',
-    path: '/user"',
+    path: '/user',
     title: '个人',
     key: 3,
   },
@@ -151,16 +151,15 @@ class BasicLayout extends React.Component {
               ))
             }
           </Menu>
-          <span>
+          <span className={styles.Avatar}>
             {
               text.map(item => (
                 <Tooltip placement="bottom" title={item.text} key={item.key} >
-                  <Button style={{ posititon: 'absolute', float: 'right', top: -50, marginRight: 30 }}
-                    onClick={item.key === 1 ?
-                    () => this.handleLogout(item.path) : () => router.push(item.path)}>
-                    <Icon type={item.type} />
-                    {item.title}
-                  </Button>
+                  <Avatar size="large" icon={item.type}
+                  style={{ posititon: 'absolute', float: 'right', top: -50, marginRight: 30, cursor: 'pointer' }}
+                   onClick={item.key === 1 ?
+                    () => this.handleLogout(item.path) : () => router.push(item.path)}
+                  />
                 </Tooltip>
               ))
             }

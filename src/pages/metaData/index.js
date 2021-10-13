@@ -1,21 +1,14 @@
-import React from 'react';
-import noData from '@/assets/noData.svg';
+import React, { PureComponent } from 'react';
+import { Empty } from 'antd';
+import noMatchedCourse from '@/assets/noMatchedCourse.svg';
 import styles from './index.less';
 
-class MetaData extends React.Component {
-    constructor (props) {
-        super(props);
-        this.state = { };
-    }
-
-    render () {
-      return (
-        <div className={styles.noData}>
-          <img src={noData} alt="404" />
-          <span style={{ fontSize: 20, marginTop: 10 }}>暂无内容~</span>
-        </div>
-      )
-    }
+class MetaData extends PureComponent {
+  render() {
+    return (
+      <Empty image={noMatchedCourse} className={styles.empty}/>
+    )
+  }
 }
 
 export default MetaData;
