@@ -7,6 +7,7 @@ import FormPropDelModal from '../FormPropDelModal';
 import PreviewDebugModal from '../PreviewDebugModal'
 import styles from './index.less';
 import { getAllFormProps, getFormPreview } from '@/services/formManage';
+import { getDictItemInitial } from '@/services/dict';
 
 
 const leftTableColumns = [
@@ -53,8 +54,11 @@ const rightTableColumns = [
   },
 ];
 
+const { Option } = Select;
+
 @connect(({ formManage }) => ({
   formId: formManage.formId,
+  dictId: formManage.dictId,
 }))
 class TableTransfer extends Component {
   constructor(props) {
@@ -69,6 +73,7 @@ class TableTransfer extends Component {
       selectedLeftKeys: [],
       selectedFormType: '',
       previewCode: null,
+      formPropsObj: null,
     };
   }
 
@@ -86,7 +91,6 @@ class TableTransfer extends Component {
     const { formId } = this.props;
     const resp1 = await getAllFormProps();
     const resp2 = await getFormPreview(formId);
-
     if (resp1.msgCode === 'SUCCESS' && resp2.msgCode === 'SUCCESS') {
       this.setState({
         formPropsData: resp1.data,
@@ -94,6 +98,11 @@ class TableTransfer extends Component {
         transferLoading: false,
       });
       const formPropsObj = JSON.parse(resp2.data.formValue);
+      const dictID = resp2.data.dictId;
+      let resp3;
+      if (dictID) {
+        resp3 = await getDictItemInitial(dictID);
+      }
       if (formPropsObj) {
         switch (resp2.data.formType) {
           case 'Input':
@@ -102,15 +111,27 @@ class TableTransfer extends Component {
                   <Input {...formPropsObj}/>
                 ),
               previewLoading: false,
+              selectedFormType: resp2.data.formType,
+              formPropsObj,
             });
             break;
 
           case 'Select':
+
             this.setState({
               previewCode: (
-                <Select style={{ width: 200 }} {...formPropsObj}/>
+                <Select style={{ width: 200 }} {...formPropsObj}>
+                  { dictID ?
+                    resp3.data.map(item => (
+                      <Option key={item.value} value={item.item_id}>{item.value}</Option>
+                    )) :
+                    null
+                  }
+                </Select>
               ),
               previewLoading: false,
+              selectedFormType: resp2.data.formType,
+              formPropsObj,
             });
             break;
 
@@ -120,6 +141,8 @@ class TableTransfer extends Component {
                 <DatePicker {...formPropsObj}/>
               ),
               previewLoading: false,
+              selectedFormType: resp2.data.formType,
+              formPropsObj,
             });
             break;
           default:
@@ -172,7 +195,7 @@ class TableTransfer extends Component {
 
   render() {
     const { targetKeys, disabled, showSearch, formPropsData, previewCode, selectedFormType,
-            transferLoading, previewLoading, selectedLeftKeys } = this.state;
+            transferLoading, previewLoading, selectedLeftKeys, formPropsObj } = this.state;
     const controlLeft = (
       <span>
         <FormPropAddModal getFormProps={this.getFormProps}/>
@@ -182,7 +205,7 @@ class TableTransfer extends Component {
     const controlRight = (
       <span>
         <PreviewDebugModal getFormProps={this.getFormProps} rightKeys={targetKeys}
-                           selectedFormType={selectedFormType}/>
+                           selectedFormType={selectedFormType} formPropsObj={formPropsObj}/>
       </span>
     );
     return (

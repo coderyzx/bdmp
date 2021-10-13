@@ -6,7 +6,13 @@ const { TextArea } = Input;
 @connect()
 @Form.create({ name: 'advanced_search' })
 class DictAddModal extends Component {
-  state = { visible: false };
+  constructor(props) {
+    super(props);
+    this.state = {
+      visible: false,
+      btnloading: false,
+    }
+  }
 
   componentDidMount() {
     this.props.onRef(this);
@@ -21,6 +27,7 @@ class DictAddModal extends Component {
   handleOk = e => {
     e.preventDefault();
     const { dispatch } = this.props;
+    this.setState({ btnloading: true });
     this.props.form.validateFields((err, values) => {
       if (err) {
         return
@@ -32,6 +39,7 @@ class DictAddModal extends Component {
           this.handleReset();
           this.setState({
             visible: false,
+            btnloading: false,
           })
         },
       });
@@ -51,6 +59,7 @@ class DictAddModal extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
+    const { btnloading } = this.state;
     return (
       <Fragment>
         <Modal
@@ -66,7 +75,7 @@ class DictAddModal extends Component {
             <Button key="reset" type="danger" onClick={this.handleReset}>
               重置
             </Button>,
-            <Button key="submit" type="primary" onClick={this.handleOk}>
+            <Button key="submit" type="primary" onClick={this.handleOk} loading={btnloading}>
               提交
             </Button>,
           ]}

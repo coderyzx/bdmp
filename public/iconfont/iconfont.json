@@ -6,6 +6,62 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "3099701",
+      "name": "详情-01",
+      "font_class": "xiangqing-",
+      "unicode": "e639",
+      "unicode_decimal": 58937
+    },
+    {
+      "icon_id": "5427097",
+      "name": "查询",
+      "font_class": "chaxun",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    },
+    {
+      "icon_id": "5519055",
+      "name": "编辑蓝",
+      "font_class": "bianjilan",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
+      "icon_id": "5922020",
+      "name": "重置",
+      "font_class": "zhongzhi",
+      "unicode": "e66a",
+      "unicode_decimal": 58986
+    },
+    {
+      "icon_id": "16356105",
+      "name": "批量删除",
+      "font_class": "piliangshanchu",
+      "unicode": "e666",
+      "unicode_decimal": 58982
+    },
+    {
+      "icon_id": "19302339",
+      "name": "动态预览",
+      "font_class": "dongtaiyulan",
+      "unicode": "e652",
+      "unicode_decimal": 58962
+    },
+    {
+      "icon_id": "23027730",
+      "name": "添加",
+      "font_class": "tianjia",
+      "unicode": "e668",
+      "unicode_decimal": 58984
+    },
+    {
+      "icon_id": "24705945",
+      "name": "删除",
+      "font_class": "shanchu",
+      "unicode": "e6a0",
+      "unicode_decimal": 59040
+    },
+    {
       "icon_id": "15838425",
       "name": "add-circle",
       "font_class": "add-circle",

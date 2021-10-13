@@ -180,7 +180,7 @@ class RowAddModal extends React.Component {
         <Button type="primary"
                 style={{ marginLeft: 10 }}
                 onClick={this.showModal}>
-          添加图表类型
+          <i className="iconfont icon-add-circle">添加图表类型</i>
         </Button>
         <Modal
           destroyOnClose

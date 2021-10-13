@@ -1,13 +1,15 @@
 import React, { Fragment } from 'react';
-import { Modal, Form, Input, Button } from 'antd';
+import { Modal, Form, Input, Button, Select } from 'antd';
 import { connect } from 'dva';
 import { configFormProps } from '@/services/formManage';
 
 const { TextArea } = Input;
-const defaultTemplate = '{ value: "输入属性值",\n allowClear: false/true,\n...}';
+const { Option } = Select;
+const defaultTemplate = '{ "value": "输入属性值",\n "allowClear": false/true,\n...}';
 
 @connect(({ formManage }) => ({
   formId: formManage.formId,
+  dictTypeList: formManage.dictTypeList,
 }))
 @Form.create({ name: 'debug' })
 class PreviewDebugModal extends React.Component {
@@ -16,10 +18,15 @@ class PreviewDebugModal extends React.Component {
     this.state = {
         visible: false,
         btnLoading: false,
+        isDisabled: true,
       };
   }
 
-  showModal = async () => {
+  showModal = () => {
+    const { selectedFormType } = this.props;
+    if (selectedFormType === 'Select') {
+      this.setState({ isDisabled: false });
+    }
     this.setState({
       visible: true,
     });
@@ -29,15 +36,17 @@ class PreviewDebugModal extends React.Component {
   handleOk = async e => {
     e.preventDefault();
     let formPropsObj;
+    let dictId;
     let error = null;
     this.props.form.validateFields((err, values) => {
-      console.log('value:', values.formValue)
+      console.log('value:', values)
       if (err) {
         error = err;
         return
       }
       this.setState({ btnLoading: true });
       formPropsObj = JSON.stringify(JSON.parse(values.formValue));
+      dictId = Number(values.dictId);
     });
     console.log('formPropsObj:', formPropsObj);
     if (!error) {
@@ -47,8 +56,14 @@ class PreviewDebugModal extends React.Component {
         list: [...rightKeys],
         formValue: formPropsObj,
         formType: selectedFormType,
+        dictId,
       });
       if (resp.msgCode === 'SUCCESS') {
+        const { dispatch } = this.props;
+        dispatch({
+          type: 'formManage/changeDictId',
+          payload: dictId,
+        });
         await this.props.getFormProps();
         this.handleReset();
         this.setState({
@@ -73,13 +88,14 @@ class PreviewDebugModal extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { btnLoading } = this.state;
+    const { dictTypeList, formPropsObj } = this.props;
+    const { btnLoading, isDisabled } = this.state;
     return (
       <Fragment>
         <Button type="primary"
                 style={{ marginLeft: 10 }}
                 onClick={this.showModal}>
-          创建表单配置预览
+          <i className="iconfont icon-add-circle">创建表单配置预览</i>
         </Button>
         <Modal
           destroyOnClose
@@ -112,6 +128,7 @@ class PreviewDebugModal extends React.Component {
                 rules: [{ required: true, message: '根据已选属性，请输入属性数据结构' },
                         { whitespace: true },
                 ],
+                initialValue: JSON.stringify(formPropsObj),
                 validateTrigger: 'onSubmit',
               })(
                 <TextArea
@@ -119,6 +136,24 @@ class PreviewDebugModal extends React.Component {
                   rows={4} autoSize={{ minRows: 7, maxRows: 12 }}
                   allowClear
                 />,
+              )}
+            </Form.Item>
+            <Form.Item label="select选择框关联字典">
+              {getFieldDecorator('dictId', {
+                  rules: [{ required: true, message: '请选择关联的字典主项!' },
+                          { whitespace: true },
+                  ],
+                  initialValue: '请选择关联的字典主项',
+                  validateTrigger: 'onSubmit',
+              })(
+                  <Select placeholder="请选择关联的字典主项" style={{ width: '100%' }}
+                          allowClear disabled={isDisabled}>
+                    {
+                      dictTypeList.map(item => (
+                        <Option key={item.type} value={String(item.id)}>{item.type}</Option>
+                      ))
+                    }
+                  </Select>,
               )}
             </Form.Item>
           </Form>

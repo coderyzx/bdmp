@@ -57,7 +57,7 @@ const config = {
     },
     // lezhang
     '/dict': {
-      target: 'http://10.5.67.45:8091/',
+      target: 'http://10.5.65.30:8091/',
       changeOrigin: true,
       pathRewrite: {
         '^/dict': '',
@@ -65,7 +65,7 @@ const config = {
     },
       // bingbing接口
     '/api': {
-      target: 'http://10.5.65.37:8091/',
+      target: 'http://10.5.65.30:8091/',
        // secure: false,// 如果是https接口，需要配置这个参数
       changeOrigin: true,
       pathRewrite: {

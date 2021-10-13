@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { Drawer, Spin, DatePicker, Input, Select } from 'antd';
 import styles from './index.less';
 import { getFormPreview } from '@/services/formManage';
+import { getDictItemInitial } from '@/services/dict';
 
+const { Option } = Select;
 class PreviewDisplayDrawer extends Component {
   constructor(props) {
     super(props);
@@ -23,6 +25,11 @@ class PreviewDisplayDrawer extends Component {
     const resp = await getFormPreview(tableRow.id);
     if (resp.msgCode === 'SUCCESS') {
       const formPropsObj = JSON.parse(resp.data.formValue);
+      const dictID = resp.data.dictId;
+      let dictResp;
+      if (dictID) {
+        dictResp = await getDictItemInitial(dictID);
+      }
       if (formPropsObj) {
         switch (resp.data.formType) {
           case 'Input':
@@ -37,7 +44,14 @@ class PreviewDisplayDrawer extends Component {
           case 'Select':
             this.setState({
               previewCode: (
-                <Select style={{ width: 200 }} {...formPropsObj}/>
+                <Select style={{ width: 200 }} {...formPropsObj}>
+                  { dictID ?
+                    dictResp.data.map(item => (
+                      <Option key={item.value} value={item.item_id}>{item.value}</Option>
+                    )) :
+                    null
+                  }
+                </Select>
               ),
               previewLoading: false,
             });

@@ -39,12 +39,14 @@ class RowDetailsModal extends Component {
         >
           <Descriptions layout="vertical">
             <Descriptions.Item label="表单名称">{rowDetailsData.formName}</Descriptions.Item>
-            <Descriptions.Item label="描述">
+            <Descriptions.Item label="描述说明">
               <Tooltip title={rowDetailsData.describtion}>
                 {rowDetailsData.describtion}
               </Tooltip>
             </Descriptions.Item>
             <Descriptions.Item label="创建时间">{rowDetailsData.createTime}</Descriptions.Item>
+            <Descriptions.Item label="修改时间">{rowDetailsData.updateTime}</Descriptions.Item>
+            <Descriptions.Item label="关联仪表盘">{rowDetailsData.type}</Descriptions.Item>
           </Descriptions>
         </Modal>
       </Fragment>

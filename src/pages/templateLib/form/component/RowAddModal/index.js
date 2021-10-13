@@ -68,7 +68,7 @@ class RowAddModal extends React.Component {
         <Button type="primary"
                 style={{ marginLeft: 10 }}
                 onClick={this.showModal}>
-          新建Form表单
+          <i className="iconfont icon-add-circle">新建Form表单</i>
         </Button>
         <Modal
           destroyOnClose

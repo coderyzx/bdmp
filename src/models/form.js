@@ -4,13 +4,21 @@
 export default {
     namespace: 'formManage',
     state: {
-      isPreview: false,
+      // isPreview: false,
       formId: undefined,
+      dictTypeList: [],
+      dictId: undefined,
     },
 
     reducers: {
       changeFormId(state, { payload }) {
         return { ...state, formId: payload }
+      },
+      getDictTypeList(state, { payload }) {
+        return { ...state, dictTypeList: payload }
+      },
+      getDictItemList(state, { payload }) {
+        return { ...state, dictId: payload }
       },
     },
     effects: {

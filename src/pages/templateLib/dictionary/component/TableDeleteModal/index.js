@@ -4,7 +4,13 @@ import { connect } from 'dva';
 
 @connect()
 class TableDeleteModal extends Component {
-  state = { visible: false };
+  constructor(props) {
+    super(props);
+    this.state = ({
+      visible: false,
+      btnLoading: false,
+    })
+  }
 
   componentDidMount() {
     this.props.onRef(this);
@@ -18,12 +24,14 @@ class TableDeleteModal extends Component {
 
   handleOk = () => {
     const { deleteRow, dispatch } = this.props;
+    this.setState({ btnLoading: true });
     dispatch({
       type: 'dict/singleRowDictDelete',
       payload: deleteRow.id,
       callback: () => {
         this.setState({
           visible: false,
+          btnLoading: false,
         })
       },
     });
@@ -36,6 +44,7 @@ class TableDeleteModal extends Component {
   };
 
   render() {
+    const { btnLoading } = this.state;
     return (
       <Fragment>
         <Modal
@@ -54,7 +63,7 @@ class TableDeleteModal extends Component {
                 <Button key="back" type="warning" onClick={this.handleCancel}>
                 取消
               </Button>
-              <Button key="submit" type="primary" onClick={this.handleOk}>
+              <Button key="submit" type="primary" onClick={this.handleOk} loading={btnLoading}>
                 确定
               </Button>
               </Fragment>
