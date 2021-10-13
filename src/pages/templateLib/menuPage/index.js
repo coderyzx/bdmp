@@ -174,9 +174,9 @@ class MenuPage extends React.Component {
         align: 'center',
         render: (text, record) => (
           <span style={{ width: '100%', display: 'block' }}>
-            <span onClick={() => this.showEdit(record)} style={{ color: '#40a9ff', cursor: 'pointer' }}>
-              <Icon type="edit" style={{ color: '#40a9ff' }} />  编辑
-            </span>
+            <a href="#!" onClick={() => this.showEdit(record)}>
+              <i className="iconfont icon-edit">编辑</i>
+            </a>
             <Divider type="vertical" style={{ margin: '0 10px' }} />
             {this.props.dataSource.length >= 1 ? (
               <Popconfirm
@@ -185,13 +185,15 @@ class MenuPage extends React.Component {
                 icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
                 okType="danger"
               >
-                <span style={{ color: '#40a9ff', cursor: 'pointer' }}>
-                  <Icon type="delete" style={{ color: '#40a9ff' }} />  删除
-                </span>
+                <a href="#!" >
+                  <i className="iconfont icon-shanchu">删除</i>
+                </a>
               </Popconfirm>
             ) : null}
             <Divider type="vertical" style={{ margin: '0 10px' }} />
-            <a href="#!" onClick={() => this.handleRowDetailsModal(record)}>详情</a>
+            <a href="#!" onClick={() => this.handleRowDetailsModal(record)}>
+              <i className="iconfont icon-xiangqing-">详情</i>
+            </a>
           </span>
         ),
       },
@@ -491,15 +493,14 @@ class MenuPage extends React.Component {
         <div className={styles.title}>菜单页面维护</div>
         <div className={styles.bar}>
           <Button onClick={this.showModal} type="primary" style={{ marginRight: 30 }}>
-            +创建菜单页面
+            <i className="iconfont icon-add-circle">添加菜单页面</i>
           </Button>
           <Button
             type="danger"
             onClick={this.showDelete}
             disabled={!hasSelected}
-            icon="delete"
           >
-            批量删除
+            <i className="iconfont icon-piliangshanchu"> 批量删除菜单页面</i>
           </Button>
         </div>
         <CreateForm
