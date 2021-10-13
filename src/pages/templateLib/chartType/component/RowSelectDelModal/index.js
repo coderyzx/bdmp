@@ -52,7 +52,9 @@ class RowSelectDelModal extends Component {
         <Button type="danger"
                 disabled= {this.props.selectedRowKeys.length === 0 ? true : false}
                 style={{ marginLeft: 10, marginTop: 4 }}
-                onClick={this.showModal}>删除图表类型</Button>
+                onClick={this.showModal}>
+          <i className="iconfont icon-piliangshanchu">批量删除图表类型</i>
+        </Button>
         <Modal
           destroyOnClose
           title="删除"

@@ -4,7 +4,13 @@ import { connect } from 'dva';
 
 @connect(({ dict }) => ({ selectedRowKeys: dict.selectedRowKeys }))
 class TableSelectDelModal extends Component {
-  state = { visible: false };
+  constructor(props) {
+    super(props);
+    this.state = {
+      visible: false,
+      btnloading: false,
+     };
+  }
 
   showModal = () => {
     this.setState({
@@ -14,11 +20,13 @@ class TableSelectDelModal extends Component {
 
   handleOk = () => {
     const { dispatch } = this.props;
+    this.setState({ btnloading: true });
     dispatch({
       type: 'dict/deleteSelectedDict',
       callback: () => {
         this.setState({
           visible: false,
+          btnloading: false,
         })
       },
     });
@@ -31,11 +39,13 @@ class TableSelectDelModal extends Component {
   };
 
   render() {
+    const { btnloading } = this.state;
     return (
       <Fragment>
         <Button type="danger" style={{ marginLeft: 10 }} onClick={this.showModal}
-                disabled= {this.props.selectedRowKeys.length === 0 ? true : false}
-        >删除字典</Button>
+                disabled= {this.props.selectedRowKeys.length === 0 ? true : false}>
+          <i className="iconfont icon-shanchu">删除字典</i>
+        </Button>
         <Modal
           destroyOnClose
           title="删除"
@@ -52,7 +62,7 @@ class TableSelectDelModal extends Component {
                 <Button key="back" type="warning" onClick={this.handleCancel}>
                   取消
                 </Button>
-                <Button key="submit" type="primary" onClick={this.handleOk}>
+                <Button key="submit" type="primary" onClick={this.handleOk} loading={btnloading}>
                   确定
                 </Button>
               </Fragment>

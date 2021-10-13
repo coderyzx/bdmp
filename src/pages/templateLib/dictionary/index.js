@@ -163,11 +163,17 @@ class Dictionary extends Component {
             render: (text, record) => (
               dictData.length >= 1 ? (
                 <Fragment>
-                  <a href="#!" onClick={() => this.handleRowEidtModal(record)}>编辑</a>
+                  <a href="#!" onClick={() => this.handleRowEidtModal(record)}>
+                    <i className="iconfont icon-edit">编辑</i>
+                  </a>
                   <Divider type="vertical" />
-                  <a href="#!" onClick={() => this.handleRowDeleteMoadl(record)}>删除</a>
+                  <a href="#!" onClick={() => this.handleRowDeleteMoadl(record)}>
+                    <i className="iconfont icon-shanchu">删除</i>
+                  </a>
                   <Divider type="vertical" />
-                  <a href="#!" onClick={() => this.handleRowDetailsModal(record)}>详情</a>
+                  <a href="#!" onClick={() => this.handleRowDetailsModal(record)}>
+                    <i className="iconfont icon-xiangqing-">详情</i>
+                  </a>
                 </Fragment>
               ) : null
             ),

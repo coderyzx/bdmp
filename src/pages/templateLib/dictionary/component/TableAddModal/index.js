@@ -6,7 +6,13 @@ const { TextArea } = Input;
 @connect()
 @Form.create({ type: 'advanced_search' })
 class TableAddModal extends React.Component {
-  state = { visible: false };
+  constructor(props) {
+    super(props);
+    this.state = ({
+      visible: false,
+      btnLoading: false,
+    })
+  }
 
   showModal = () => {
     this.setState({
@@ -17,6 +23,7 @@ class TableAddModal extends React.Component {
   handleOk = e => {
     e.preventDefault();
     const { dispatch } = this.props;
+    this.setState({ btnLoading: true });
     this.props.form.validateFields((err, values) => {
       if (err) {
         return
@@ -28,6 +35,7 @@ class TableAddModal extends React.Component {
           this.handleReset();
           this.setState({
             visible: false,
+            btnLoading: false,
           })
         },
       });
@@ -47,9 +55,12 @@ class TableAddModal extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
+    const { btnLoading } = this.state;
     return (
       <Fragment>
-        <Button type="primary" style={{ marginLeft: 10 }} onClick={this.showModal}>创建字典</Button>
+        <Button type="primary" style={{ marginLeft: 10 }} onClick={this.showModal}>
+          <i className="iconfont icon-add-circle">创建字典</i>
+        </Button>
         <Modal
           destroyOnClose
           title="创建字典"
@@ -63,7 +74,7 @@ class TableAddModal extends React.Component {
             <Button key="reset" type="danger" onClick={this.handleReset}>
               重置
             </Button>,
-            <Button key="submit" type="primary" onClick={this.handleOk}>
+            <Button key="submit" type="primary" onClick={this.handleOk} loading={btnLoading}>
               提交
             </Button>,
           ]}

@@ -6,7 +6,13 @@ const { TextArea } = Input;
 @connect()
 @Form.create({ name: 'coordinated' })
 class DictEditModal extends Component {
-  state = { visible: false };
+  constructor(props) {
+    super(props);
+    this.state = {
+      visible: false,
+      btnloading: false,
+    }
+  }
 
   componentDidMount() {
     this.props.onRef(this);
@@ -21,6 +27,7 @@ class DictEditModal extends Component {
   handleOk = e => {
     e.preventDefault();
     const { dispatch, editItemkey } = this.props;
+    this.setState({ btnloading: true });
     this.props.form.validateFields((err, values) => {
       if (err) {
         return
@@ -32,6 +39,7 @@ class DictEditModal extends Component {
           this.handleReset();
           this.setState({
             visible: false,
+            btnloading: false,
           })
         },
       });
@@ -52,6 +60,7 @@ class DictEditModal extends Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { selectedDictItem } = this.props;
+    const { btnloading } = this.state;
     return (
       <Fragment>
         <Modal
@@ -64,7 +73,7 @@ class DictEditModal extends Component {
             <Button key="back" onClick={this.handleCancel}>
               取消
             </Button>,
-            <Button key="submit" type="primary" onClick={this.handleOk}>
+            <Button key="submit" type="primary" onClick={this.handleOk} loading={btnloading}>
               提交
             </Button>,
           ]}

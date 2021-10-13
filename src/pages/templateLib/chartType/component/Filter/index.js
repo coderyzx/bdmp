@@ -58,10 +58,14 @@ class Filter extends Component {
                     }</Select>)}
         </Form.Item>
         <Form.Item>
-            <Button type="primary" onClick={this.handleSave}>查询</Button>
+            <Button type="primary" onClick={this.handleSave}>
+              <i className="iconfont icon-chaxun">查询</i>
+            </Button>
         </Form.Item>
         <Form.Item>
-            <Button onClick={this.handleReset}>重置</Button>
+            <Button onClick={this.handleReset}>
+              <i className="iconfont icon-zhongzhi">重置</i>
+            </Button>
         </Form.Item>
       </Form>
     );
