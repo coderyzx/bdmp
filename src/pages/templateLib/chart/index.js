@@ -185,7 +185,7 @@ class Chart extends React.Component {
           <Button type="primary" className={styles.chartNew}
            onClick={this.showModal}
           >
-            新增图表
+            <i className="iconfont icon-add-circle">添加图表</i>
           </Button>
           <CreateChart
             wrappedComponentRef={this.saveFormRef}

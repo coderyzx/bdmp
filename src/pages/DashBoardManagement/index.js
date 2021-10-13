@@ -83,12 +83,17 @@ class DashboardManagement extends React.Component {
       // render三个参数：行的值，行数据，行索引
       render: (text, rec) => (
         <span>
-          <span className={styles.action} onClick = {() => this.handleEdit(rec)}>编辑</span>
+          <span className={styles.action} onClick = {() => this.handleEdit(rec)}>
+            <i className="iconfont icon-edit">编辑</i>
+          </span>
           <Divider type="vertical" />
-          <span className={styles.action} onClick = {() => this.addChart(rec)}>添加图表</span>
+          <span className={styles.action} onClick = {() => this.addChart(rec)}>
+            <Icon type="area-chart" />
+            添加图表
+          </span>
           <Divider type="vertical" />
           <span className={styles.action} onClick = {() => this.handlePreview(rec)}>
-            <Icon type="search" /> 预览
+            <i className="iconfont icon-dongtaiyulan">仪表盘预览</i>
           </span>
           <Divider type="vertical" />
           <Popconfirm
@@ -97,7 +102,9 @@ class DashboardManagement extends React.Component {
             icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
             okType="danger"
           >
-            <span className={styles.action}>删除</span>
+            <span className={styles.action} >
+              <i className="iconfont icon-shanchu">删除</i>
+            </span>
           </Popconfirm>
         </span>
       ),
@@ -581,15 +588,14 @@ class DashboardManagement extends React.Component {
       <div className={styles.wrapper}>
         <div className={styles.wrapHeader}>
           <Button className={styles.createBtn} onClick={this.createDashboard} type="primary" >
-            + 创建仪表盘
+            <i className="iconfont icon-add-circle">创建仪表盘</i>
           </Button>
           <Button
             type="danger"
             onClick={this.showDelete}
             disabled={!hasSelected}
-            icon="delete"
           >
-            批量删除
+            <i className="iconfont icon-piliangshanchu"> 批量删除仪表盘</i>
           </Button>
         </div>
         <div className={styles.wrapMain}>

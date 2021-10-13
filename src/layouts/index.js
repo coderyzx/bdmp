@@ -165,7 +165,7 @@ class BasicLayout extends React.Component {
             }
           </span>
         </Header>
-        <Layout style={{ paddingTop: 2 }}>
+        <Layout style={{ paddingTop: 2, background: 'white' }}>
           { this.props.children }
         </Layout>
       </Layout>
