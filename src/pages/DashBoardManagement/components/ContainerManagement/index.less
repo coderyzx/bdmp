@@ -97,13 +97,14 @@
 }
 .drawerBody {
   height:100%;
+  display: flex;
   .chartView {
     float:left;
-    width: 1360px;
+    width: 75%;
     height: 100%;
   }
   .attributeView {
-    width: 400px;
+    width: 25%;
     height: 100%;
     float:right;
   }
@@ -112,3 +113,29 @@
 :global .ant-drawer-body {
   height: 100%
 }
+
+// @media screen and (min-width: 768px) {
+//   .drawerBody {
+//     width:40%;
+//   }
+// }
+// @media screen and (min-width: 1000px){
+//   .drawerBody {
+//     width: 50%;
+//   }
+// }
+// @media screen and (min-width: 1200px){
+//   .drawerBody {
+//     width: 70%;
+//   }
+// }
+// @media  screen and(min-width: 1600px){
+//   .drawerBody {
+//     width:90%;
+//   }
+// }
+// @media screen and (min-width: 2000px){
+//   .drawerBody {
+//     width: 100%;
+//   }
+// }

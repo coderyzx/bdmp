@@ -484,7 +484,9 @@ class ContainerManagement extends React.Component {
     return (
       <div className={styles.dashboardMamagementWrap}>
         <div className={styles.choiceChartsWrap}>
-          <Button type="primary" onClick={this.showChoiceCharts}>+ 图表组件</Button>
+          <Button type="primary" onClick={this.showChoiceCharts}>
+            <i className="iconfont icon-add-circle">添加图表组件</i>
+          </Button>
         </div>
         <ReactGridLayout
           layout={layouts}
