@@ -1,8 +1,13 @@
-.noData{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  margin-top: 150px;
-  background-color: white;
+.empty {
+  :global {
+    margin-top: 150px !important;
+    .ant-empty-image {
+      height: auto;
+      margin-bottom: 0;
+    }
+
+    .ant-empty-description {
+      font-size: 16px;
+    }
+  }
 }

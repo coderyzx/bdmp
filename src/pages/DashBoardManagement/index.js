@@ -32,7 +32,7 @@ class DashboardManagement extends React.Component {
       dataIndex: 'businessTheme',
       key: 'businessTheme',
       align: 'center',
-      width: '15%',
+      width: '10%',
       ellipsis: true,
     },
     {
@@ -48,7 +48,7 @@ class DashboardManagement extends React.Component {
       dataIndex: 'createUserId',
       key: 'createUserId',
       align: 'center',
-      width: '5%',
+      width: '7%',
       ellipsis: true,
     },
     {
@@ -56,7 +56,7 @@ class DashboardManagement extends React.Component {
       dataIndex: 'createDatatime',
       key: 'createDatatime',
       align: 'center',
-      width: '10%',
+      width: '12%',
       ellipsis: true,
     },
     {
@@ -64,7 +64,7 @@ class DashboardManagement extends React.Component {
       dataIndex: 'modifyUserId',
       key: 'modifyUserId',
       align: 'center',
-      width: '5%',
+      width: '7%',
       ellipsis: true,
     },
     {
@@ -72,7 +72,7 @@ class DashboardManagement extends React.Component {
       dataIndex: 'modifyDatatime',
       key: 'modifyDatatime',
       align: 'center',
-      width: '10%',
+      width: '12%',
       ellipsis: true,
     },
     {

@@ -78,7 +78,6 @@ class Chart extends React.Component {
         confirmLoading: true,
       });
       // 校验通过，调接口传参
-      console.log(values);
       const { typeName } = this.props.location.query;
       dispatch({
         type: 'chartModel/postNewChart',

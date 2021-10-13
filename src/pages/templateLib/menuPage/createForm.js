@@ -10,7 +10,7 @@ const list = [
     key: 'sort',
   },
   {
-    title: '创建者',
+    title: '创建人',
     key: 'createUserId',
   },
 ];

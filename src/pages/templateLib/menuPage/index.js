@@ -224,6 +224,7 @@ class MenuPage extends React.Component {
     this.setState({
       visibleAdd: true,
     });
+    console.log(1);
     dispatch({
       type: 'menuPageModel/getLabel',
       payload: {},
@@ -501,6 +502,13 @@ class MenuPage extends React.Component {
             批量删除
           </Button>
         </div>
+        <CreateForm
+          wrappedComponentRef={this.saveFormRef}
+          visible={visibleAdd}
+          onCancel={this.handleCancel}
+          onCreate={this.handleCreate}
+          confirmLoading={confirmLoading}
+        />
         { loading && <div className={styles.spin}><Spin />加载中...</div>}
         { emptyList && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}/> }
         { renderList &&
@@ -530,13 +538,6 @@ class MenuPage extends React.Component {
             confirmLoading={editLoading}
             editData={editData}
             isParent={isParentLabel}
-          />
-          <CreateForm
-            wrappedComponentRef={this.saveFormRef}
-            visible={visibleAdd}
-            onCancel={this.handleCancel}
-            onCreate={this.handleCreate}
-            confirmLoading={confirmLoading}
           />
           <Table
             // components={components}

@@ -3,6 +3,7 @@ import ReactECharts from 'echarts-for-react';
 import { connect } from 'dva'
 import router from 'umi/router'
 import { Layout, Button, Icon, notification, Spin } from 'antd';
+// import domtoimage from 'dom-to-image';
 import Mirror from './mirror';
 import styles from './index.less';
 import EditableForm from './editable';
@@ -140,25 +141,46 @@ class Editor extends React.Component {
     this.formRefEdit = formRefEdit;
   };
 
-  // 运行代码块
-  // handleStart=option => {
-  //   console.log(option);
-  //   const { dispatch, chartEdit } = this.props;
-  //   dispatch({
-  //     type: 'chartModel/postUpdateChart',
-  //     payload: chartEdit.option,
+  dataURLtoFile = dataurl => {
+    const arr = dataurl.split(',');
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    const array = [];
+    for (let i = 0; i < bstr.length; i += 1) {
+     array.push(bstr.charCodeAt(i));
+   }
+   return new Blob([new Uint8Array(array)], { type: mime });
+  }
 
-  //   })
-  // }
+  blobToFile = (theBlob, fileName) => {
+    const val = theBlob;
+    val.lastModifiedDate = new Date();
+    val.name = fileName;
+    return theBlob;
+  }
 
   // 保存
   handleSave = () => {
-    const { dispatch } = this.props;
+    const { dispatch, chartEdit } = this.props;
     const { optionValue } = this.state;
     const { id } = this.props.location.query;
     const newData = {};
     newData.optionjson = JSON.stringify(optionValue, null, '\t');
     newData.id = id;
+    // const formData = new FormData();
+    // domtoimage.toPng(document.getElementById('chartViewWrap'), { quality: 1 })
+    // .then(dataUrl => {
+      // const blob = this.dataURLtoFile(dataUrl);
+      // const file = this.blobToFile(blob, `${chartEdit.typename}-${chartEdit.title}-${id}.png`);
+      // const img = new Image();
+      // img.src = dataUrl;
+      // newData.mark = newDataUrl;
+      // const newDataUrl = dataUrl.split('base64,')[1];
+      // formData.append('id', id);
+      // formData.append('optionjson', JSON.stringify(optionValue, null, '\t'));
+      // formData.append('mark', newDataUrl);
+      // console.log(formData);
+    // })
     dispatch({
       type: 'chartModel/postUpdateChart',
       payload: newData,
@@ -172,7 +194,6 @@ class Editor extends React.Component {
             message: '提示',
             description: '保存图表option成功',
           };
-          const { chartEdit } = this.props;
           notification.success(args);
           router.push(`/templateLib/chart?typeName=${chartEdit.typename}`)
         } else {
@@ -181,6 +202,7 @@ class Editor extends React.Component {
             description: '保存图表option失败',
           };
           notification.info(args);
+          router.push(`/templateLib/chart?typeName=${chartEdit.typename}`)
         }
       },
     })
@@ -265,15 +287,18 @@ class Editor extends React.Component {
           </div>
           <div className={styles.chart} >
             <div className={styles.chartTitle} >图表示例预览</div>
-            <ReactECharts
-              ref={e => {
-                this.echarts_react = e;
-              }}
-              option = {addToolOption(optionValue)}
-              className={styles.chartContent}
-              // style={{ width: '99%',
-              //   height: '100%' }}
-            />
+            <div id="chartViewWrap"
+              style={{ width: '100%',
+              height: '95%' }}
+            >
+              <ReactECharts
+                ref={e => {
+                  this.echarts_react = e;
+                }}
+                option = {addToolOption(optionValue)}
+                className={styles.chartContent}
+              />
+            </div>
           </div>
         </div>
         }

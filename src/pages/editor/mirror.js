@@ -77,7 +77,7 @@ class Mirror extends React.Component {
       <div >
         <textarea
           ref={ el => { this.edit = el }}
-          value = {value}
+          defaultValue = {value}
           // value = {JSON.parse(value)}
         />
       </div>
