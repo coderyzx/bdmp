@@ -60,7 +60,9 @@ class FormPropAddModal extends React.Component {
     const { btnLoading, visible } = this.state;
     return (
       <Fragment>
-        <Button type="primary" onClick={this.showModal}>新建form表单项</Button>
+        <Button type="primary" onClick={this.showModal}>
+          <i className="iconfont icon-add-circle">新建form表单项</i>
+        </Button>
         <Modal
           destroyOnClose
           title="新建form表单项"

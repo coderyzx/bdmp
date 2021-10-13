@@ -4,7 +4,13 @@ import { connect } from 'dva';
 
 @connect()
 class DictDeleteModal extends Component {
-  state = { visible: false };
+  constructor(props) {
+    super(props);
+    this.state = {
+      visible: false,
+      btnloading: false,
+     };
+  }
 
   componentDidMount() {
     this.props.onRef(this);
@@ -18,12 +24,14 @@ class DictDeleteModal extends Component {
 
   handleOk = () => {
     const { dispatch, deleteItemkey } = this.props;
+    this.setState({ btnloading: true })
     dispatch({
       type: 'dict/deleteDictItemData',
       payload: deleteItemkey,
       callback: () => {
         this.setState({
           visible: false,
+          btnloading: false,
         })
       },
     });
@@ -36,6 +44,7 @@ class DictDeleteModal extends Component {
   };
 
   render() {
+    const { btnloading } = this.state;
     return (
       <Fragment>
         <Modal
@@ -54,7 +63,7 @@ class DictDeleteModal extends Component {
                 <Button key="back" type="warning" onClick={this.handleCancel}>
                 取消
               </Button>
-              <Button key="submit" type="primary" onClick={this.handleOk}>
+              <Button key="submit" type="primary" onClick={this.handleOk} loading={btnloading}>
                 确定
               </Button>
               </Fragment>

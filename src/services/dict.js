@@ -108,3 +108,10 @@ export async function selectedDictItem(params) {
     method: 'GET',
 });
 }
+
+// 获取所有字典主项及对应id
+export async function selectAllDict() {
+  return request('/dict/consumer/dict/selectAllDict', {
+    method: 'GET',
+});
+}

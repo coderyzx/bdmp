@@ -8,9 +8,11 @@ import RowDetailsModal from './component/RowDetailsModal';
 import FormPropsAddDrawer from './component/FormPropsAddDrawer';
 import PreviewDisplayDrawer from './component/PreviewDisplayDrawer';
 import { getAllFormRecordByPage, getAllDashBoard } from '@/services/formManage';
+import { selectAllDict } from '@/services/dict';
 import styles from './index.less';
 
-@connect(() => ({
+@connect(({ formManage }) => ({
+  dictItemList: formManage.dictItemList,
 }))
 class FormConfigManage extends Component {
   constructor(props) {
@@ -34,6 +36,7 @@ class FormConfigManage extends Component {
   initial = async () => {
     const resp = await getAllFormRecordByPage({ current: 1, pageSize: 10 });
     const allDashBoard = await getAllDashBoard();
+    await this.getDictTypeList();
     this.setState({
       verified: false,
       allDashBoard,
@@ -51,6 +54,16 @@ class FormConfigManage extends Component {
         verified: true,
       });
     }
+  }
+
+  getDictTypeList = async () => {
+    const dictResp = await selectAllDict();
+    const dictTypeList = dictResp.data;
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'formManage/getDictTypeList',
+      payload: dictTypeList,
+    });
   }
 
   onSelectedRowKeysChange = selectedRowKeys => {
@@ -217,13 +230,21 @@ class FormConfigManage extends Component {
         render: (text, record) => (
           chartTypeData.length >= 1 ? (
             <Fragment>
-              <a href="#!" onClick={() => this.handleRowEidtModal(record)}>编辑</a>
+              <a href="#!" onClick={() => this.handleRowEidtModal(record)}>
+                <i className="iconfont icon-edit">编辑</i>
+              </a>
               <Divider type="vertical" />
-              <a href="#!" onClick={() => this.handleAddFormProps(record)}>添加属性</a>
+              <a href="#!" onClick={() => this.handleAddFormProps(record)}>
+                <i className="iconfont icon-add-circle">添加属性</i>
+              </a>
               <Divider type="vertical" />
-              <a href="#!" onClick={() => this.handlePreview(record)}>预览</a>
+              <a href="#!" onClick={() => this.handlePreview(record)}>
+                <i className="iconfont icon-dongtaiyulan">表单预览</i>
+              </a>
               <Divider type="vertical" />
-              <a href="#!" onClick={() => this.handleRowDetailsModal(record)}>详情</a>
+              <a href="#!" onClick={() => this.handleRowDetailsModal(record)}>
+                <i className="iconfont icon-xiangqing-">详情</i>
+              </a>
             </Fragment>
           ) : null
         ),
