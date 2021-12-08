@@ -413,7 +413,6 @@ class MenuPage extends React.Component {
       loading: true,
     });
     form.validateFields((err, values) => {
-      console.log('Received values of form: ', values);
       if (err) {
         return;
       }

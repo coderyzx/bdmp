@@ -128,6 +128,9 @@ class DashboardManagement extends React.Component {
         current: 1,
         pageSize: 10,
       },
+      confirmLoading: false, // 添加是否加载
+      editLoading: false, // 编辑保存是否加载
+      deleteLoading: false, // 选择多行删除是否加载
     }
   }
 
@@ -185,6 +188,9 @@ class DashboardManagement extends React.Component {
   addNewDashboard = () => {
     const { form } = this.formRef.props;
     const { dispatch, current, pageSize } = this.props;
+    this.setState({
+      confirmLoading: true,
+    });
     form.validateFields((err, values) => {
       if (err) {
         return;
@@ -196,6 +202,7 @@ class DashboardManagement extends React.Component {
           if (res.code === 'U000000') {
             this.setState({
               saveVisible: false,
+              confirmLoading: false,
             });
             const args = {
               message: '提示',
@@ -205,6 +212,7 @@ class DashboardManagement extends React.Component {
           } else {
             this.setState({
               saveVisible: false,
+              confirmLoading: false,
             });
             const args = {
               message: '提示',
@@ -258,6 +266,9 @@ class DashboardManagement extends React.Component {
     const { displayId } = this.state;
     const { dispatch, current, pageSize } = this.props;
     const { form } = this.editformRef.props;
+    this.setState({
+      editLoading: true,
+    });
     form.validateFields((err, values) => {
       if (err) {
         return;
@@ -271,6 +282,7 @@ class DashboardManagement extends React.Component {
           if (res.code === 'U000000') {
             this.setState({
               editVisible: false,
+              editLoading: false,
             });
             const args = {
               message: '提示',
@@ -280,6 +292,7 @@ class DashboardManagement extends React.Component {
           } else {
             this.setState({
               editVisible: false,
+              editLoading: false,
             });
             const args = {
               message: '提示',
@@ -465,7 +478,7 @@ class DashboardManagement extends React.Component {
   };
 
   renderList = () => {
-    const { selectedRowKeys, visibleDelete, examDataLoading } = this.state;
+    const { selectedRowKeys, visibleDelete, examDataLoading, deleteLoading } = this.state;
     const { totalCount, current, pageSize, dashboardList } = this.props;
     const pagination = { total: totalCount, current, pageSize }
     const paginationProps = {
@@ -508,6 +521,7 @@ class DashboardManagement extends React.Component {
           visible={visibleDelete}
           onOk={() => this.deleteSelection(selectedRowKeys)}
           onCancel={this.deleteSelectionCancel}
+          confirmLoading={deleteLoading}
           >
             <p style={{ textAlign: 'center', marginBottom: 15 }}>
               <img src={dele} alt="404" />
@@ -580,6 +594,8 @@ class DashboardManagement extends React.Component {
       editVisible,
       selectedRowKeys,
       editData,
+      confirmLoading,
+      editLoading,
     } = this.state;
     const { totalCount } = this.props;
     const listNode = this.renderList()
@@ -612,6 +628,7 @@ class DashboardManagement extends React.Component {
           visible={saveVisible}
           onCancel={this.closeSave}
           onCreate={this.addNewDashboard}
+          confirmLoading={confirmLoading}
         />
         <EditForm
           wrappedComponentRef={this.editFormRef}
@@ -619,6 +636,7 @@ class DashboardManagement extends React.Component {
           onCancel={this.closeSave}
           onCreate={this.updateDashboard}
           data={editData}
+          confirmLoading={editLoading}
         />
       </div>
     )

@@ -62,7 +62,6 @@ class EditableForm extends React.Component {
         onCancel={onCancel}
         onOk={onCreate}
         width={700}
-        confirmLoading={confirmLoading}
         destroyOnClose
         footer={[
           <Button key="back" onClick={onCancel}>
@@ -71,7 +70,7 @@ class EditableForm extends React.Component {
           <Button key="reset" type="danger" onClick={this.handleReset}>
             重置
           </Button>,
-          <Button key="submit" type="primary" onClick={onCreate}>
+          <Button key="submit" type="primary" onClick={onCreate} loading={confirmLoading}>
             确定
           </Button>,
         ]}
